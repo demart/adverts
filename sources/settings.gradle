@@ -1,0 +1,17 @@
+rootProject.name = 'adverts-project'
+
+include ':common:adverts-common-persistence'
+
+include ':crawler:adverts-crawler-core'
+include ':crawler:adverts-crawler-persistence'
+
+include ':crawler:adverts-crawler-krisha'
+include ':crawler:adverts-crawler-kn'
+include ':crawler:adverts-crawler-olx'
+include ':crawler:adverts-crawler-irr'
+
+include ':analyser'
+
+include ':subscriptions'
+
+include ':notifications'

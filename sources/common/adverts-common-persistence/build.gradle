@@ -1,0 +1,57 @@
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'groovy'
+
+repositories {
+    mavenCentral()
+}
+ 
+
+dependencies {
+	compile 'com.google.code.maven-play-plugin.org.playframework:play:1.2.7'
+	compile 'org.mongodb.morphia:morphia:1.0.1'
+}
+
+
+jar {
+	doLast {
+		println 'Copy jar file: ' + archiveName.toString() + '  to crawlers play app';
+		println 'From: ' + archivePath
+		assert file(archivePath).exists();
+		copy {
+			from file(archivePath)
+			into file(getRootDir().getAbsolutePath() + '/crawler/adverts-crawler-krisha/lib/')
+		}
+		println 'to: ' + getRootDir().getAbsolutePath() + '/crawler/adverts-crawler-krisha/lib/'
+		copy {
+			from file(archivePath)
+			into file(getRootDir().getAbsolutePath() + '/crawler/adverts-crawler-kn/lib/')
+		}
+		println 'to: ' + getRootDir().getAbsolutePath() + '/crawler/adverts-crawler-kn/lib/'
+		copy {
+			from file(archivePath)
+			into file(getRootDir().getAbsolutePath() + '/crawler/adverts-crawler-irr/lib/')
+		}
+		println 'to: ' + getRootDir().getAbsolutePath() + '/crawler/adverts-crawler-irr/lib/'
+		copy {
+			from file(archivePath)
+			into file(getRootDir().getAbsolutePath() + '/crawler/adverts-crawler-olx/lib/')
+		}
+		println 'to: ' + getRootDir().getAbsolutePath() + '/crawler/adverts-crawler-olx/lib/'
+	}
+}
+
+
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/java'
+        }
+        resources {
+            srcDir 'src/resources'
+        }
+    }
+}

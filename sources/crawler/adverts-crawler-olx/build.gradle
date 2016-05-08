@@ -1,0 +1,32 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'groovy'
+ 
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.mongodb.morphia:morphia:1.0.1'
+	compile project(":common:adverts-common-persistence")
+    compile project(":crawler:adverts-crawler-core")
+}
+
+
+task runCrawlerOlx(type:Exec) {
+    
+        println 'Starting play crawler olx'
+
+        def stdout = new ByteArrayOutputStream() 
+        commandLine('play', 'run') 
+        ext.output = {
+            return stdout
+        }
+
+       // commandLine('tail', '-f', 'system.out') 
+}
+
+runCrawlerOlx.dependsOn project.jar
+runCrawlerOlx.dependsOn project.assemble
+project.build.dependsOn runCrawlerOlx

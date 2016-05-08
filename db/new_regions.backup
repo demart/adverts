@@ -1,0 +1,1603 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.3.9
+-- Dumped by pg_dump version 9.3.9
+-- Started on 2016-04-29 08:32:14
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 179 (class 1259 OID 91080)
+-- Name: region; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE region (
+    id bigint NOT NULL,
+    latitude real,
+    longitude real,
+    name character varying(255),
+    parentid_id bigint
+);
+
+
+ALTER TABLE public.region OWNER TO postgres;
+
+--
+-- TOC entry 183 (class 1259 OID 91180)
+-- Name: region_irr; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE region_irr (
+    id bigint NOT NULL,
+    key character varying(255),
+    name character varying(255),
+    regionid_id bigint
+);
+
+
+ALTER TABLE public.region_irr OWNER TO postgres;
+
+--
+-- TOC entry 181 (class 1259 OID 91139)
+-- Name: region_kn; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE region_kn (
+    id bigint NOT NULL,
+    key character varying(255),
+    name character varying(255),
+    regionid_id bigint
+);
+
+
+ALTER TABLE public.region_kn OWNER TO postgres;
+
+--
+-- TOC entry 180 (class 1259 OID 91112)
+-- Name: region_krisha; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE region_krisha (
+    id bigint NOT NULL,
+    name character varying(255),
+    regionid_id bigint,
+    key bigint
+);
+
+
+ALTER TABLE public.region_krisha OWNER TO postgres;
+
+--
+-- TOC entry 182 (class 1259 OID 91165)
+-- Name: region_olx; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE region_olx (
+    id bigint NOT NULL,
+    created_date timestamp without time zone,
+    deleted boolean DEFAULT false NOT NULL,
+    enabled boolean DEFAULT true,
+    modified_date timestamp without time zone,
+    key character varying(255),
+    name character varying(255),
+    type character varying(255),
+    regionid_id bigint
+);
+
+
+ALTER TABLE public.region_olx OWNER TO postgres;
+
+--
+-- TOC entry 1991 (class 0 OID 91080)
+-- Dependencies: 179
+-- Data for Name: region; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (3, 43.2812996, 76.8519974, 'Алатауский р-н', 2);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (26, 43.2611008, 76.8945007, 'Алмалинский р-н', 2);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (29, 43.2408981, 76.8389969, 'Ауэовский р-н', 2);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (73, 43.2134018, 76.8880005, 'Бостандыкский р-н', 2);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (83, 43.3011017, 76.8983002, 'Жетысуский р-н', 2);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (89, 43.2282982, 76.9586029, 'Медеуский р-н', 2);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (783, 43.1892014, 76.8169022, 'Наурызбайский р-н', 2);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (99, 43.3459015, 76.9776001, 'Турксибский р-н', 2);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (291, 51.1226997, 71.3665009, 'Есильский р-н', 105);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (106, 51.1328011, 71.5100021, 'Алматинский р-н', 105);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (107, 51.2062988, 71.3869019, 'Сарыаркинский р-н', 105);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (267, 54.8737984, 69.1740036, 'Петропавловск', 264);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1639, 0, 0, 'Альжан', 264);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1079, 54.7639999, 68.6986008, 'Бишкуль', 264);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (265, 54.898201, 70.4496994, 'Булаево', 264);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (983, 54.7425995, 69.8391037, 'Виноградовка', 264);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1637, 54.5363007, 68.9347, 'Зарослое', 264);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (739, 52.9744987, 68.3622971, 'Имантау', 264);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1883, 54.5298996, 68.6270981, 'Киялы', 264);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (266, 54.9366989, 68.5395966, 'Мамлютка', 264);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (977, 53.4705009, 66.6824036, 'Новоишимское', 264);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1903, 54.4978981, 69.066597, 'Новопавловка', 264);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (268, 53.8865013, 67.4173965, 'Саумалколь', 264);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (269, 53.8471985, 69.7683029, 'Тайынша', 264);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1647, 54.8086014, 69.3684998, 'Тельманово', 264);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1645, 54.5425987, 68.8687973, 'Уваковское', 264);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (256, 44.8507996, 65.5033035, 'Кызылорда', 253);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (254, 46.7994003, 61.6749001, 'Аральск', 253);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1817, 44.8916016, 65.5811005, 'Досан', 253);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (885, 0, 0, 'Байконур', 253);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (255, 45.7612991, 62.1044006, 'Казалинск', 253);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1707, 45.3580017, 63.6063995, 'Казылжарма', 253);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1505, 45.4160004, 64.1895981, 'Махамбетов', 253);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1459, 44.6534004, 65.4449005, 'Тасбогет', 253);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (214, 47.1013985, 51.9096985, 'Атырау', 213);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (215, 46.9602013, 59.9980011, 'Кульсары', 213);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1445, 47.3641014, 52.4040985, 'Акжар', 213);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1787, 47.4238014, 52.360199, 'Аксай', 213);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1573, 47.5876007, 52.8325996, 'Алмалы', 213);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (335, 51.0643005, 70.975502, 'Акмол', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1679, 47.6767006, 52.6787987, 'Береке (Память Ильича)', 213);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1799, 47.3790016, 52.3051987, 'Бирлик', 213);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1665, 47.5205994, 52.4151001, 'Ганюшкино', 213);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1553, 47.394001, 52.4151001, 'Дамба', 213);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1333, 47.2370987, 51.6104012, 'Доссор', 213);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1447, 47.4566994, 51.8120003, 'Еркинкала', 213);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1789, 47.4611015, 52.448101, 'Жумыскер', 213);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (477, 48.5326996, 51.7532997, 'Индер', 213);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1833, 47.5205994, 52.6678009, 'Коктагай', 213);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (479, 47.6682014, 51.5854988, 'Махамбет', 213);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1867, 47.4760017, 52.5359993, 'Миялы', 213);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1483, 47.3641014, 52.2832985, 'Ракуша', 213);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1757, 47.3492012, 52.4151001, 'Талгайран', 213);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1849, 47.6915016, 52.5578995, 'Томарлы', 213);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (119, 53.2863007, 69.3945999, 'Кокшетау', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (123, 52.9322014, 70.1837006, 'Щучинск', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1635, 52.1357994, 70.0003967, 'Акбулак', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (113, 51.9948997, 51.9948997, 'Акколь', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (328, 50.8339005, 72.1821976, 'Аршалы', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (329, 51.4888992, 69.7970963, 'Астраханка', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (114, 51.8097, 68.3495026, 'Атбасар', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (549, 51.4720001, 71.2068024, 'Бозайгыр', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (334, 52.5227013, 68.7555008, 'Балкашино', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (115, 53.0821991, 70.310997, 'Боровое', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (881, 51.2116013, 71.1137009, 'Воздвиженка', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1563, 53.0443993, 70.0113983, 'Волгодоновка', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (116, 51.1049004, 66.3147964, 'Державинск', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1539, 52.2438011, 70.9891968, 'Дамса', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (330, 50.0393982, 54.0359001, 'Егиндыколь', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (117, 51.6248016, 73.1051025, 'Ерейментау', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (118, 51.9546013, 66.4057999, 'Есиль', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (331, 51.9085007, 67.3162003, 'Жаксы', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (667, 51.7882996, 69.4076004, 'Жибек жолы', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (819, 53.1615982, 70.1980972, 'Жукей', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (338, 51.7419014, 71.7161026, 'Жолымбет', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (332, 52.9081993, 69.1549988, 'Зеренда', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1593, 51.2481995, 71.9120026, 'Ильинка', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1825, 51.1245995, 71.5964966, 'Интернациональный', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (341, 50.854599, 71.3584976, 'Кабанбай Батыра', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1317, 54.1446991, 69.2093964, 'Сергеевка', 264);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (105, 51.1100006, 71.2399979, 'Астана', NULL);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (2, 43.1500015, 76.5400009, 'Алматы', NULL);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (112, 51.3725014, 69.4957962, 'Акмолинская обл.', NULL);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (213, 47.0699997, 51.5299988, 'Атырауская обл.', NULL);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (370, 51.2661018, 71.0774994, 'Кажымукан', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1373, 51.8849983, 69.8575974, 'Каражар', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1397, 51.0904999, 71.1747971, 'Караоткель', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1181, 52.2549019, 70.6692963, 'Катарколь', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1615, 51.4553986, 70.7286987, 'Кенесары', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1875, 50.9718018, 72.0733032, 'Константиновка', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (333, 50.5882988, 70.012413, 'Коргалжын', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (731, 50.9743996, 71.3520966, 'Косшы', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (230, 42.8916016, 71.3921967, 'Тараз', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (637, 51.2742996, 71.6427002, 'Коянды', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1595, 52.3111992, 71.2309036, 'Красный Кордон', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1425, 53.2398987, 69.5334015, 'Красный яр', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1179, 51.0320015, 71.5465012, 'Куйгенжар', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1877, 44.1767998, 71.2857971, 'Акыртобе', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (775, 50.8893013, 71.8728027, 'Кызылсуат', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1495, 53.3042984, 68.8563995, 'Кызылжулдуз', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1453, 52.6358986, 70.3867035, 'Успеноюрьевка', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1723, 44.4135017, 72.6042023, 'Алатау', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1501, 43.4985008, 75.1999969, 'Алга', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1377, 42.9788017, 71.5239029, 'Байзак', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (452, 43.5349007, 75.2129974, 'Отар', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (228, 43.5634003, 69.7357025, 'Жанатас', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1423, 42.8418007, 71.4503021, 'Жалпактобе', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (229, 43.1819, 70.4598999, 'Каратау', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (451, 43.050499, 74.7152023, 'Кордай', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1345, 42.9840012, 72.6386032, 'Кулан', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (693, 42.8610992, 73.1763, 'Мерке', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1571, 44.1055984, 71.4726028, 'Орнек', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1229, 42.8540993, 71.1682968, 'Сарыкемер', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1693, 43.4385986, 71.2988968, 'Тамды', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1499, 51.4546013, 70.3300018, 'Тельмана', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1431, 43.8396988, 71.1119003, 'Шайкорык', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (369, 51.2411995, 71.1656036, 'Талапкер', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1433, 50.5862007, 71.0194016, 'Тайтобе', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (122, 52.8372002, 70.7848969, 'Степняк', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (121, 52.3466988, 71.8797989, 'Степногорск', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (438, 51.4031982, 71.7073975, 'Софиевка', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1797, 51.8917999, 71.2748032, 'Сабынды', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1315, 50.9389992, 71.2324982, 'Рахымжана Кошкарбаева', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1655, 52.4724998, 70.6815033, 'Приречное', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1661, 52.6422997, 71.3080978, 'Отрадное', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (337, 51.6769981, 73.0162964, 'Научный', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1627, 51.2067986, 71.5384979, 'Малотимофеевка', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (368, 51.2937012, 71.0203018, 'Максимовка', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (120, 52.6357994, 70.4271011, 'Макинск', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1277, 50.9514999, 71.7963028, 'Узунколь', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (771, 51.3381004, 71.0931015, 'Фарфоровое', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1765, 54.073101, 68.1378021, 'Чайкино', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (336, 51.698101, 70.9974976, 'Шортанды', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1837, 53.0470009, 70.5507965, 'Шубар', 112);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (125, 50.2827988, 57.1907997, 'Актобе', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1853, 49.4189987, 57.3223, 'Аккемер', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (126, 49.8951988, 57.3274002, 'Алга', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1709, 49.4333, 57.4211006, 'Жанаконыс', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1549, 49.6344986, 57.1032982, 'Жилянка', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1871, 49.3759995, 57.2783012, 'Заречный', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (127, 49.4625015, 57.4185982, 'Кандыагаш', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1421, 50.4193993, 57.0852013, 'Курайлы', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1851, 49.332901, 57.3003006, 'Курашасай', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1523, 49.9935989, 56.9273987, 'Кызылжар', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1793, 49.3903008, 57.0586014, 'Маржанбулак', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1395, 49.9569016, 57.0014992, 'Мартук', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1859, 49.8956985, 57.2563019, 'Нурбулак', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1437, 50.4328995, 57.1591988, 'Пригородный', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1439, 50.3675995, 57.7056999, 'Садовое', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1657, 49.8807983, 57.6049004, 'Сазда', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1591, 49.5693016, 57.2123985, 'Сарыжар', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (128, 49.1453018, 57.1268997, 'Темир', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (129, 50.2542992, 58.4459991, 'Хромтау', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (130, 47.8339005, 59.6162987, 'Шалкар', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (699, 49.1459999, 56.486599, 'Шубаркудук', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (131, 48.8210983, 58.1472015, 'Эмба', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1869, 49.3114014, 57.289299, 'Ясное', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1515, 43.8396988, 71.3557968, 'Шиен', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1779, 44.2349014, 71.2455978, 'Шолаккаргалы', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (231, 43.6054001, 73.7612991, 'Шу', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1777, 44.0500984, 70.9782028, 'Чайкурук', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (373, 42.8688011, 73.1085968, 'Чиганак', 227);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (233, 51.1674995, 53.0149002, 'Аксай', 232);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (234, 51.2302017, 51.4310989, 'Уральск', 232);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1885, 50.1162987, 50.6206017, 'Асан', 232);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1857, 50.9571991, 51.4159012, 'Барбастау', 232);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1473, 50.7508011, 50.8236008, 'Белес', 232);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1683, 50.3208008, 50.7743988, 'Дарьинск', 232);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1455, 50.6711006, 51.2578011, 'Деркул', 232);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1481, 50.3278008, 50.763401, 'Зачаганск', 232);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1311, 49.9323006, 50.6645012, 'Каратобе', 232);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1769, 50.3278008, 50.763401, 'Круглоозерное', 232);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1841, 50.6707993, 51.0158005, 'Новенький', 232);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1713, 50.0881004, 50.7523994, 'Малый Чаган', 232);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1417, 51.2535019, 51.3665009, 'Мичурино', 232);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1589, 50.4191017, 50.9062004, 'Подстепное', 232);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (227, 44, 72, 'Жамбылская обл.', NULL);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (232, 51.1399994, 51.2200012, 'Западно-Казахстанская обл.', NULL);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1443, 50.5452995, 50.9500999, 'Пугачево', 232);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1577, 50.3067017, 50.6315002, 'Трекино', 232);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1457, 51.1353989, 51.0556984, 'Федоровка', 232);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (260, 52.1800003, 76.5699997, 'Павлодарская обл.', NULL);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (258, 43.6464996, 51.1721992, 'Актау', 257);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (685, 43.7820015, 51.0721016, 'Акшукур', 257);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1811, 44.1699982, 52.9936981, 'Атамекен', 257);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (683, 43.780899, 51.0798988, 'Аташ', 257);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1411, 43.5096016, 52.1062012, 'Баскудук', 257);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (681, 44.5442009, 50.2723999, 'Баутино', 257);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1427, 43.6688004, 51.2285004, 'Батыр', 257);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1507, 44.1699982, 54.1362, 'Баянды', 257);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (795, 45.3167, 55.2000008, 'Бейнеу', 257);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (259, 43.3342018, 52.8712997, 'Жанаозен', 257);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1525, 43.9005013, 54.6856003, 'Жетыбай', 257);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (695, 42.9468002, 72.7434998, 'Курык', 257);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1497, 44.0887985, 52.986599, 'Мангышлак', 257);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1429, 0, 0, 'Кызылтобе', 257);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1415, 43.4898987, 52.0836983, 'Мунайши', 257);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (687, 43.8342018, 53.3526993, 'С.Шапагатова', 257);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1715, 44.0909004, 54.0703011, 'Умирзак', 257);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (679, 44.5074997, 50.2627983, 'Форт-Шевченко', 257);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (989, 44.4729996, 51.4990997, 'Шетпе', 257);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (262, 52.2942009, 76.9717026, 'Павлодар', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (263, 51.7294998, 75.3299026, 'Экибастуз', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (261, 52.0382004, 76.9292984, 'Аксу', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1585, 51.0186996, 77.4352036, 'Баянаул', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1641, 52.4645996, 77.6697006, 'Жетекши', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1727, 52.0808983, 77.1195984, 'Заря', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1717, 52.1890984, 76.9878006, 'Кенжеколь', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1403, 51.9453011, 76.1308975, 'Коктобе', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1545, 52.3238983, 76.7900009, 'Ленинский', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1611, 52.1484985, 76.9878006, 'Луганск', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1449, 52.2970009, 77.0098038, 'Майкайын', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1629, 52.4718018, 77.0317001, 'Ямышево', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1621, 52.3373985, 77.0756989, 'Павлодарское', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1687, 52.3103981, 76.1968002, 'Парамановка', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1651, 52.3642998, 77.2954025, 'Прииртышское', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1663, 52.229599, 77.3394012, 'Солнечный', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1805, 52.3777008, 76.9218979, 'Теренколь', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1855, 52.4718018, 76.6582031, 'Чернорецкое', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1407, 52.0808983, 76.7461014, 'Черноярка', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1537, 51.8366013, 76.1747971, 'Успенка', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1485, 52.3507996, 77.1635971, 'Шидерты', 260);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (278, 42.3174019, 69.620697, 'Шымкент', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1703, 42.3174019, 69.620697, 'Акжол', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (467, 42.4407997, 69.8495026, 'Аксукент', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1513, 44.1478004, 68.7149963, 'Алтынтобе', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (271, 42.4173012, 68.8080978, 'Арысь', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1631, 43.5914001, 69.3082962, 'Асыката', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1695, 43.655201, 69.6379013, 'Жаскешу', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (272, 40.7756996, 68.3323975, 'Жетысай', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1673, 42.8711014, 69.3421021, 'им. Турара Рыскулова', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1135, 42.0834007, 69.8559036, 'Карабулак', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1773, 45.0115013, 68.7590027, 'Карасу', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1561, 42.8279991, 69.3302994, 'Кутарыс', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (273, 43.5115013, 68.5105972, 'Кентау', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1625, 43.2910004, 72.6176987, 'Кокибель', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1705, 42.3123016, 69.2417984, 'Кулан', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (274, 42.1813011, 69.8841019, 'Ленгер', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1781, 44.7302017, 69.4181976, 'Мартобе', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1609, 42.2022018, 69.0366974, 'Мырзакент', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1671, 43.2069016, 68.7590027, 'Састобе', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (275, 41.8339996, 69.0086975, 'Сарыагаш', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1509, 43.9031982, 68.6837006, 'Таскен', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1753, 42.3064995, 69.0851974, 'Тассай', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (391, 42.5984001, 69.2563019, 'Темирлановка', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (276, 43.2971992, 68.2587967, 'Туркестан', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1355, 42.5489998, 70.1568985, 'Тюлькубас', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1669, 43.9258003, 69.1545029, 'Улгили', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1879, 43.8623009, 68.7149963, 'Черноводск', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1675, 43.463501, 68.9567032, 'Шакпак баба', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1559, 43.0136986, 68.7919006, 'Ынтымак', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (250, 53.2072983, 63.6747017, 'Костанай', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (251, 52.5661011, 62.5643997, 'Лисаковск', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (252, 52.9756012, 63.1236992, 'Рудный', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1461, 51.7979012, 64.2655029, 'Антоновка', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (248, 50.2560005, 66.9052963, 'Аркалык', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (729, 52.3932991, 63.7821007, 'Аулиеколь', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1517, 53.5223007, 64.4896011, 'Алтын-Дала', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1323, 52.4864006, 62.5619011, 'Боровской', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1313, 52.5542984, 62.5517006, 'Владимировка', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1205, 53.0456009, 63.9799004, 'Денисовка', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1751, 52.9971008, 63.1228981, 'Горняцкий', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1503, 52.4967995, 65.0823975, 'Дружба', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1747, 53.287899, 63.6813011, 'Жамбыл', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (249, 52.1633987, 61.2487984, 'Житикара', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (817, 53.2837982, 63.8306999, 'Заречное', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (603, 53.2005997, 63.6918983, 'Затобольск', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1289, 53.0928001, 63.3833008, 'Камысты', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1887, 51.6579018, 64.2292023, 'Караменды', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (481, 53.3681984, 62.8647003, 'Качар', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (257, 43.5200005, 52, 'Мангистауская обл.', NULL);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1823, 53.1297989, 63.5674019, 'Красный партизан', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (601, 52.4646988, 64.4714966, 'Кушмурун', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1659, 51.7705994, 64.3753967, 'Михайловка', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1365, 52.6824989, 63.3620987, 'Мичуринское', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1617, 52.0965996, 64.5072021, 'Московское', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1329, 53.7542, 63.7438011, 'Надеждинка', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1719, 51.7024002, 64.2216034, 'Озерное', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1129, 52.8666992, 63.4877014, 'Сарыколь', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1363, 52.8064995, 63.467701, 'Тарановское', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (759, 53.0625992, 62.5330009, 'Тобол', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1729, 51.8931007, 64.1557007, 'Убаган', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1347, 53.0625992, 62.5330009, 'Ульяновское', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1279, 52.7751007, 63.615799, 'Узунколь', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (727, 52.7318001, 62.1472015, 'Федоровка', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1569, 53.050499, 64.6799011, 'Челгаши', 247);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (239, 49.7845001, 73.0979996, 'Караганда', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (237, 46.8440018, 74.9748993, 'Балхаш', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (238, 47.7890015, 67.714798, 'Жезказган', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (245, 50.0634995, 72.9589005, 'Темиртау', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (246, 49.7088013, 72.5914001, 'Шахтинск', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (236, 49.6323013, 72.8673019, 'Абай', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1335, 49.5074997, 72.927597, 'Агадырь', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (371, 49.7831001, 72.9576035, 'Актас', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1691, 48.1926994, 75.4916, 'Ахмет', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1759, 48.4459991, 75.7792969, 'Березняки', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1283, 49.7619019, 72.8665009, 'Ботакара', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (761, 49.9115982, 72.8487015, 'Дубовка', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (240, 48.0108986, 70.7949982, 'Каражал', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (241, 49.4105988, 75.4725037, 'Каркаралинск', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1809, 47.9737015, 73.9023972, 'Кенгир', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (789, 49.9123993, 72.5314026, 'Кобетей', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1541, 48.4580002, 75.8464966, 'Коктас', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1389, 48.9737015, 71.6043015, 'Кокпекты', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1579, 48.3893013, 75.1411972, 'Мынбаев', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1721, 48.0940018, 74.8125, 'Новодолинск', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (551, 50.5648003, 72.5683975, 'Осакаровка', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (242, 46.0332985, 73.6929016, 'Приозерск', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1897, 48.4168015, 75.955101, 'Самарка', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1803, 46.1155014, 73.6175995, 'Сарышаган', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (244, 47.9023018, 67.5317993, 'Сатпаев', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1581, 49.0113983, 71.1388016, 'Сортировка', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (401, 49.5009003, 72.8071976, 'Топар', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1905, 46.4891014, 74.5289993, 'Торангалык', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1291, 49.5919991, 72.9049988, 'Улытау', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1745, 45.2563019, 77.9731979, 'Уштобе', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (392, 49.8256989, 72.6298981, 'Шахан', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1547, 48.6477013, 75.6339035, 'Шахтерское', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1763, 48.2849998, 75.1201019, 'Шашубай', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (224, 49.9706993, 82.5950012, 'Усть-Каменогорск', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (221, 50.1973991, 83.1443024, 'Риддер', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (222, 50.4328995, 80.2565994, 'Семей', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1463, 49.7126999, 82.0379028, 'Аккайнар', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1567, 49.0852013, 81.4701996, 'Ахмерово', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (217, 47.5560989, 80.4921036, 'Аягоз', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1413, 50.4371986, 80.3139038, 'Аксаринский кордон', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (781, 50.0688019, 82.3925018, 'Белоусовка', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1487, 49.0707016, 81.5580978, 'Бобровка', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1831, 50.0385017, 82.5873032, 'Винное', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1479, 49.5494003, 82.6137009, 'Восточный', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1477, 49.9306984, 82.2774963, 'Герасимовка', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1153, 49.5489006, 83.6485977, 'Глубокое', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1795, 49.2723999, 81.2944031, 'Горная Ульбинка', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1749, 47.8373985, 80.3780975, 'Жиланды', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (218, 47.5747986, 84.2425003, 'Зайсан', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (219, 49.7401009, 83.3087997, 'Зыряновск', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1667, 49.774601, 83.0221024, 'Ивановка', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (737, 50.4109001, 80.2640991, 'Катон-Карагай', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1219, 48.8246994, 81.2285004, 'им. Касыма Кайсенова', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1519, 49.3442993, 81.733902, 'Коктерек', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1603, 49.3442993, 81.4263, 'Куленовка', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (220, 50.6253014, 79.1159973, 'Курчатов', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1863, 50.3112984, 83.7305984, 'Лесхоз', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1699, 49.6887016, 81.8740005, 'Меновное', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (547, 49.6264992, 83.5223007, 'Новая Бухтарма', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1685, 49.0707016, 81.6899033, 'Ново-Явленка', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1605, 49.3442993, 81.8436966, 'Первомайский', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1755, 48.9117012, 82.0195007, 'Пригородное', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1791, 49.3730011, 81.3823013, 'Прапорщиково', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (223, 49.7840004, 82.9235992, 'Серебрянск', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1845, 49.4160004, 81.8218002, 'Радужное', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1681, 49.2436981, 83.7526016, 'Тарханка', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1575, 49.2436981, 81.7778015, 'Топиха', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (735, 49.2131004, 84.5106964, 'Улкен Нарын', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (791, 47.7677994, 81.5199966, 'Урджар', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1583, 48.9696007, 81.6679993, 'Ушановский', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1649, 50.6250992, 80.6889038, 'Шакаман', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (225, 49.6680984, 81.7302017, 'Шар', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (226, 50.4342995, 81.9457016, 'Шемонаиха', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (793, 50.1352997, 81.1801987, 'Шульбинск', 216);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (195, 45.0140991, 78.3640976, 'Талдыкорган', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (172, 43.2028008, 76.6276016, 'Каскелен', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (235, 48, 71, 'Карагандинская обл.', NULL);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (168, 43.8634987, 77.0653, 'Капчагай', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (194, 43.3092003, 77.2417984, 'Талгар', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (156, 43.3460999, 77.4708023, 'Есик', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (133, 43.2112007, 76.7628021, 'Абай', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (366, 43.4001007, 77.2707977, 'Ават', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1399, 43.3605995, 77.004303, 'Айганым', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1783, 43.5211983, 77.1920013, 'Аймен', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (362, 43.2331009, 76.6010971, 'Айтей', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (134, 43.3465004, 77.2646027, 'Азат', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1725, 44.7159004, 77.1855011, 'Акдала', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1341, 43.6888008, 77.273201, 'Аккайнар', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1385, 43.3787003, 77.2385025, 'Актас', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1785, 43.7086983, 77.5053024, 'Актоган', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (136, 43.5008011, 76.2742996, 'Аксенгир', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (321, 43.4201012, 77.9456024, 'Акши', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1343, 43.4155006, 77.186203, 'Алга', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1543, 43.986599, 77.615303, 'Али', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (360, 43.0878983, 76.9096985, 'Алма-Арасан', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (139, 43.4039993, 77.5250015, 'Алмалы', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1367, 43.2887001, 77.2291031, 'Алмалык', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (140, 43.2192993, 76.6821976, 'Алмалыбак (КИЗ)', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1735, 43.4127998, 77.097702, 'Амангельды', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1653, 43.1212006, 77.3451996, 'Арай', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (348, 43.7240982, 77.1259995, 'Арна', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (815, 43.4669991, 78.3459015, 'Асы-Сага', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (142, 43.4123001, 76.9132004, 'Ащибулак', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (381, 43.5531006, 78.0131989, 'Ащысай', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (143, 43.1917992, 76.910202, 'Баганашыл', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1085, 45.2150993, 77.3393021, 'Байбулак', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (435, 43.3795013, 77.2218018, 'Базаркельды', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (144, 43.4911003, 77.0512009, 'Байсерке', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (145, 43.4033012, 77.2247009, 'Байтерек (Новоалексеевка)', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (146, 44.8111992, 76.2705002, 'Баканас', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1053, 44.9269981, 78.4003983, 'Бактыбая Жалбарысулы', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (629, 45.0085983, 78.3961029, 'Балпык Би', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (147, 43.5047989, 77.5422974, 'Балтабай', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1401, 43.9584007, 76.1828995, 'Бастобе', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (418, 44.9640999, 77.9311981, 'Бекболат', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (302, 43.259201, 77.7289963, 'Батан', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (148, 43.3158989, 77.1007004, 'Бельбулак (Мичурино)', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (316, 43.3023987, 77.0858994, 'Береке', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (149, 43.4972992, 77.5201035, 'Бирлик', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (150, 43.3013992, 77.0406036, 'Бесагаш (Дзержинское)', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (151, 43.2200012, 77.0995026, 'Бескайнар (Горный Садовод)', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (152, 43.1904984, 76.8327026, 'Верхняя Каменка', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1551, 43.7686996, 77.504097, 'Болек', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (153, 43.3577003, 76.8574982, 'Боралдай (Бурундай)', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (769, 49.1805992, 58.4194984, 'Булакты', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (154, 43.3493996, 77.0537033, 'Гулдала', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1613, 44.2294006, 79.8795013, 'Головацкий', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (677, 43.419899, 76.9829025, 'Еркин', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (471, 46.8919983, 81.5966034, 'Ельтай', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (453, 43.6018982, 77.1023026, 'Даулет', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1281, 43.3622017, 76.6579971, 'Екпенды', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (403, 43.3506012, 77.0715027, 'Еламан', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1319, 43.4762001, 77.4643021, 'Енбек', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (409, 43.2372017, 76.5139999, 'Енбекши', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (346, 43.2529984, 76.6523972, 'Долан', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (593, 43.3918991, 76.6667023, 'Жаугашты', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (157, 43.535099, 77.1511002, 'Жалкамыс', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (665, 43.232399, 76.6791992, 'Жалпаксай', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (411, 43.4939995, 77.0154037, 'Жана-талап', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (365, 43.2724991, 76.6738968, 'Жамбыл', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (212, 44.4005013, 78.5101013, 'Жаналык', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (158, 43.1817017, 76.7822037, 'Жанатурмыс', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (361, 43.4385986, 76.9589005, 'Жанадауыр', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (314, 43.4407005, 77.259903, 'Жанашар', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (159, 43.1660004, 76.5662003, 'Жандосов', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (305, 43.4135017, 76.8944016, 'Жапек батыр', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (160, 44.1661987, 80.0037994, 'Жаркент', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (161, 43.3759995, 76.8034973, 'Жармухамбет', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (162, 43.6822014, 77.1227036, 'Жетыген', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1623, 44.6769981, 78.2296982, 'Жетысу', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1599, 43.5931015, 77.0660019, 'Жомарт', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (163, 50.1579018, 71.4459, 'Заречное', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1677, 44.2857018, 77.8585968, 'им. Балгабека Кыдырбекулы', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (787, 43.3330994, 76.7779999, 'Исаево', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (164, 43.2336998, 76.7701035, 'Иргели', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (165, 43.3507996, 77.1404037, 'ИЯФ', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (166, 43.3815994, 76.8503036, 'КазЦИК', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (689, 43.3875999, 76.8738022, 'Кайнар', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (437, 43.3630981, 77.3071976, 'Кайназар', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1489, 43.9124985, 77.3713989, 'Казахстан', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1901, 46.1544991, 78.1743011, 'Капал', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (169, 43.3977013, 77.151001, 'Карабулак (п. Ключи)', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1843, 44.9480019, 78.471199, 'Карабулак', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (318, 43.1299019, 76.8447037, 'Карагайлы (Чапаево)', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (675, 43.1285019, 76.1007996, 'Каракастек', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (597, 43.4239006, 77.6231995, 'Каракемер', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (436, 43.3437004, 76.9128036, 'Карасу-2', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (357, 44.7247009, 76.2985001, 'Караой', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (206, 45.8083992, 77.1756973, 'Каратал', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (171, 43.1654015, 76.4097977, 'Каргалы (п. Фабричный)', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (355, 43.2487984, 76.4371033, 'Касымбек', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (173, 43.2364998, 76.6648026, 'Кемертоган', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1409, 43.3889008, 77.1615982, 'Кендала', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (985, 1419, 77.4377975, 'Койшыбек', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1419, 45.2081985, 78.1149979, 'Кокдала', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (557, 43.294899, 76.8411026, 'Коккайнар', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (174, 43.2501984, 76.7583008, 'Кок-Лай-Сай', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1899, 45.6805, 79.2170029, 'Коктал', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (175, 47.1436005, 81.892601, 'Кокозек', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (426, 43.2574005, 76.7697983, 'Коксай (Путь Ильича)', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1405, 43.3745003, 77.4738998, 'Коктобе', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1177, 43.4785004, 77.0022964, 'Коктерек', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1597, 45.9160004, 81.4850006, 'Коктума', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1217, 43.3596992, 76.6159973, 'Кольащы', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (111, 43.2955017, 76.7693024, 'Кольди', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (324, 43.5584984, 76.9169998, 'Косозен', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (410, 43.4300995, 76.8542023, 'Комсомол', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (363, 43.4996986, 77.2603989, 'Космос', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (178, 43.3941994, 76.9371033, 'Коянкоз', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (725, 43.3949013, 76.9425964, 'Коянкус', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (179, 43.3404999, 76.6617966, 'Кошмамбет', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (627, 43.1525002, 75.9253998, 'Кумтоган', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (454, 43.4869995, 77.4616013, 'Куш', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (353, 43.4034996, 77.0631027, 'Кызыл ту-4', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (304, 43.3017006, 77.108902, 'Кызыл Кайрат', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1819, 43.2569008, 76.2522964, 'Кызылсок', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1393, 43.3501015, 77.0820999, 'Кызылту', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (180, 43.1721992, 76.7664032, 'Кыргауылды', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (767, 43.4026985, 77.240303, 'Кырбалтабай', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (181, 43.3419991, 76.9385986, 'М. Туймебаев', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (421, 43.512001, 77.6886978, 'Маловодное', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (183, 43.3320007, 76.7016983, 'Мерей (Селекция)', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (313, 43.3429985, 76.6697006, 'Междуреченск', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (326, 43.1977005, 76.6480026, 'Музей Жамбыла', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (358, 73.2962036, 76.6554031, 'Мынбаев', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (757, 43.1850014, 76.6512985, 'Наурыз', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1381, 43.4668999, 77.4077988, 'Нияз', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1493, 43.5004997, 77.0094986, 'Новый', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (184, 43.6875992, 77.1930008, 'Нура', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (457, 43.6285019, 77.2556992, 'Остемир', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (185, 43.6285019, 77.0328979, 'Отеген батыр', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (186, 43.3891983, 77.1147995, 'Панфилова (Табаксовхоз)', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (188, 43.2033997, 76.7436981, 'Райымбек', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (189, 43.4081001, 77.0089035, 'Рахат (Покровка)', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (290, 43.4453011, 77.3320007, 'Саймасай', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (192, 43.4720993, 76.117897, 'Самсы', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (459, 44.1216011, 77.1099014, 'Сункар', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (193, 45.4132004, 79.917099, 'Сарканд', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (439, 44.3647003, 77.9692993, 'Сарыозек', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (211, 43.3721008, 76.6272964, 'Станция Шамалган', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (420, 43.3072014, 77.0166016, 'Талдыбулак', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (197, 44.8633995, 78.7650986, 'Текели', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1601, 44.3702011, 78.4378967, 'Теренкара', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1047, 43.3109016, 76.9107971, 'Тескенсу', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (697, 43.6296997, 77.8937988, 'Толкын', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1511, 43.7354012, 76.5076981, 'Толе би', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (559, 43.4747009, 77.1371002, 'Тонкерис', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (199, 43.3055992, 77.0653992, 'Туздыбастау (Калинино)', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (200, 43.3166008, 76.5856018, 'Турар', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (201, 43.3941994, 77.5887985, 'Турген', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (325, 73.2257004, 76.3162003, 'Узынагаш', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (372, 43.3432007, 76.4024963, 'Улькен', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (350, 43.3130989, 76.0926971, 'Унгуртас', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (327, 43.3120995, 76.6691971, 'Улан', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (733, 43.202301, 76.4284973, 'Ульгили', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (202, 43.4306984, 70.7739029, 'Ушарал', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (207, 43.1893005, 76.5354996, 'Ушконыр', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (203, 45.2514992, 76.5354996, 'Уштобе', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1555, 45.6174011, 77.3612976, 'Уштерек', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1465, 43.4706993, 76.7751999, 'Чапаево', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (204, 43.5960999, 78.2498016, 'Чилик', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (205, 43.5383987, 79.4630966, 'Чунджа', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (312, 43.4151001, 76.9665985, 'Ынтымак', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (545, 43.2000999, 76.5615997, 'Шалкар', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (440, 43.5136986, 76.8909988, 'Шелекемир', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (643, 43.9799995, 77.4626007, 'Шенгельды', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (419, 44.2503014, 77.7266006, 'Шубар', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (1521, 43.3291016, 77.2130966, 'Шымбулак', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (243, 72.8451004, 72.8451004, 'Сарань', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (2000, 0, 0, 'Капшагай', 132);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (124, 49.0905991, 60.483799, 'Актюбинская обл.', NULL);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (132, 43.1500015, 76.5400009, 'Алматинская обл.', NULL);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (216, 50.0830002, 82.1822968, 'Восточно-Казахстанская обл.', NULL);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (247, 52.1199989, 63.3800011, 'Костанайская обл.', NULL);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (253, 45, 64, 'Кызылординская обл. ', NULL);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (264, 54.5299988, 69.0999985, 'Северо-Казахстанская обл.', NULL);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (270, 43, 68.3000031, 'Южно-Казахстанская обл.', NULL);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (277, 41.2653008, 67.9810028, 'Шардара', 270);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (2001, 0, 0, 'Атасу', 235);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (2002, 48.4630013, 58.0429993, 'Жем', 124);
+INSERT INTO region (id, latitude, longitude, name, parentid_id) VALUES (2003, 49.3518982, 81.0242996, 'Чарск', 216);
+
+
+--
+-- TOC entry 1995 (class 0 OID 91180)
+-- Dependencies: 183
+-- Data for Name: region_irr; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (9, 'kazahstan/kyzylordinskaya-obl/', 'Кызылординская обл.', 253);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (10, 'kazahstan/mangistauskaya-obl/', 'Мангыстауская обл.', 257);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (33, 'kazahstan/almatinskaya-obl/almaty-gorod/', 'Алмата', 2);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (68, 'kazahstan/karagandinskaya-obl/stapaev-gorod/', 'Сатпаев', 244);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (77, 'kazahstan/kyzylordinskaya-obl/baykonur-gorod/', 'Байконур', 885);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (96, 'kazahstan/yuzhno-kazahstanskaya-obl/shardara-gorod/', 'Шардара', 277);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (36, 'kazahstan/almatinskaya-obl/kapchagay-gorod/', 'Капчагай', 2000);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (15, 'kazahstan/akmolinskaya-obl/akkol-gorod/', 'Акколь', 113);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (16, 'kazahstan/akmolinskaya-obl/astana-gorod/', 'Астана', 105);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (17, 'kazahstan/akmolinskaya-obl/atbasar-gorod/', 'Атбасар', 114);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (18, 'kazahstan/akmolinskaya-obl/derzhavinsk-gorod/', 'Державинск', 116);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (19, 'kazahstan/akmolinskaya-obl/ereymentau-gorod/', 'Ерейментау', 117);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (1, 'kazahstan/akmolinskaya-obl/', 'Акмолинская обл.', 112);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (2, 'kazahstan/aktyubinskaya-obl/', 'Актюбинская обл.', 124);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (3, 'kazahstan/almatinskaya-obl/', 'Алматинская обл.', 132);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (4, 'kazahstan/atyrauskaya-obl/', 'Атырауская обл.', 213);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (5, 'kazahstan/vostochno-kazahstanskaya-obl/', 'Восточно-Казахстанская обл.', 216);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (6, 'kazahstan/zhambylskaya-obl/', 'Жамбылская обл.', 227);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (7, 'kazahstan/karagandinskaya-obl/', 'Карагандинская обл.', 235);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (8, 'kazahstan/kostanayskaya-obl/', 'Костанайская обл.', 247);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (11, 'kazahstan/pavlodarskaya-obl/', 'Павлодарская обл.', 260);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (12, 'kazahstan/severo-kazahstanskaya-obl/', 'Северо-Казахстанская обл.', 264);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (13, 'kazahstan/yuzhno-kazahstanskaya-obl/', 'Южно-Казахстанская обл.', 270);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (14, 'kazahstan/zapadno-kazahstanskaya-obl/', 'Западно-Казахстанская обл.', 232);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (20, 'kazahstan/akmolinskaya-obl/esil-gorod/', 'Есиль', 118);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (21, 'kazahstan/akmolinskaya-obl/kokshetau-gorod/', 'Кокшетау', 119);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (22, 'kazahstan/akmolinskaya-obl/makinsk-gorod/', 'Макинск', 120);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (23, 'kazahstan/akmolinskaya-obl/stepnogorsk-gorod/', 'Степногорск', 121);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (24, 'kazahstan/akmolinskaya-obl/stepnyak-gorod/', 'Степняк', 122);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (25, 'kazahstan/akmolinskaya-obl/schuchinsk-gorod/', 'Щучинск', 123);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (26, 'kazahstan/aktyubinskaya-obl/aktobe-gorod/', 'Актобе', 125);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (27, 'kazahstan/aktyubinskaya-obl/alga-gorod/', 'Алга', 1501);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (28, 'kazahstan/aktyubinskaya-obl/kandyagash-gorod/', 'Кандыагаш', 127);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (29, 'kazahstan/aktyubinskaya-obl/temir-gorod/', 'Темир', 128);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (30, 'kazahstan/aktyubinskaya-obl/hromtau-gorod/', 'Хромтау', 129);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (31, 'kazahstan/aktyubinskaya-obl/shalkar-gorod/', 'Шалкар', 130);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (32, 'kazahstan/aktyubinskaya-obl/emba-gorod/', 'Эмба', 131);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (34, 'kazahstan/almatinskaya-obl/esik-gorod/', 'Есик', 156);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (35, 'kazahstan/almatinskaya-obl/zharkent-gorod/', 'Жаркент', 160);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (37, 'kazahstan/almatinskaya-obl/kaskelen-gorod/', 'Каскелен', 172);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (38, 'kazahstan/almatinskaya-obl/sarkand-gorod/', 'Сарканд', 193);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (39, 'kazahstan/almatinskaya-obl/talgar-gorod/', 'Талгар', 194);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (40, 'kazahstan/almatinskaya-obl/taldykorgan-gorod/', 'Талдыкорган', 195);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (41, 'kazahstan/almatinskaya-obl/tekeli-gorod/', 'Текели', 197);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (42, 'kazahstan/almatinskaya-obl/usharal-gorod/', 'Ушарал', 202);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (43, 'kazahstan/almatinskaya-obl/ushtobe-gorod/', 'Уштобе', 1745);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (44, 'kazahstan/atyrauskaya-obl/atyrau-gorod/', 'Атырау', 214);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (45, 'kazahstan/atyrauskaya-obl/kulsary-gorod/', 'Кульсары', 215);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (46, 'kazahstan/vostochno-kazahstanskaya-obl/ayagoz-gorod/', 'Аягоз', 217);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (47, 'kazahstan/vostochno-kazahstanskaya-obl/zaysan-gorod/', 'Зайсан', 218);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (48, 'kazahstan/vostochno-kazahstanskaya-obl/zyryanovsk-gorod/', 'Зыряновск', 219);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (49, 'kazahstan/vostochno-kazahstanskaya-obl/kurchatov-gorod/', 'Курчатов', 220);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (50, 'kazahstan/vostochno-kazahstanskaya-obl/ridder-gorod/', 'Риддер', 221);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (51, 'kazahstan/vostochno-kazahstanskaya-obl/semey-gorod/', 'Семей', 222);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (52, 'kazahstan/vostochno-kazahstanskaya-obl/serebryansk-gorod/', 'Серебрянск', 223);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (53, 'kazahstan/vostochno-kazahstanskaya-obl/ust-kamenogorsk-gorod/', 'Усть-Каменогорск', 224);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (54, 'kazahstan/vostochno-kazahstanskaya-obl/shar-gorod/', 'Шар', 225);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (55, 'kazahstan/vostochno-kazahstanskaya-obl/shemonaiha-gorod/', 'Шемонаиха', 226);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (56, 'kazahstan/zhambylskaya-obl/zhanatas-gorod/', 'Жанатас', 228);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (57, 'kazahstan/zhambylskaya-obl/karatau-gorod/', 'Каратау', 229);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (58, 'kazahstan/zhambylskaya-obl/taraz-gorod/', 'Тараз', 230);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (59, 'kazahstan/zhambylskaya-obl/shu-gorod/', 'Шу', 231);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (60, 'kazahstan/karagandinskaya-obl/abay-gorod/', 'Абай', 236);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (61, 'kazahstan/karagandinskaya-obl/balhash-gorod/', 'Балхаш', 237);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (62, 'kazahstan/karagandinskaya-obl/zhezkazgan-gorod/', 'Жезказган', 238);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (63, 'kazahstan/karagandinskaya-obl/karaganda-gorod/', 'Караганда', 239);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (64, 'kazahstan/karagandinskaya-obl/karazhal-gorod/', 'Каражал', 240);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (65, 'kazahstan/karagandinskaya-obl/karkaralinsk-gorod/', 'Каркаралинск', 241);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (67, 'kazahstan/karagandinskaya-obl/saran-gorod/', 'Сарань', 243);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (66, 'kazahstan/karagandinskaya-obl/priozyorsk-gorod/', 'Приозерск', 242);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (69, 'kazahstan/karagandinskaya-obl/temirtau-gorod/', 'Темиртау', 245);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (70, 'kazahstan/karagandinskaya-obl/shahtinsk-gorod/', 'Шахтинск', 246);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (71, 'kazahstan/kostanayskaya-obl/arkalyk-gorod/', 'Аркалык', 248);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (72, 'kazahstan/kostanayskaya-obl/zhitikara-gorod/', 'Житикара', 249);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (73, 'kazahstan/kostanayskaya-obl/kostanay-gorod/', 'Костанай', 250);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (74, 'kazahstan/kostanayskaya-obl/lisakovsk-gorod/', 'Лисаковск', 251);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (75, 'kazahstan/kostanayskaya-obl/rudnyy-gorod/', 'Рудный', 252);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (76, 'kazahstan/kyzylordinskaya-obl/aralsk-gorod/', 'Аральск', 254);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (78, 'kazahstan/kyzylordinskaya-obl/kazalinsk-gorod/', 'Казалинск', 255);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (79, 'kazahstan/kyzylordinskaya-obl/kyzylorda-gorod/', 'Кызылорда', 256);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (80, 'kazahstan/mangistauskaya-obl/aktau-gorod/', 'Актау', 258);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (81, 'kazahstan/mangistauskaya-obl/zhanaozen-gorod/', 'Жанаозен', 259);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (82, 'kazahstan/pavlodarskaya-obl/aksu-gorod/', 'Аксу', 261);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (83, 'kazahstan/pavlodarskaya-obl/pavlodar-gorod/', 'Павлодар', 262);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (84, 'kazahstan/pavlodarskaya-obl/ekibastuz-gorod/', 'Экибастуз', 263);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (85, 'kazahstan/severo-kazahstanskaya-obl/bulaevo-gorod/', 'Булаево', 265);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (86, 'kazahstan/severo-kazahstanskaya-obl/mamlyutka-gorod/', 'Мамлютка', 266);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (87, 'kazahstan/severo-kazahstanskaya-obl/petropavlovsk-gorod/', 'Петропавловск', 267);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (88, 'kazahstan/severo-kazahstanskaya-obl/sergeevka-gorod/', 'Сергеевка', 1317);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (89, 'kazahstan/severo-kazahstanskaya-obl/tayynsha-gorod/', 'Тайынша', 269);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (90, 'kazahstan/yuzhno-kazahstanskaya-obl/arys-gorod/', 'Арысь', 271);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (91, 'kazahstan/yuzhno-kazahstanskaya-obl/zhetysay-gorod/', 'Жетысай', 272);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (92, 'kazahstan/yuzhno-kazahstanskaya-obl/kentau-gorod/', 'Кентау', 273);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (93, 'kazahstan/yuzhno-kazahstanskaya-obl/lenger-gorod/', 'Ленгер', 274);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (94, 'kazahstan/yuzhno-kazahstanskaya-obl/saryagash-gorod/', 'Сарыагаш', 275);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (95, 'kazahstan/yuzhno-kazahstanskaya-obl/turkestan-gorod/', 'Туркестан', 276);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (97, 'kazahstan/yuzhno-kazahstanskaya-obl/shymkent-gorod/', 'Шымкент', 278);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (99, 'kazahstan/zapadno-kazahstanskaya-obl/uralsk-gorod/', 'Уральск', 234);
+INSERT INTO region_irr (id, key, name, regionid_id) VALUES (98, 'kazahstan/zapadno-kazahstanskaya-obl/aksay-gorod/', 'Аксай', 233);
+
+
+--
+-- TOC entry 1993 (class 0 OID 91139)
+-- Dependencies: 181
+-- Data for Name: region_kn; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (1, 'almaty', 'Алматы', 2);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (2, 'astana', 'Астана', 105);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (3, 'karaganda', 'Караганда', 239);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (4, 'ust-kamenogorsk', 'Усть-Каменогорск', 224);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (5, 'uralsk', 'Уральск', 234);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (6, 'atyrau', 'Атырау', 214);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (7, 'aktau', 'Актау', 258);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (8, 'abay', 'Абай', 236);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (53, 'kulsary', 'Кульсары', 215);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (9, 'abay-almatinskaya-oblast', 'Алматинская обл.', 132);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (10, 'akkol', 'Акколь', 113);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (11, 'zhambylskaya-oblast', 'Жамбылская обл.', 227);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (54, 'kostanayskaya-oblast', 'Костанайская обл.', 247);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (12, 'zhanaozen', 'Жанаозен', 259);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (55, 'kostanay', 'Костанай', 250);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (14, 'zharkent', 'Жаркент', 160);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (13, 'zhanatas', 'Жанатас', 228);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (15, 'zhezkazgan', 'Жезказган', 238);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (17, 'sarkand', 'Сарканд', 193);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (18, 'satpaev', 'Сатпаев', 244);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (19, 'severo-kazahstanskaya-oblast', 'Северо-Казахстанская обл.', 264);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (20, 'semey', 'Семей', 222);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (56, 'kokshetau', 'Кокшетау', 119);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (57, 'kentau', 'Кентау', 273);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (58, 'kaskelen', 'Каскелен', 172);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (59, 'karatau', 'Каратау', 229);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (60, 'karazhal', 'Каражал', 240);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (61, 'karagandinskaya-oblast', 'Карагандинская обл.', 235);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (22, 'stepnogorsk', 'Степногорск', 121);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (23, 'zapadno-kazahstanskaya-oblast', 'Западно-Казахстанская обл.', 232);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (24, 'zyryanovsk', 'Зыряновск', 219);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (25, 'tayynsha', 'Тайынша', 269);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (26, 'talgar', 'Талгар', 194);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (27, 'taldykorgan', 'Талдыкорган', 195);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (28, 'taraz', 'Тараз', 230);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (29, 'tekeli', 'Текели', 197);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (30, 'temirtau', 'Темиртау', 245);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (31, 'turkestan', 'Туркестан', 276);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (32, 'usharal', 'Ушарал', 202);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (33, 'ushtobe', 'Уштобе', 1745);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (34, 'hromtau', 'Хромтау', 129);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (35, 'shahtinsk', 'Шахтинск', 246);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (36, 'shu', 'Шу', 231);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (37, 'shymkent', 'Шымкент', 278);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (38, 'shchuchinsk', 'Щучинск', 123);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (39, 'ekibastuz', 'Экибастуз', 263);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (47, 'mangistauskaya-oblast', 'Мангыстауская обл.', 257);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (50, 'kyzylordinskaya-oblast', 'Кызылординская обл.', 253);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (16, 'saran', 'Сарань', 243);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (21, 'sergeevka', 'Сергеевка', 1317);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (62, 'kapshagay', 'Капшагай', 2000);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (40, 'yuzhno-kazahstanskaya-oblast', 'Южно-Казахстанская обл.', 270);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (41, 'rudniy', 'Рудный', 252);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (42, 'ridder', 'Риддер', 221);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (43, 'priozersk', 'Приозерск', 242);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (44, 'petropavlovsk', 'Петропавловск', 267);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (45, 'pavlodarskaya-oblast', 'Павлодарская обл.', 260);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (46, 'pavlodar', 'Павлодар', 262);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (48, 'mamlyutka', 'Мамлютка', 266);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (49, 'lisakovsk', 'Лисаковск', 251);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (51, 'kyzylorda', 'Кызылорда', 256);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (52, 'kurchatov', 'Курчатов', 220);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (63, 'akmolinskaya-oblast', 'Акмолинская обл.', 112);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (64, 'aksay', 'Аксай', 1787);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (65, 'aksu', 'Аксу', 261);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (66, 'aktobe', 'Актобе', 125);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (67, 'aktyubinskaya-oblast', 'Актюбинская обл.', 124);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (68, 'aralsk', 'Аральск', 254);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (69, 'arkalyk', 'Аркалык', 248);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (71, 'atyrauskaya-oblast', 'Атырауская обл.', 213);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (72, 'ayagoz', 'Аягоз', 217);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (74, 'balhash', 'Балхаш', 237);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (75, 'borovoe', 'Боровое', 115);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (76, 'bulaevo', 'Булаево', 265);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (77, 'vostochno-kazahstanskaya-oblas', 'Восточно-Казахстанская обл.', 216);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (73, 'bayterek', 'Байтерек', 145);
+INSERT INTO region_kn (id, key, name, regionid_id) VALUES (70, 'arys', 'Арысь', 271);
+
+
+--
+-- TOC entry 1992 (class 0 OID 91112)
+-- Dependencies: 180
+-- Data for Name: region_krisha; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19383, 'Алматы', 2, 2);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19384, 'Алатауский р-н', 3, 3);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19385, 'Алмалинский р-н', 26, 26);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19386, 'Ауэовский р-н', 29, 29);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19387, 'Бостандыкский р-н', 73, 73);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19388, 'Жетысуский р-н', 83, 83);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19389, 'Медеуский р-н', 89, 89);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19390, 'Турксибский р-н', 99, 99);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19391, 'Астана', 105, 105);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19392, 'Алматинский р-н', 106, 106);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19393, 'Сарыаркинский р-н', 107, 107);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19394, 'Кольди', 111, 111);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19395, 'Акмолинская обл.', 112, 112);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19396, 'Акколь', 113, 113);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19397, 'Атбасар', 114, 114);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19398, 'Боровое', 115, 115);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19399, 'Державинск', 116, 116);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19400, 'Ерейментау', 117, 117);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19401, 'Есиль', 118, 118);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19402, 'Кокшетау', 119, 119);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19403, 'Макинск', 120, 120);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19404, 'Степногорск', 121, 121);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19405, 'Степняк', 122, 122);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19406, 'Щучинск', 123, 123);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19407, 'Актюбинская обл.', 124, 124);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19408, 'Актобе', 125, 125);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19409, 'Алга', 126, 126);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19410, 'Кандыагаш', 127, 127);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19411, 'Темир', 128, 128);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19412, 'Хромтау', 129, 129);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19413, 'Шалкар', 130, 130);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19414, 'Эмба', 131, 131);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19415, 'Алматинская обл.', 132, 132);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19416, 'Абай', 133, 133);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19417, 'Азат', 134, 134);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19418, 'Аксенгир', 136, 136);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19419, 'Алмалы', 139, 139);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19420, 'Алмалыбак (КИЗ)', 140, 140);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19421, 'Ащибулак', 142, 142);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19422, 'Баганашыл', 143, 143);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19423, 'Байсерке', 144, 144);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19424, 'Байтерек (Новоалексеевка)', 145, 145);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19425, 'Баканас', 146, 146);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19426, 'Балтабай', 147, 147);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19427, 'Бельбулак (Мичурино)', 148, 148);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19428, 'Бирлик', 149, 149);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19429, 'Бесагаш (Дзержинское)', 150, 150);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19430, 'Бескайнар (Горный Садовод)', 151, 151);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19431, 'Верхняя Каменка', 152, 152);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19432, 'Боралдай (Бурундай)', 153, 153);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19433, 'Гулдала', 154, 154);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19434, 'Есик', 156, 156);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19435, 'Жалкамыс', 157, 157);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19436, 'Жанатурмыс', 158, 158);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19437, 'Жандосов', 159, 159);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19438, 'Жаркент', 160, 160);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19439, 'Жармухамбет', 161, 161);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19440, 'Жетыген', 162, 162);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19441, 'Заречное', 163, 163);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19442, 'Иргели', 164, 164);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19443, 'ИЯФ', 165, 165);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19444, 'КазЦИК', 166, 166);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19445, 'Капчагай', 168, 168);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19446, 'Карабулак (п. Ключи)', 169, 169);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19447, 'Каргалы (п. Фабричный)', 171, 171);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19448, 'Каскелен', 172, 172);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19449, 'Кемертоган', 173, 173);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19450, 'Кок-Лай-Сай', 174, 174);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19451, 'Кокозек', 175, 175);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19452, 'Коянкоз', 178, 178);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19453, 'Кошмамбет', 179, 179);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19454, 'Кыргауылды', 180, 180);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19455, 'М. Туймебаев', 181, 181);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19456, 'Мерей (Селекция)', 183, 183);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19457, 'Нура', 184, 184);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19458, 'Отеген батыр', 185, 185);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19459, 'Панфилова (Табаксовхоз)', 186, 186);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19460, 'Райымбек', 188, 188);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19461, 'Рахат (Покровка)', 189, 189);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19462, 'Самсы', 192, 192);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19463, 'Сарканд', 193, 193);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19464, 'Талгар', 194, 194);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19465, 'Талдыкорган', 195, 195);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19466, 'Текели', 197, 197);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19467, 'Туздыбастау (Калинино)', 199, 199);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19468, 'Турар', 200, 200);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19469, 'Турген', 201, 201);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19470, 'Ушарал', 202, 202);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19471, 'Уштобе', 203, 203);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19472, 'Чилик', 204, 204);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19473, 'Чунджа', 205, 205);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19474, 'Каратал', 206, 206);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19475, 'Ушконыр', 207, 207);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19476, 'Станция Шамалган', 211, 211);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19477, 'Жаналык', 212, 212);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19478, 'Атырауская обл.', 213, 213);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19479, 'Атырау', 214, 214);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19480, 'Кульсары', 215, 215);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19481, 'Восточно-Казахстанская обл.', 216, 216);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19482, 'Аягоз', 217, 217);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19483, 'Зайсан', 218, 218);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19484, 'Зыряновск', 219, 219);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19485, 'Курчатов', 220, 220);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19486, 'Риддер', 221, 221);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19487, 'Семей', 222, 222);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19488, 'Серебрянск', 223, 223);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19489, 'Усть-Каменогорск', 224, 224);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19490, 'Шар', 225, 225);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19491, 'Шемонаиха', 226, 226);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19492, 'Жамбылская обл.', 227, 227);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19493, 'Жанатас', 228, 228);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19494, 'Каратау', 229, 229);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19495, 'Тараз', 230, 230);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19496, 'Шу', 231, 231);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19497, 'Западно-Казахстанская обл.', 232, 232);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19498, 'Аксай', 233, 233);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19499, 'Уральск', 234, 234);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19500, 'Карагандинская обл.', 235, 235);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19501, 'Абай', 236, 236);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19502, 'Балхаш', 237, 237);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19503, 'Жезказган', 238, 238);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19504, 'Караганда', 239, 239);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19505, 'Каражал', 240, 240);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19506, 'Каркаралинск', 241, 241);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19507, 'Приозерск', 242, 242);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19508, 'Сатпаев', 244, 244);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19509, 'Темиртау', 245, 245);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19510, 'Шахтинск', 246, 246);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19511, 'Костанайская обл.', 247, 247);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19512, 'Аркалык', 248, 248);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19513, 'Житикара', 249, 249);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19514, 'Костанай', 250, 250);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19515, 'Лисаковск', 251, 251);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19516, 'Рудный', 252, 252);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19517, 'Кызылординаская обл. ', 253, 253);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19518, 'Аральск', 254, 254);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19519, 'Казалинск', 255, 255);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19520, 'Кызылорда', 256, 256);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19521, 'Мангистауская обл.', 257, 257);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19522, 'Актау', 258, 258);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19523, 'Жанаозен', 259, 259);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19524, 'Павлодарская обл.', 260, 260);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19525, 'Аксу', 261, 261);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19526, 'Павлодар', 262, 262);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19527, 'Экибастуз', 263, 263);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19528, 'Северо-Казахстанская обл.', 264, 264);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19529, 'Булаево', 265, 265);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19530, 'Мамлютка', 266, 266);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19531, 'Петропавловск', 267, 267);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19532, 'Саумалколь', 268, 268);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19533, 'Тайынша', 269, 269);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19534, 'Южно-Казахстанская обл.', 270, 270);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19535, 'Арысь', 271, 271);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19536, 'Жетысай', 272, 272);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19537, 'Кентау', 273, 273);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19538, 'Ленгер', 274, 274);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19539, 'Сарыагаш', 275, 275);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19540, 'Туркестан', 276, 276);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19541, 'Шардана', 277, 277);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19542, 'Шымкент', 278, 278);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19543, 'Саймасай', 290, 290);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19544, 'Есильский р-н', 291, 291);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19545, 'Батан', 302, 302);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19546, 'Кызыл Кайрат', 304, 304);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19547, 'Жапек батыр', 305, 305);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19548, 'Ынтымак', 312, 312);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19549, 'Междуреченск', 313, 313);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19550, 'Жанашар', 314, 314);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19551, 'Береке', 316, 316);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19552, 'Карагайлы (Чапаево)', 318, 318);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19553, 'Акши', 321, 321);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19554, 'Косозен', 324, 324);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19555, 'Узынагаш', 325, 325);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19556, 'Музей Жамбыла', 326, 326);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19557, 'Улан', 327, 327);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19558, 'Аршалы', 328, 328);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19559, 'Астраханка', 329, 329);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19560, 'Егиндыколь', 330, 330);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19561, 'Жаксы', 331, 331);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19562, 'Зеренда', 332, 332);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19563, 'Коргалжын', 333, 333);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19564, 'Балкашино', 334, 334);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19565, 'Акмол', 335, 335);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19566, 'Шортанды', 336, 336);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19567, 'Научный', 337, 337);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19568, 'Жолымбет', 338, 338);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19569, 'Кабанбай Батыра', 341, 341);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19570, 'Долан', 346, 346);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19571, 'Арна', 348, 348);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19572, 'Унгуртас', 350, 350);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19573, 'Кызыл ту-4', 353, 353);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19574, 'Касымбек', 355, 355);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19575, 'Караой', 357, 357);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19576, 'Мынбаев', 358, 358);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19577, 'Алма-Арасан', 360, 360);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19578, 'Жанадауыр', 361, 361);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19579, 'Айтей', 362, 362);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19580, 'Космос', 363, 363);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19581, 'Жамбыл', 365, 365);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19582, 'Ават', 366, 366);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19583, 'Максимовка', 368, 368);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19584, 'Талапкер', 369, 369);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19585, 'Кажымукан', 370, 370);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19586, 'Актас', 371, 371);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19587, 'Улькен', 372, 372);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19588, 'Чиганак', 373, 373);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19589, 'Ащысай', 381, 381);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19590, 'Темирлановка', 391, 391);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19591, 'Шахан', 392, 392);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19592, 'Топар', 401, 401);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19593, 'Еламан', 403, 403);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19594, 'Енбекши', 409, 409);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19595, 'Комсомол', 410, 410);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19596, 'Жана-талап', 411, 411);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19597, 'Бекболат', 418, 418);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19598, 'Шубар', 419, 419);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19599, 'Талдыбулак', 420, 420);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19600, 'Маловодное', 421, 421);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19601, 'Коксай (Путь Ильича)', 426, 426);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19602, 'Базаркельды', 435, 435);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19603, 'Карасу-2', 436, 436);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19604, 'Кайназар', 437, 437);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19605, 'Софиевка', 438, 438);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19606, 'Сарыозек', 439, 439);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19607, 'Шелекемир', 440, 440);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19608, 'Кордай', 451, 451);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19609, 'Отар', 452, 452);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19610, 'Даулет', 453, 453);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19611, 'Куш', 454, 454);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19612, 'Остемир', 457, 457);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19613, 'Сункар', 459, 459);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19614, 'Аксукент', 467, 467);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19615, 'Ельтай', 471, 471);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19616, 'Индер', 477, 477);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19617, 'Махамбет', 479, 479);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19618, 'Качар', 481, 481);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19619, 'Шалкар', 545, 545);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19620, 'Новая Бухтарма', 547, 547);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19621, 'Бозайгыр', 549, 549);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19622, 'Осакаровка', 551, 551);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19623, 'Коккайнар', 557, 557);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19624, 'Тонкерис', 559, 559);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19625, 'Жаугашты', 593, 593);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19626, 'Каракемер', 597, 597);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19627, 'Кушмурун', 601, 601);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19628, 'Затобольск', 603, 603);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19629, 'Кумтоган', 627, 627);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19630, 'Балпык Би', 629, 629);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19631, 'Коянды', 637, 637);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19632, 'Шенгельды', 643, 643);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19633, 'Жалпаксай', 665, 665);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19634, 'Жибек жолы', 667, 667);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19635, 'Каракастек', 675, 675);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19636, 'Еркин', 677, 677);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19637, 'Форт-Шевченко', 679, 679);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19638, 'Баутино', 681, 681);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19639, 'Аташ', 683, 683);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19640, 'Акшукур', 685, 685);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19641, 'С.Шапагатова', 687, 687);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19642, 'Кайнар', 689, 689);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19643, 'Мерке', 693, 693);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19644, 'Курык', 695, 695);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19645, 'Толкын', 697, 697);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19646, 'Шубаркудук', 699, 699);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19647, 'Коянкус', 725, 725);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19648, 'Федоровка', 727, 727);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19649, 'Аулиеколь', 729, 729);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19650, 'Косшы', 731, 731);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19651, 'Ульгили', 733, 733);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19652, 'Улкен Нарын', 735, 735);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19653, 'Катон-Карагай', 737, 737);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19654, 'Имантау', 739, 739);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19655, 'Наурыз', 757, 757);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19656, 'Тобол', 759, 759);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19657, 'Дубовка', 761, 761);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19658, 'Кырбалтабай', 767, 767);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19659, 'Булакты', 769, 769);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19660, 'Фарфоровое', 771, 771);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19661, 'Кызылсуат', 775, 775);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19662, 'Белоусовка', 781, 781);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19663, 'Наурызбайский р-н', 783, 783);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19664, 'Исаево', 787, 787);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19665, 'Кобетей', 789, 789);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19666, 'Урджар', 791, 791);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19667, 'Шульбинск', 793, 793);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19668, 'Бейнеу', 795, 795);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19669, 'Асы-Сага', 815, 815);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19670, 'Заречное', 817, 817);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19671, 'Жукей', 819, 819);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19672, 'Воздвиженка', 881, 881);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19673, 'Байконур', 885, 885);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19674, 'Новоишимское', 977, 977);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19675, 'Виноградовка', 983, 983);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19676, 'Койшыбек', 985, 985);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19677, 'Шетпе', 989, 989);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19678, 'Тескенсу', 1047, 1047);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19679, 'Бактыбая Жалбарысулы', 1053, 1053);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19680, 'Бишкуль', 1079, 1079);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19681, 'Байбулак', 1085, 1085);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19682, 'Сарыколь', 1129, 1129);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19683, 'Карабулак', 1135, 1135);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19684, 'Глубокое', 1153, 1153);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19685, 'Коктерек', 1177, 1177);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19686, 'Куйгенжар', 1179, 1179);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19687, 'Катарколь', 1181, 1181);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19688, 'Денисовка', 1205, 1205);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19689, 'Кольащы', 1217, 1217);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19690, 'им. Касыма Кайсенова', 1219, 1219);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19691, 'Сарыкемер', 1229, 1229);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19692, 'Узунколь', 1277, 1277);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19693, 'Узунколь', 1279, 1279);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19694, 'Екпенды', 1281, 1281);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19695, 'Ботакара', 1283, 1283);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19696, 'Камысты', 1289, 1289);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19697, 'Улытау', 1291, 1291);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19698, 'Каратобе', 1311, 1311);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19699, 'Владимировка', 1313, 1313);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19700, 'Рахымжана Кошкарбаева', 1315, 1315);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19701, 'Сергеева', 1317, 1317);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19702, 'Енбек', 1319, 1319);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19703, 'Боровской', 1323, 1323);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19704, 'Надеждинка', 1329, 1329);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19705, 'Доссор', 1333, 1333);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19706, 'Агадырь', 1335, 1335);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19707, 'Аккайнар', 1341, 1341);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19708, 'Алга', 1343, 1343);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19709, 'Кулан', 1345, 1345);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19710, 'Ульяновское', 1347, 1347);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19711, 'Тюлькубас', 1355, 1355);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19712, 'Тарановское', 1363, 1363);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19713, 'Мичуринское', 1365, 1365);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19714, 'Алмалык', 1367, 1367);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19715, 'Каражар', 1373, 1373);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19716, 'Байзак', 1377, 1377);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19717, 'Нияз', 1381, 1381);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19718, 'Актас', 1385, 1385);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19719, 'Кокпекты', 1389, 1389);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19720, 'Кызылту', 1393, 1393);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19721, 'Мартук', 1395, 1395);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19722, 'Караоткель', 1397, 1397);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19723, 'Айганым', 1399, 1399);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19724, 'Бастобе', 1401, 1401);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19725, 'Коктобе', 1403, 1403);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19726, 'Коктобе', 1405, 1405);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19727, 'Черноярка', 1407, 1407);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19728, 'Кендала', 1409, 1409);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19729, 'Баскудук', 1411, 1411);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19730, 'Аксаринский кордон', 1413, 1413);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19731, 'Мунайши', 1415, 1415);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19732, 'Мичурино', 1417, 1417);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19733, 'Кокдала', 1419, 1419);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19734, 'Курайлы', 1421, 1421);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19735, 'Жалпактобе', 1423, 1423);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19736, 'Красный яр', 1425, 1425);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19737, 'Батыр', 1427, 1427);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19738, 'Кызылтобе', 1429, 1429);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19739, 'Шайкорык', 1431, 1431);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19740, 'Тайтобе', 1433, 1433);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19741, 'Пригородный', 1437, 1437);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19742, 'Садовое', 1439, 1439);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19743, 'Пугачево', 1443, 1443);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19744, 'Акжар', 1445, 1445);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19745, 'Еркинкала', 1447, 1447);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19746, 'Майкайын', 1449, 1449);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19747, 'Успеноюрьевка', 1453, 1453);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19748, 'Деркул', 1455, 1455);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19749, 'Федоровка', 1457, 1457);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19750, 'Тасбогет', 1459, 1459);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19751, 'Антоновка', 1461, 1461);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19752, 'Аккайнар', 1463, 1463);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19753, 'Чапаево', 1465, 1465);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19754, 'Белес', 1473, 1473);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19755, 'Герасимовка', 1477, 1477);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19756, 'Восточный', 1479, 1479);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19757, 'Зачаганск', 1481, 1481);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19758, 'Ракуша', 1483, 1483);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19759, 'Шидерты', 1485, 1485);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19760, 'Бобровка', 1487, 1487);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19761, 'Казахстан', 1489, 1489);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19762, 'Новый', 1493, 1493);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19763, 'Кызылжулдуз', 1495, 1495);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19764, 'Мангышлак', 1497, 1497);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19765, 'Тельмана', 1499, 1499);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19766, 'Алга', 1501, 1501);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19767, 'Дружба', 1503, 1503);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19768, 'Махамбетов', 1505, 1505);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19769, 'Баянды', 1507, 1507);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19770, 'Таскен', 1509, 1509);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19771, 'Толе би', 1511, 1511);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19772, 'Алтынтобе', 1513, 1513);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19773, 'Шиен', 1515, 1515);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19774, 'Алтын-Дала', 1517, 1517);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19775, 'Коктерек', 1519, 1519);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19776, 'Шымбулак', 1521, 1521);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19777, 'Кызылжар', 1523, 1523);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19778, 'Жетыбай', 1525, 1525);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19779, 'Успенка', 1537, 1537);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19780, 'Дамса', 1539, 1539);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19781, 'Коктас', 1541, 1541);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19782, 'Али', 1543, 1543);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19783, 'Ленинский', 1545, 1545);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19784, 'Шахтерское', 1547, 1547);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19785, 'Жилянка', 1549, 1549);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19786, 'Болек', 1551, 1551);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19787, 'Дамба', 1553, 1553);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19788, 'Уштерек', 1555, 1555);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19789, 'Ынтымак', 1559, 1559);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19790, 'Кутарыс', 1561, 1561);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19791, 'Волгодоновка', 1563, 1563);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19792, 'Ахмерово', 1567, 1567);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19793, 'Челгаши', 1569, 1569);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19794, 'Орнек', 1571, 1571);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19795, 'Алмалы', 1573, 1573);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19796, 'Топиха', 1575, 1575);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19797, 'Трекино', 1577, 1577);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19798, 'Мынбаев', 1579, 1579);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19799, 'Сортировка', 1581, 1581);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19800, 'Ушановский', 1583, 1583);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19801, 'Баянаул', 1585, 1585);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19802, 'Подстепное', 1589, 1589);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19803, 'Сарыжар', 1591, 1591);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19804, 'Ильинка', 1593, 1593);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19805, 'Красный Кордон', 1595, 1595);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19806, 'Коктума', 1597, 1597);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19807, 'Жомарт', 1599, 1599);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19808, 'Теренкара', 1601, 1601);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19809, 'Куленовка', 1603, 1603);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19810, 'Первомайский', 1605, 1605);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19811, 'Мырзакент', 1609, 1609);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19812, 'Луганск', 1611, 1611);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19813, 'Головацкий', 1613, 1613);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19814, 'Кенесары', 1615, 1615);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19815, 'Московское', 1617, 1617);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19816, 'Павлодарское', 1621, 1621);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19817, 'Жетысу', 1623, 1623);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19818, 'Кокибель', 1625, 1625);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19819, 'Малотимофеевка', 1627, 1627);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19820, 'Ямышево', 1629, 1629);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19821, 'Асыката', 1631, 1631);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19822, 'Акбулак', 1635, 1635);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19823, 'Зарослое', 1637, 1637);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19824, 'Альжан', 1639, 1639);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19825, 'Жетекши', 1641, 1641);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19826, 'Уваковское', 1645, 1645);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19827, 'Тельманово', 1647, 1647);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19828, 'Шакаман', 1649, 1649);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19829, 'Прииртышское', 1651, 1651);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19830, 'Арай', 1653, 1653);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19831, 'Приречное', 1655, 1655);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19832, 'Сазда', 1657, 1657);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19833, 'Михайловка', 1659, 1659);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19834, 'Отрадное', 1661, 1661);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19835, 'Солнечный', 1663, 1663);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19836, 'Ганюшкино', 1665, 1665);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19837, 'Ивановка', 1667, 1667);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19838, 'Улгили', 1669, 1669);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19839, 'Састобе', 1671, 1671);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19840, 'им. Турара Рыскулова', 1673, 1673);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19841, 'Шакпак баба', 1675, 1675);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19842, 'им. Балгабека Кыдырбекулы', 1677, 1677);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19843, 'Береке (Память Ильича)', 1679, 1679);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19844, 'Тарханка', 1681, 1681);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19845, 'Дарьинск', 1683, 1683);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19846, 'Ново-Явленка', 1685, 1685);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19847, 'Парамановка', 1687, 1687);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19848, 'Ахмет', 1691, 1691);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19849, 'Тамды', 1693, 1693);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19850, 'Жаскешу', 1695, 1695);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19851, 'Меновное', 1699, 1699);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19852, 'Акжол', 1703, 1703);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19853, 'Кулан', 1705, 1705);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19854, 'Казылжарма', 1707, 1707);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19855, 'Жанаконыс', 1709, 1709);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19856, 'Малый Чаган', 1713, 1713);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19857, 'Умирзак', 1715, 1715);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19858, 'Кенжеколь', 1717, 1717);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19859, 'Озерное', 1719, 1719);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19860, 'Новодолинск', 1721, 1721);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19861, 'Алатау', 1723, 1723);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19862, 'Акдала', 1725, 1725);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19863, 'Заря', 1727, 1727);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19864, 'Убаган', 1729, 1729);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19865, 'Амангельды', 1735, 1735);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19866, 'Уштобе', 1745, 1745);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19867, 'Жамбыл', 1747, 1747);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19868, 'Жиланды', 1749, 1749);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19869, 'Горняцкий', 1751, 1751);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19870, 'Тассай', 1753, 1753);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19871, 'Пригородное', 1755, 1755);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19872, 'Талгайран', 1757, 1757);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19873, 'Березняки', 1759, 1759);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19874, 'Шашубай', 1763, 1763);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19875, 'Чайкино', 1765, 1765);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19876, 'Круглоозерное', 1769, 1769);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19877, 'Карасу', 1773, 1773);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19878, 'Чайкурук', 1777, 1777);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19879, 'Шолаккаргалы', 1779, 1779);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19880, 'Мартобе', 1781, 1781);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19881, 'Аймен', 1783, 1783);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19882, 'Актоган', 1785, 1785);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19883, 'Аксай', 1787, 1787);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19884, 'Жумыскер', 1789, 1789);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19885, 'Прапорщиково', 1791, 1791);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19886, 'Маржанбулак', 1793, 1793);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19887, 'Горная Ульбинка', 1795, 1795);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19888, 'Сабынды', 1797, 1797);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19889, 'Бирлик', 1799, 1799);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19890, 'Сарышаган', 1803, 1803);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19891, 'Теренколь', 1805, 1805);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19892, 'Кенгир', 1809, 1809);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19893, 'Атамекен', 1811, 1811);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19894, 'Досан', 1817, 1817);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19895, 'Кызылсок', 1819, 1819);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19896, 'Красный партизан', 1823, 1823);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19897, 'Интернациональный', 1825, 1825);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19898, 'Винное', 1831, 1831);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19899, 'Коктагай', 1833, 1833);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19900, 'Шубар', 1837, 1837);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19901, 'Новенький', 1841, 1841);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19902, 'Карабулак', 1843, 1843);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19903, 'Радужное', 1845, 1845);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19904, 'Томарлы', 1849, 1849);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19905, 'Курашасай', 1851, 1851);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19906, 'Аккемер', 1853, 1853);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19907, 'Чернорецкое', 1855, 1855);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19908, 'Барбастау', 1857, 1857);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19909, 'Нурбулак', 1859, 1859);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19910, 'Лесхоз', 1863, 1863);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19911, 'Миялы', 1867, 1867);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19912, 'Ясное', 1869, 1869);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19913, 'Заречный', 1871, 1871);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19914, 'Константиновка', 1875, 1875);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19915, 'Акыртобе', 1877, 1877);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19916, 'Черноводск', 1879, 1879);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19917, 'Киялы', 1883, 1883);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19918, 'Асан', 1885, 1885);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19919, 'Караменды', 1887, 1887);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19920, 'Самарка', 1897, 1897);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19921, 'Коктал', 1899, 1899);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19922, 'Капал', 1901, 1901);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19923, 'Новопавловка', 1903, 1903);
+INSERT INTO region_krisha (id, name, regionid_id, key) VALUES (19924, 'Торангалык', 1905, 1905);
+
+
+--
+-- TOC entry 1994 (class 0 OID 91165)
+-- Dependencies: 182
+-- Data for Name: region_olx; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (30, NULL, false, true, '2016-04-28 23:52:21.429', '56', 'Макинск', 'city', 120);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (31, NULL, false, true, '2016-04-28 23:52:21.432', '81', 'Щучинск', 'city', 123);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (32, NULL, false, true, '2016-04-28 23:52:21.434', '16', 'Степногорск', 'city', 121);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (33, NULL, false, true, '2016-04-28 23:52:21.452', '41', 'Степняк', 'city', 122);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (24, NULL, false, true, '2016-04-28 23:52:21.33', '87', 'Астана', 'city', 105);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (46, NULL, false, true, NULL, '86', 'Аягоз', 'city', 217);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (64, NULL, false, true, NULL, '101', 'Атасу', 'city', 2001);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (22, NULL, false, true, NULL, '32', 'Жем', 'city', 2002);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (103, NULL, false, true, NULL, '61', 'Шардара', 'city', 277);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (47, NULL, false, true, NULL, '18', 'Чарск', 'city', 2003);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (1, NULL, false, true, '2016-04-28 21:20:08.884', '13', 'Акмолинская обл.', 'region', 112);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (2, NULL, false, true, '2016-04-28 21:20:08.898', '2', 'Актюбинская обл.', 'region', 124);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (3, NULL, false, true, '2016-04-28 21:20:08.9', '8', 'Алматинская обл.', 'region', 132);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (4, NULL, false, true, '2016-04-28 21:20:08.903', '4', 'Атырауская обл.', 'region', 213);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (5, NULL, false, true, '2016-04-28 21:20:08.906', '14', 'Восточно-Казахстанская обл.', 'region', 216);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (6, NULL, false, true, '2016-04-28 21:20:08.908', '10', 'Жамбылская обл.', 'region', 227);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (7, NULL, false, true, '2016-04-28 21:20:08.911', '7', 'Западно-Казахстанская обл.', 'region', 232);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (8, NULL, false, true, '2016-04-28 21:20:08.913', '5', 'Карагандинская обл.', 'region', 235);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (9, NULL, false, true, '2016-04-28 21:20:08.915', '12', 'Костанайская обл.', 'region', 247);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (12, NULL, false, true, '2016-04-28 21:20:08.921', '1', 'Павлодарская обл.', 'region', 260);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (13, NULL, false, true, '2016-04-28 21:20:08.924', '11', 'Северо-Казахстанская обл.', 'region', 264);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (14, NULL, false, true, '2016-04-28 21:20:08.927', '6', 'Южно-Казахстанская обл.', 'region', 270);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (11, NULL, false, true, '2016-04-28 21:20:08.93', '9', 'Мангистауская обл.', 'region', 257);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (10, NULL, false, true, '2016-04-28 21:18:23.439', '3', 'Кызылординская обл.', 'region', 253);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (15, NULL, false, true, '2016-04-28 23:49:11.938', '26', 'Актобе', 'city', 125);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (16, NULL, false, true, '2016-04-28 23:49:11.942', '66', 'Алга', 'city', 1501);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (17, NULL, false, true, '2016-04-28 23:49:11.977', '10', 'Эмба', 'city', 131);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (18, NULL, false, true, '2016-04-28 23:49:11.98', '25', 'Хромтау', 'city', 129);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (19, NULL, false, true, '2016-04-28 23:49:11.983', '63', 'Кандыагаш', 'city', 127);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (20, NULL, false, true, '2016-04-28 23:49:11.998', '11', 'Шалкар', 'city', 130);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (21, NULL, false, true, '2016-04-28 23:49:12.002', '31', 'Темир', 'city', 128);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (23, NULL, false, true, '2016-04-28 23:52:21.327', '57', 'Акколь', 'city', 113);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (25, NULL, false, true, '2016-04-28 23:52:21.333', '34', 'Атбасар', 'city', 114);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (26, NULL, false, true, '2016-04-28 23:52:21.336', '27', 'Державинск', 'city', 116);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (27, NULL, false, true, '2016-04-28 23:52:21.345', '24', 'Кокшетау', 'city', 119);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (28, NULL, false, true, '2016-04-28 23:52:21.423', '14', 'Есиль', 'city', 118);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (29, NULL, false, true, '2016-04-28 23:52:21.426', '15', 'Ерейментау', 'city', 117);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (53, NULL, false, true, '2016-04-29 01:16:23.264', '52', 'Усть-Каменогорск', 'city', 224);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (34, NULL, false, true, '2016-04-29 01:16:23.288', '1', 'Алматы', 'city', 2);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (35, NULL, false, true, '2016-04-29 01:16:23.284', '22', 'Есик', 'city', 156);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (36, NULL, false, true, '2016-04-29 01:16:23.291', '60', 'Капчагай', 'city', 168);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (37, NULL, false, true, '2016-04-29 01:16:23.294', '20', 'Каскелен', 'city', 172);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (38, NULL, false, true, '2016-04-29 01:16:23.297', '44', 'Сарканд', 'city', 193);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (39, NULL, false, true, '2016-04-29 01:16:23.302', '40', 'Талдыкорган', 'city', 195);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (40, NULL, false, true, '2016-04-29 01:16:23.305', '59', 'Талгар', 'city', 194);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (41, NULL, false, true, '2016-04-29 01:16:23.308', '37', 'Текели', 'city', 197);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (42, NULL, false, true, '2016-04-29 01:16:23.311', '67', 'Ушарал', 'city', 202);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (43, NULL, false, true, '2016-04-29 01:16:23.316', '46', 'Уштобе', 'city', 1745);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (44, NULL, false, true, '2016-04-29 01:16:23.32', '28', 'Атырау', 'city', 214);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (45, NULL, false, true, '2016-04-29 01:16:23.322', '9', 'Кульсары', 'city', 215);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (48, NULL, false, true, '2016-04-29 01:16:23.329', '75', 'Курчатов', 'city', 220);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (49, NULL, false, true, '2016-04-29 01:16:23.332', '70', 'Риддер', 'city', 221);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (50, NULL, false, true, '2016-04-29 01:16:23.335', '58', 'Семей', 'city', 222);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (51, NULL, false, true, '2016-04-29 01:16:23.339', '78', 'Серебрянск', 'city', 223);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (52, NULL, false, true, '2016-04-29 01:16:23.344', '84', 'Шемонаиха', 'city', 226);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (54, NULL, false, true, '2016-04-29 01:16:23.349', '71', 'Зайсан', 'city', 218);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (55, NULL, false, true, '2016-04-29 01:16:23.353', '55', 'Зыряновск', 'city', 219);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (56, NULL, false, true, '2016-04-29 01:16:23.358', '17', 'Каратау', 'city', 229);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (57, NULL, false, true, '2016-04-29 01:16:23.362', '69', 'Шу', 'city', 231);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (58, NULL, false, true, '2016-04-29 01:16:23.366', '53', 'Тараз', 'city', 230);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (59, NULL, false, true, '2016-04-29 01:16:23.369', '23', 'Жанатас', 'city', 228);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (60, NULL, false, true, '2016-04-29 01:16:23.373', '68', 'Жаркент', 'city', 160);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (61, NULL, false, true, '2016-04-29 01:16:23.393', '12', 'Аксай', 'city', 1787);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (62, NULL, false, true, '2016-04-29 01:16:23.592', '19', 'Уральск', 'city', 234);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (63, NULL, false, true, '2016-04-29 01:16:23.595', '64', 'Абай', 'city', 236);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (65, NULL, false, true, '2016-04-29 01:16:23.601', '72', 'Балхаш', 'city', 237);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (66, NULL, false, true, '2016-04-29 01:16:23.605', '39', 'Караганда', 'city', 239);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (67, NULL, false, true, '2016-04-29 01:16:23.609', '43', 'Каражал', 'city', 240);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (68, NULL, false, true, '2016-04-29 01:16:23.613', '77', 'Каркаралинск', 'city', 241);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (69, NULL, false, true, '2016-04-29 01:16:23.616', '76', 'Приозерск', 'city', 242);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (70, NULL, false, true, '2016-04-29 01:16:23.619', '82', 'Сарань', 'city', 243);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (77, NULL, false, true, '2016-04-29 01:16:23.622', '33', 'Сатпаев', 'city', 244);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (78, NULL, false, true, '2016-04-29 01:16:23.625', '73', 'Шахтинск', 'city', 246);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (79, NULL, false, true, '2016-04-29 01:16:23.628', '65', 'Темиртау', 'city', 245);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (80, NULL, false, true, '2016-04-29 01:16:23.632', '38', 'Жезказган', 'city', 238);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (81, NULL, false, true, '2016-04-29 01:16:23.637', '48', 'Аркалык', 'city', 248);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (82, NULL, false, true, '2016-04-29 01:16:23.64', '51', 'Костанай', 'city', 250);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (83, NULL, false, true, '2016-04-29 01:16:23.643', '49', 'Лисаковск', 'city', 251);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (84, NULL, false, true, '2016-04-29 01:16:23.646', '79', 'Рудный', 'city', 252);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (85, NULL, false, true, '2016-04-29 01:16:23.65', '80', 'Житикара', 'city', 249);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (86, NULL, false, true, '2016-04-29 01:16:23.654', '2', 'Аральск', 'city', 254);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (87, NULL, false, true, '2016-04-29 01:16:23.659', '30', 'Байконур', 'city', 885);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (88, NULL, false, true, '2016-04-29 01:16:23.661', '35', 'Казалинск', 'city', 255);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (89, NULL, false, true, '2016-04-29 01:16:23.664', '45', 'Кызылорда', 'city', 256);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (90, NULL, false, true, '2016-04-29 01:16:23.669', '50', 'Актау', 'city', 258);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (92, NULL, false, true, '2016-04-29 01:16:23.672', '5', 'Жанаозен', 'city', 259);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (91, NULL, false, true, '2016-04-29 01:16:23.676', '62', 'Форт-Шевченко', 'city', 679);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (94, NULL, false, true, '2016-04-29 01:16:23.679', '85', 'Экибастуз', 'city', 263);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (95, NULL, false, true, '2016-04-29 01:16:23.684', '36', 'Павлодар', 'city', 262);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (97, NULL, false, true, '2016-04-29 01:16:23.689', '6', 'Мамлютка', 'city', 266);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (98, NULL, false, true, '2016-04-29 01:16:23.693', '7', 'Петропавловск', 'city', 267);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (100, NULL, false, true, '2016-04-29 01:16:23.697', '8', 'Тайынша', 'city', 269);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (101, NULL, false, true, '2016-04-29 01:16:23.703', '29', 'Кентау', 'city', 273);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (104, NULL, false, true, '2016-04-29 01:16:23.716', '47', 'Шымкент', 'city', 278);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (106, NULL, false, true, '2016-04-29 01:16:23.722', '4', 'Жетысай', 'city', 272);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (93, NULL, false, true, '2016-04-29 01:16:23.727', '83', 'Аксу', 'city', 261);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (96, NULL, false, true, '2016-04-29 01:16:23.731', '13', 'Булаево', 'city', 265);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (99, NULL, false, true, '2016-04-29 01:16:23.778', '42', 'Сергеевка', 'city', 1317);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (102, NULL, false, true, '2016-04-29 01:16:23.781', '3', 'Ленгер', 'city', 274);
+INSERT INTO region_olx (id, created_date, deleted, enabled, modified_date, key, name, type, regionid_id) VALUES (105, NULL, false, true, '2016-04-29 01:16:23.784', '74', 'Туркестан', 'city', 276);
+
+
+--
+-- TOC entry 1878 (class 2606 OID 91189)
+-- Name: region_irr_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY region_irr
+    ADD CONSTRAINT region_irr_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1874 (class 2606 OID 91148)
+-- Name: region_kn_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY region_kn
+    ADD CONSTRAINT region_kn_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1872 (class 2606 OID 91118)
+-- Name: region_krisha_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY region_krisha
+    ADD CONSTRAINT region_krisha_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1876 (class 2606 OID 91174)
+-- Name: region_olx_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY region_olx
+    ADD CONSTRAINT region_olx_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1870 (class 2606 OID 91089)
+-- Name: region_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY region
+    ADD CONSTRAINT region_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1881 (class 2606 OID 91149)
+-- Name: fk46e768ec9a34725; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY region_kn
+    ADD CONSTRAINT fk46e768ec9a34725 FOREIGN KEY (regionid_id) REFERENCES region(id);
+
+
+--
+-- TOC entry 1883 (class 2606 OID 91190)
+-- Name: fk8960549ec9a34725; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY region_irr
+    ADD CONSTRAINT fk8960549ec9a34725 FOREIGN KEY (regionid_id) REFERENCES region(id);
+
+
+--
+-- TOC entry 1882 (class 2606 OID 91175)
+-- Name: fk89606a70c9a34725; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY region_olx
+    ADD CONSTRAINT fk89606a70c9a34725 FOREIGN KEY (regionid_id) REFERENCES region(id);
+
+
+--
+-- TOC entry 1880 (class 2606 OID 91119)
+-- Name: fka47e5535c9a34725; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY region_krisha
+    ADD CONSTRAINT fka47e5535c9a34725 FOREIGN KEY (regionid_id) REFERENCES region(id);
+
+
+--
+-- TOC entry 1879 (class 2606 OID 91090)
+-- Name: fkc84826f46377072f; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY region
+    ADD CONSTRAINT fkc84826f46377072f FOREIGN KEY (parentid_id) REFERENCES region(id);
+
+
+-- Completed on 2016-04-29 08:32:15
+
+--
+-- PostgreSQL database dump complete
+--
+

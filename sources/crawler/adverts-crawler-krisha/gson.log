@@ -1,0 +1,301 @@
+2016-04-28 09:50:06,925 INFO  [play] Crawler KRISHA:1ROOM-ALL finished
+2016-04-28 09:50:36,097 INFO  [play] Crawler KRISHA:1ROOM-ALL finished
+2016-04-28 09:50:41,106 INFO  [play] Crawler KRISHA:1ROOM-ALL started
+2016-04-28 09:50:41,107 INFO  [play] Found crawler parameter: REGION with name: Регион Астана and value: query[data][map.geo_id]=105
+2016-04-28 09:50:41,108 INFO  [play] Found crawler parameter: CATEGORY with name: Продажа квартир and value: catId=1
+2016-04-28 09:50:41,108 INFO  [play] Found crawler parameter: LIMIT with name: Лимит 25 за раз and value: 25
+2016-04-28 09:50:41,108 INFO  [play] Found crawler parameter: ROOMS_FROM with name: Комнат от 1 and value: query[data][live.rooms][from]=1
+2016-04-28 09:50:41,109 INFO  [play] Found crawler parameter: ROOMS_TO with name: Комнат до 1 and value: query[data][live.rooms][to]=1
+2016-04-28 09:50:41,109 INFO  [play] QueryBuilder: Url to crawle:https://api.krisha.kz/v1/adverts/search.json?appId=123892005472&appKey=0b94b147d7315ac8d23fdfcae24cb7a4&currentUser=&withAdverts=1&catId=1&limit=25&offset=0&query[data][map.geo_id]=105&query[data][live.rooms][from]=1&query[data][live.rooms][to]=1
+2016-04-28 09:50:41,111 INFO  [play] Will be used User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko with name [Windows Phone]
+2016-04-28 09:50:41,114 INFO  [play] Will be used proxy server: 5.135.254.35:3128 with name [France Free server]
+2016-04-28 09:50:41,705 INFO  [play] Crawler KRISHA:1ROOM-ALL finished
+2016-04-28 09:50:41,705 INFO  [play] Crawler KRISHA:1ROOM-ALL finished
+2016-04-28 09:50:46,711 INFO  [play] Crawler KRISHA:1ROOM-ALL started
+2016-04-28 09:50:46,711 INFO  [play] Crawler KRISHA:1ROOM-ALL started
+2016-04-28 09:50:46,713 INFO  [play] Found crawler parameter: REGION with name: Регион Астана and value: query[data][map.geo_id]=105
+2016-04-28 09:50:46,713 INFO  [play] Found crawler parameter: REGION with name: Регион Астана and value: query[data][map.geo_id]=105
+2016-04-28 09:50:46,713 INFO  [play] Found crawler parameter: CATEGORY with name: Продажа квартир and value: catId=1
+2016-04-28 09:50:46,713 INFO  [play] Found crawler parameter: CATEGORY with name: Продажа квартир and value: catId=1
+2016-04-28 09:50:46,713 INFO  [play] Found crawler parameter: LIMIT with name: Лимит 25 за раз and value: 25
+2016-04-28 09:50:46,713 INFO  [play] Found crawler parameter: LIMIT with name: Лимит 25 за раз and value: 25
+2016-04-28 09:50:46,714 INFO  [play] Found crawler parameter: ROOMS_FROM with name: Комнат от 1 and value: query[data][live.rooms][from]=1
+2016-04-28 09:50:46,714 INFO  [play] Found crawler parameter: ROOMS_FROM with name: Комнат от 1 and value: query[data][live.rooms][from]=1
+2016-04-28 09:50:46,715 INFO  [play] Found crawler parameter: ROOMS_TO with name: Комнат до 1 and value: query[data][live.rooms][to]=1
+2016-04-28 09:50:46,715 INFO  [play] Found crawler parameter: ROOMS_TO with name: Комнат до 1 and value: query[data][live.rooms][to]=1
+2016-04-28 09:50:46,715 INFO  [play] QueryBuilder: Url to crawle:https://api.krisha.kz/v1/adverts/search.json?appId=123892005472&appKey=0b94b147d7315ac8d23fdfcae24cb7a4&currentUser=&withAdverts=1&catId=1&limit=25&offset=0&query[data][map.geo_id]=105&query[data][live.rooms][from]=1&query[data][live.rooms][to]=1
+2016-04-28 09:50:46,715 INFO  [play] QueryBuilder: Url to crawle:https://api.krisha.kz/v1/adverts/search.json?appId=123892005472&appKey=0b94b147d7315ac8d23fdfcae24cb7a4&currentUser=&withAdverts=1&catId=1&limit=25&offset=0&query[data][map.geo_id]=105&query[data][live.rooms][from]=1&query[data][live.rooms][to]=1
+2016-04-28 09:50:46,718 INFO  [play] Will be used User-Agent: Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25 with name [Safary]
+2016-04-28 09:50:46,718 INFO  [play] Will be used User-Agent: Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25 with name [Safary]
+2016-04-28 09:50:46,720 INFO  [play] Will be used proxy server: 5.135.254.35:3128 with name [France Free server]
+2016-04-28 09:50:46,720 INFO  [play] Will be used proxy server: 5.135.254.35:3128 with name [France Free server]
+2016-04-28 09:50:47,131 INFO  [play] Crawler KRISHA:1ROOM-ALL finished
+2016-04-28 09:50:47,131 INFO  [play] Crawler KRISHA:1ROOM-ALL finished
+2016-04-28 09:50:47,131 INFO  [play] Crawler KRISHA:1ROOM-ALL finished
+2016-04-28 09:50:52,135 INFO  [play] Crawler KRISHA:1ROOM-ALL started
+2016-04-28 09:50:52,135 INFO  [play] Crawler KRISHA:1ROOM-ALL started
+2016-04-28 09:50:52,135 INFO  [play] Crawler KRISHA:1ROOM-ALL started
+2016-04-28 09:50:52,136 INFO  [play] Found crawler parameter: REGION with name: Регион Астана and value: query[data][map.geo_id]=105
+2016-04-28 09:50:52,136 INFO  [play] Found crawler parameter: REGION with name: Регион Астана and value: query[data][map.geo_id]=105
+2016-04-28 09:50:52,136 INFO  [play] Found crawler parameter: REGION with name: Регион Астана and value: query[data][map.geo_id]=105
+2016-04-28 09:50:52,136 INFO  [play] Found crawler parameter: CATEGORY with name: Продажа квартир and value: catId=1
+2016-04-28 09:50:52,136 INFO  [play] Found crawler parameter: CATEGORY with name: Продажа квартир and value: catId=1
+2016-04-28 09:50:52,136 INFO  [play] Found crawler parameter: CATEGORY with name: Продажа квартир and value: catId=1
+2016-04-28 09:50:52,137 INFO  [play] Found crawler parameter: LIMIT with name: Лимит 25 за раз and value: 25
+2016-04-28 09:50:52,137 INFO  [play] Found crawler parameter: LIMIT with name: Лимит 25 за раз and value: 25
+2016-04-28 09:50:52,137 INFO  [play] Found crawler parameter: LIMIT with name: Лимит 25 за раз and value: 25
+2016-04-28 09:50:52,137 INFO  [play] Found crawler parameter: ROOMS_FROM with name: Комнат от 1 and value: query[data][live.rooms][from]=1
+2016-04-28 09:50:52,137 INFO  [play] Found crawler parameter: ROOMS_FROM with name: Комнат от 1 and value: query[data][live.rooms][from]=1
+2016-04-28 09:50:52,137 INFO  [play] Found crawler parameter: ROOMS_FROM with name: Комнат от 1 and value: query[data][live.rooms][from]=1
+2016-04-28 09:50:52,138 INFO  [play] Found crawler parameter: ROOMS_TO with name: Комнат до 1 and value: query[data][live.rooms][to]=1
+2016-04-28 09:50:52,138 INFO  [play] Found crawler parameter: ROOMS_TO with name: Комнат до 1 and value: query[data][live.rooms][to]=1
+2016-04-28 09:50:52,138 INFO  [play] Found crawler parameter: ROOMS_TO with name: Комнат до 1 and value: query[data][live.rooms][to]=1
+2016-04-28 09:50:52,138 INFO  [play] QueryBuilder: Url to crawle:https://api.krisha.kz/v1/adverts/search.json?appId=123892005472&appKey=0b94b147d7315ac8d23fdfcae24cb7a4&currentUser=&withAdverts=1&catId=1&limit=25&offset=0&query[data][map.geo_id]=105&query[data][live.rooms][from]=1&query[data][live.rooms][to]=1
+2016-04-28 09:50:52,138 INFO  [play] QueryBuilder: Url to crawle:https://api.krisha.kz/v1/adverts/search.json?appId=123892005472&appKey=0b94b147d7315ac8d23fdfcae24cb7a4&currentUser=&withAdverts=1&catId=1&limit=25&offset=0&query[data][map.geo_id]=105&query[data][live.rooms][from]=1&query[data][live.rooms][to]=1
+2016-04-28 09:50:52,138 INFO  [play] QueryBuilder: Url to crawle:https://api.krisha.kz/v1/adverts/search.json?appId=123892005472&appKey=0b94b147d7315ac8d23fdfcae24cb7a4&currentUser=&withAdverts=1&catId=1&limit=25&offset=0&query[data][map.geo_id]=105&query[data][live.rooms][from]=1&query[data][live.rooms][to]=1
+2016-04-28 09:50:52,140 INFO  [play] Will be used User-Agent: Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19 with name [Android]
+2016-04-28 09:50:52,140 INFO  [play] Will be used User-Agent: Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19 with name [Android]
+2016-04-28 09:50:52,140 INFO  [play] Will be used User-Agent: Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19 with name [Android]
+2016-04-28 09:50:52,143 INFO  [play] Will be used proxy server: 5.135.254.35:3128 with name [France Free server]
+2016-04-28 09:50:52,143 INFO  [play] Will be used proxy server: 5.135.254.35:3128 with name [France Free server]
+2016-04-28 09:50:52,143 INFO  [play] Will be used proxy server: 5.135.254.35:3128 with name [France Free server]
+2016-04-28 09:50:52,594 INFO  [play] Crawler KRISHA:1ROOM-ALL finished
+2016-04-28 09:50:52,594 INFO  [play] Crawler KRISHA:1ROOM-ALL finished
+2016-04-28 09:50:52,594 INFO  [play] Crawler KRISHA:1ROOM-ALL finished
+2016-04-28 09:50:52,594 INFO  [play] Crawler KRISHA:1ROOM-ALL finished
+2016-04-28 09:50:57,600 INFO  [play] Crawler KRISHA:1ROOM-ALL started
+2016-04-28 09:50:57,600 INFO  [play] Crawler KRISHA:1ROOM-ALL started
+2016-04-28 09:50:57,600 INFO  [play] Crawler KRISHA:1ROOM-ALL started
+2016-04-28 09:50:57,600 INFO  [play] Crawler KRISHA:1ROOM-ALL started
+2016-04-28 09:50:57,601 INFO  [play] Found crawler parameter: REGION with name: Регион Астана and value: query[data][map.geo_id]=105
+2016-04-28 09:50:57,601 INFO  [play] Found crawler parameter: REGION with name: Регион Астана and value: query[data][map.geo_id]=105
+2016-04-28 09:50:57,601 INFO  [play] Found crawler parameter: REGION with name: Регион Астана and value: query[data][map.geo_id]=105
+2016-04-28 09:50:57,601 INFO  [play] Found crawler parameter: REGION with name: Регион Астана and value: query[data][map.geo_id]=105
+2016-04-28 09:50:57,602 INFO  [play] Found crawler parameter: CATEGORY with name: Продажа квартир and value: catId=1
+2016-04-28 09:50:57,602 INFO  [play] Found crawler parameter: CATEGORY with name: Продажа квартир and value: catId=1
+2016-04-28 09:50:57,602 INFO  [play] Found crawler parameter: CATEGORY with name: Продажа квартир and value: catId=1
+2016-04-28 09:50:57,602 INFO  [play] Found crawler parameter: CATEGORY with name: Продажа квартир and value: catId=1
+2016-04-28 09:50:57,602 INFO  [play] Found crawler parameter: LIMIT with name: Лимит 25 за раз and value: 25
+2016-04-28 09:50:57,602 INFO  [play] Found crawler parameter: LIMIT with name: Лимит 25 за раз and value: 25
+2016-04-28 09:50:57,602 INFO  [play] Found crawler parameter: LIMIT with name: Лимит 25 за раз and value: 25
+2016-04-28 09:50:57,602 INFO  [play] Found crawler parameter: LIMIT with name: Лимит 25 за раз and value: 25
+2016-04-28 09:50:57,603 INFO  [play] Found crawler parameter: ROOMS_FROM with name: Комнат от 1 and value: query[data][live.rooms][from]=1
+2016-04-28 09:50:57,603 INFO  [play] Found crawler parameter: ROOMS_FROM with name: Комнат от 1 and value: query[data][live.rooms][from]=1
+2016-04-28 09:50:57,603 INFO  [play] Found crawler parameter: ROOMS_FROM with name: Комнат от 1 and value: query[data][live.rooms][from]=1
+2016-04-28 09:50:57,603 INFO  [play] Found crawler parameter: ROOMS_FROM with name: Комнат от 1 and value: query[data][live.rooms][from]=1
+2016-04-28 09:50:57,603 INFO  [play] Found crawler parameter: ROOMS_TO with name: Комнат до 1 and value: query[data][live.rooms][to]=1
+2016-04-28 09:50:57,603 INFO  [play] Found crawler parameter: ROOMS_TO with name: Комнат до 1 and value: query[data][live.rooms][to]=1
+2016-04-28 09:50:57,603 INFO  [play] Found crawler parameter: ROOMS_TO with name: Комнат до 1 and value: query[data][live.rooms][to]=1
+2016-04-28 09:50:57,603 INFO  [play] Found crawler parameter: ROOMS_TO with name: Комнат до 1 and value: query[data][live.rooms][to]=1
+2016-04-28 09:50:57,604 INFO  [play] QueryBuilder: Url to crawle:https://api.krisha.kz/v1/adverts/search.json?appId=123892005472&appKey=0b94b147d7315ac8d23fdfcae24cb7a4&currentUser=&withAdverts=1&catId=1&limit=25&offset=0&query[data][map.geo_id]=105&query[data][live.rooms][from]=1&query[data][live.rooms][to]=1
+2016-04-28 09:50:57,604 INFO  [play] QueryBuilder: Url to crawle:https://api.krisha.kz/v1/adverts/search.json?appId=123892005472&appKey=0b94b147d7315ac8d23fdfcae24cb7a4&currentUser=&withAdverts=1&catId=1&limit=25&offset=0&query[data][map.geo_id]=105&query[data][live.rooms][from]=1&query[data][live.rooms][to]=1
+2016-04-28 09:50:57,604 INFO  [play] QueryBuilder: Url to crawle:https://api.krisha.kz/v1/adverts/search.json?appId=123892005472&appKey=0b94b147d7315ac8d23fdfcae24cb7a4&currentUser=&withAdverts=1&catId=1&limit=25&offset=0&query[data][map.geo_id]=105&query[data][live.rooms][from]=1&query[data][live.rooms][to]=1
+2016-04-28 09:50:57,604 INFO  [play] QueryBuilder: Url to crawle:https://api.krisha.kz/v1/adverts/search.json?appId=123892005472&appKey=0b94b147d7315ac8d23fdfcae24cb7a4&currentUser=&withAdverts=1&catId=1&limit=25&offset=0&query[data][map.geo_id]=105&query[data][live.rooms][from]=1&query[data][live.rooms][to]=1
+2016-04-28 09:50:57,607 INFO  [play] Will be used User-Agent: Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25 with name [Safary]
+2016-04-28 09:50:57,607 INFO  [play] Will be used User-Agent: Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25 with name [Safary]
+2016-04-28 09:50:57,607 INFO  [play] Will be used User-Agent: Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25 with name [Safary]
+2016-04-28 09:50:57,607 INFO  [play] Will be used User-Agent: Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25 with name [Safary]
+2016-04-28 09:50:57,609 INFO  [play] Will be used proxy server: 5.135.254.35:3128 with name [France Free server]
+2016-04-28 09:50:57,609 INFO  [play] Will be used proxy server: 5.135.254.35:3128 with name [France Free server]
+2016-04-28 09:50:57,609 INFO  [play] Will be used proxy server: 5.135.254.35:3128 with name [France Free server]
+2016-04-28 09:50:57,609 INFO  [play] Will be used proxy server: 5.135.254.35:3128 with name [France Free server]
+2016-04-28 09:50:58,058 ERROR [play] 
+
+@70024ngbi
+Error during job execution (kz.aphion.adverts.crawler.krisha.jobs.KrishaCrawlerJob)
+
+Execution exception (In /app/kz/aphion/adverts/crawler/krisha/jobs/KrishaCrawlerJob.java around line 129)
+JsonSyntaxException occured : java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+
+play.exceptions.JavaExecutionException: java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+	at play.jobs.Job.call(Job.java:155)
+	at Invocation.Job(Play!)
+Caused by: com.google.gson.JsonSyntaxException: java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:176)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper.read(TypeAdapterRuntimeTypeWrapper.java:40)
+	at com.google.gson.internal.bind.CollectionTypeAdapterFactory$Adapter.read(CollectionTypeAdapterFactory.java:81)
+	at com.google.gson.internal.bind.CollectionTypeAdapterFactory$Adapter.read(CollectionTypeAdapterFactory.java:60)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.Gson.fromJson(Gson.java:791)
+	at com.google.gson.Gson.fromJson(Gson.java:757)
+	at com.google.gson.Gson.fromJson(Gson.java:706)
+	at com.google.gson.Gson.fromJson(Gson.java:678)
+	at kz.aphion.adverts.crawler.krisha.jobs.KrishaCrawlerJob.startCrawle(KrishaCrawlerJob.java:129)
+	at kz.aphion.adverts.crawler.krisha.jobs.KrishaCrawlerJob.doJob(KrishaCrawlerJob.java:48)
+	at play.jobs.Job.doJobWithResult(Job.java:50)
+	at play.jobs.Job.call(Job.java:146)
+	... 1 more
+Caused by: java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+	at com.google.gson.stream.JsonReader.expect(JsonReader.java:339)
+	at com.google.gson.stream.JsonReader.beginObject(JsonReader.java:322)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:165)
+	... 22 more
+2016-04-28 09:50:58,058 ERROR [play] 
+
+@70024ngbi
+Error during job execution (kz.aphion.adverts.crawler.krisha.jobs.KrishaCrawlerJob)
+
+Execution exception (In /app/kz/aphion/adverts/crawler/krisha/jobs/KrishaCrawlerJob.java around line 129)
+JsonSyntaxException occured : java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+
+play.exceptions.JavaExecutionException: java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+	at play.jobs.Job.call(Job.java:155)
+	at Invocation.Job(Play!)
+Caused by: com.google.gson.JsonSyntaxException: java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:176)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper.read(TypeAdapterRuntimeTypeWrapper.java:40)
+	at com.google.gson.internal.bind.CollectionTypeAdapterFactory$Adapter.read(CollectionTypeAdapterFactory.java:81)
+	at com.google.gson.internal.bind.CollectionTypeAdapterFactory$Adapter.read(CollectionTypeAdapterFactory.java:60)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.Gson.fromJson(Gson.java:791)
+	at com.google.gson.Gson.fromJson(Gson.java:757)
+	at com.google.gson.Gson.fromJson(Gson.java:706)
+	at com.google.gson.Gson.fromJson(Gson.java:678)
+	at kz.aphion.adverts.crawler.krisha.jobs.KrishaCrawlerJob.startCrawle(KrishaCrawlerJob.java:129)
+	at kz.aphion.adverts.crawler.krisha.jobs.KrishaCrawlerJob.doJob(KrishaCrawlerJob.java:48)
+	at play.jobs.Job.doJobWithResult(Job.java:50)
+	at play.jobs.Job.call(Job.java:146)
+	... 1 more
+Caused by: java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+	at com.google.gson.stream.JsonReader.expect(JsonReader.java:339)
+	at com.google.gson.stream.JsonReader.beginObject(JsonReader.java:322)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:165)
+	... 22 more
+2016-04-28 09:50:58,058 ERROR [play] 
+
+@70024ngbi
+Error during job execution (kz.aphion.adverts.crawler.krisha.jobs.KrishaCrawlerJob)
+
+Execution exception (In /app/kz/aphion/adverts/crawler/krisha/jobs/KrishaCrawlerJob.java around line 129)
+JsonSyntaxException occured : java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+
+play.exceptions.JavaExecutionException: java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+	at play.jobs.Job.call(Job.java:155)
+	at Invocation.Job(Play!)
+Caused by: com.google.gson.JsonSyntaxException: java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:176)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper.read(TypeAdapterRuntimeTypeWrapper.java:40)
+	at com.google.gson.internal.bind.CollectionTypeAdapterFactory$Adapter.read(CollectionTypeAdapterFactory.java:81)
+	at com.google.gson.internal.bind.CollectionTypeAdapterFactory$Adapter.read(CollectionTypeAdapterFactory.java:60)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.Gson.fromJson(Gson.java:791)
+	at com.google.gson.Gson.fromJson(Gson.java:757)
+	at com.google.gson.Gson.fromJson(Gson.java:706)
+	at com.google.gson.Gson.fromJson(Gson.java:678)
+	at kz.aphion.adverts.crawler.krisha.jobs.KrishaCrawlerJob.startCrawle(KrishaCrawlerJob.java:129)
+	at kz.aphion.adverts.crawler.krisha.jobs.KrishaCrawlerJob.doJob(KrishaCrawlerJob.java:48)
+	at play.jobs.Job.doJobWithResult(Job.java:50)
+	at play.jobs.Job.call(Job.java:146)
+	... 1 more
+Caused by: java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+	at com.google.gson.stream.JsonReader.expect(JsonReader.java:339)
+	at com.google.gson.stream.JsonReader.beginObject(JsonReader.java:322)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:165)
+	... 22 more
+2016-04-28 09:50:58,058 ERROR [play] 
+
+@70024ngbi
+Error during job execution (kz.aphion.adverts.crawler.krisha.jobs.KrishaCrawlerJob)
+
+Execution exception (In /app/kz/aphion/adverts/crawler/krisha/jobs/KrishaCrawlerJob.java around line 129)
+JsonSyntaxException occured : java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+
+play.exceptions.JavaExecutionException: java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+	at play.jobs.Job.call(Job.java:155)
+	at Invocation.Job(Play!)
+Caused by: com.google.gson.JsonSyntaxException: java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:176)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper.read(TypeAdapterRuntimeTypeWrapper.java:40)
+	at com.google.gson.internal.bind.CollectionTypeAdapterFactory$Adapter.read(CollectionTypeAdapterFactory.java:81)
+	at com.google.gson.internal.bind.CollectionTypeAdapterFactory$Adapter.read(CollectionTypeAdapterFactory.java:60)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.Gson.fromJson(Gson.java:791)
+	at com.google.gson.Gson.fromJson(Gson.java:757)
+	at com.google.gson.Gson.fromJson(Gson.java:706)
+	at com.google.gson.Gson.fromJson(Gson.java:678)
+	at kz.aphion.adverts.crawler.krisha.jobs.KrishaCrawlerJob.startCrawle(KrishaCrawlerJob.java:129)
+	at kz.aphion.adverts.crawler.krisha.jobs.KrishaCrawlerJob.doJob(KrishaCrawlerJob.java:48)
+	at play.jobs.Job.doJobWithResult(Job.java:50)
+	at play.jobs.Job.call(Job.java:146)
+	... 1 more
+Caused by: java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+	at com.google.gson.stream.JsonReader.expect(JsonReader.java:339)
+	at com.google.gson.stream.JsonReader.beginObject(JsonReader.java:322)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:165)
+	... 22 more
+2016-04-28 09:50:58,058 ERROR [play] 
+
+@70024ngbi
+Error during job execution (kz.aphion.adverts.crawler.krisha.jobs.KrishaCrawlerJob)
+
+Execution exception (In /app/kz/aphion/adverts/crawler/krisha/jobs/KrishaCrawlerJob.java around line 129)
+JsonSyntaxException occured : java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+
+play.exceptions.JavaExecutionException: java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+	at play.jobs.Job.call(Job.java:155)
+	at Invocation.Job(Play!)
+Caused by: com.google.gson.JsonSyntaxException: java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:176)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper.read(TypeAdapterRuntimeTypeWrapper.java:40)
+	at com.google.gson.internal.bind.CollectionTypeAdapterFactory$Adapter.read(CollectionTypeAdapterFactory.java:81)
+	at com.google.gson.internal.bind.CollectionTypeAdapterFactory$Adapter.read(CollectionTypeAdapterFactory.java:60)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$1.read(ReflectiveTypeAdapterFactory.java:93)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:172)
+	at com.google.gson.Gson.fromJson(Gson.java:791)
+	at com.google.gson.Gson.fromJson(Gson.java:757)
+	at com.google.gson.Gson.fromJson(Gson.java:706)
+	at com.google.gson.Gson.fromJson(Gson.java:678)
+	at kz.aphion.adverts.crawler.krisha.jobs.KrishaCrawlerJob.startCrawle(KrishaCrawlerJob.java:129)
+	at kz.aphion.adverts.crawler.krisha.jobs.KrishaCrawlerJob.doJob(KrishaCrawlerJob.java:48)
+	at play.jobs.Job.doJobWithResult(Job.java:50)
+	at play.jobs.Job.call(Job.java:146)
+	... 1 more
+Caused by: java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 86949
+	at com.google.gson.stream.JsonReader.expect(JsonReader.java:339)
+	at com.google.gson.stream.JsonReader.beginObject(JsonReader.java:322)
+	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:165)
+	... 22 more
