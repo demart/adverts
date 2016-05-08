@@ -10,7 +10,7 @@ To run project required following middleware or tools:
 
 ## Start project preparations
 
-1. Create DB name adverts in Postgres using scripts in db/dump-09-05-16-00-06.backup (or the latest full script)
+1. Create DB name adverts in Postgres using scripts in db/full-dump-09-05-16-02-27.sql (or the latest full script)
 2. Run Mongo (default port)
 3. Run ActiveMQ
 4. Execute command ./gradlew clean build
