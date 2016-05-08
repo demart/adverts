@@ -1,6 +1,16 @@
 
 
 workspace
+sources/common/adverts-common/build/*
+sources/common/adverts-common/tmp/*
+sources/common/adverts-common/eclipse/*
+sources/common/adverts-common/logs/*
+sources/common/adverts-common/bin/*
+sources/common/adverts-common/.project
+sources/common/adverts-common/.settings
+sources/common/adverts-common/.DS_Store
+sources/common/adverts-common/.classpath
+
 sources/common/adverts-common-persistence/build/*
 sources/common/adverts-common-persistence/tmp/*
 sources/common/adverts-common-persistence/eclipse/*

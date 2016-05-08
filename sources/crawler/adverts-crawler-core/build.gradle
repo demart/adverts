@@ -21,6 +21,7 @@ dependencies {
 	
 	compile 'org.mongodb.morphia:morphia:1.0.1'
 
+	compile project(":common:adverts-common")
 	compile project(":crawler:adverts-crawler-persistence")
 }
 

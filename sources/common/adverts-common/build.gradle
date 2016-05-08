@@ -10,10 +10,9 @@ repositories {
  
 
 dependencies {
-	//compile 'com.google.code.maven-play-plugin.org.playframework:play:1.2.7'
-	
 	compile 'org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final'
 	compile 'org.mongodb.morphia:morphia:1.0.1'
+	compile project(":common:adverts-common-persistence")
 }
 
 
