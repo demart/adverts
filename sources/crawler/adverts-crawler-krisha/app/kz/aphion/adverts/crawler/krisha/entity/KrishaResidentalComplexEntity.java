@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import kz.aphion.adverts.persistence.db.RegionEntity;
 import kz.aphion.adverts.persistence.db.ResidentalComplexEntity;
 
 
@@ -39,6 +40,12 @@ public class KrishaResidentalComplexEntity {
 	 */
 	@Column(name="name")
 	public String name;
+	
+	/**
+	 * Ссылка на регион к которому принадлежит данный ЖК
+	 */
+	@ManyToOne
+	public RegionEntity region;
 	
 	/**
 	 * Ссылка на ЖК во внутреннем справочнике

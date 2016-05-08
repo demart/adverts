@@ -155,7 +155,7 @@ public class FlatRentDataMapper  extends AbstractAdvertMapper<FlatRentRealty> {
 			case "map.complex":
 				String houseComplexId = (String)dataItem.getValue();
 				realty.data.residentalComplex.externalComplexId = houseComplexId;
-				FlatDataMapperUtils.mapResidentialComplex(realty.data.residentalComplex);
+				FlatDataMapperUtils.mapResidentialComplex(advert, realty.data.residentalComplex);
 				break;
 			case "map.street": // Улица
 				String mapStreet = (String)dataItem.getValue();

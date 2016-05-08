@@ -10,7 +10,7 @@ To run project required following middleware or tools:
 
 ## Start project preparations
 
-1. Create DB name adverts in Postgres using scripts in db/full-dump-09-05-16-02-27.sql (or the latest full script)
+1. Create DB name adverts in Postgres using scripts in db/full-dump-09-05-16-04-35.sql (or the latest full script)
 2. Run Mongo (default port)
 3. Run ActiveMQ
 4. Set path to jvm /sources/gradle.properties (example org.gradle.java.home=/Library/Java/JavaVirtualMachines/jdk1.7.0_79.jdk/Contents/Home/)
