@@ -1,5 +1,7 @@
 # Adverts (Crawler project)
-To run project required following middleware or tools
+# 
+To run project required following middleware or tools:
+
 1. Gradle
 2. Postgres (9.X version)
 3. MongoDB (3.3.X version)
