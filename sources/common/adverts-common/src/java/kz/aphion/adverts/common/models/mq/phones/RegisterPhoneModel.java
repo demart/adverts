@@ -1,7 +1,9 @@
 package kz.aphion.adverts.common.models.mq.phones;
 
 import java.util.Calendar;
+import java.util.List;
 
+import kz.aphion.adverts.persistence.Region;
 import kz.aphion.adverts.persistence.phones.PhoneOwner;
 import kz.aphion.adverts.persistence.phones.PhoneSource;
 import kz.aphion.adverts.persistence.phones.PhoneSourceCategory;
@@ -18,12 +20,17 @@ public class RegisterPhoneModel {
 	/**
 	 * Номер телефона
 	 */
-	public String phone;
+	public List<String> phone;
 	
 	/**
 	 * Идентификатор региона
 	 */
-	public String regionId;
+	public Region region;
+	
+	/**
+	 * Регионы вхождения
+	 */
+	public List<Region> regions;
 	
 	/**
 	 * Время когда был зафиксирован телефон

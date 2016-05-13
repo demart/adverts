@@ -110,4 +110,24 @@ public class KrishaDataManager {
 		}
 	}
 	
+	/**
+	 * Возвращает ЖК по названию и региону
+	 * @param complex
+	 * @return
+	 */
+	public static KrishaResidentalComplexEntity getResidentalComplex(String complex, Long regionId) {
+		List<KrishaResidentalComplexEntity> results = (List<KrishaResidentalComplexEntity>)JPA.em()
+				.createQuery("from KrishaResidentalComplexEntity where name = :key and region.id = :regionId")
+				.setMaxResults(1)
+				.setParameter("key", complex)
+				.setParameter("regionId", regionId)
+				.getResultList();
+		if (results.size() > 0) {
+			return results.get(0);
+		} else {
+			Logger.error("Requested residental complex with id [" + complex + "] not found.");
+			return null;
+		}
+	}	
+	
 }

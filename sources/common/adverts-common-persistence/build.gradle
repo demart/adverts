@@ -42,6 +42,18 @@ jar {
 			into file(getRootDir().getAbsolutePath() + '/crawler/adverts-crawler-olx/lib/')
 		}
 		println 'to: ' + getRootDir().getAbsolutePath() + '/crawler/adverts-crawler-olx/lib/'
+
+		copy {
+			from file(archivePath)
+			into file(getRootDir().getAbsolutePath() + '/phones/adverts-phone-processor/lib/')
+		}
+		println 'to: ' + getRootDir().getAbsolutePath() + '/phones/adverts-phone-processor/lib/'
+
+		copy {
+			from file(archivePath)
+			into file(getRootDir().getAbsolutePath() + '/phones/adverts-phone-web/lib/')
+		}
+		println 'to: ' + getRootDir().getAbsolutePath() + '/phones/adverts-phone-web/lib/'
 	}
 }
 

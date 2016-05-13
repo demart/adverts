@@ -22,7 +22,7 @@ public class Application extends Controller {
     }
     
     
-    private static void mongoTest() {
+    private static void mongoTest() throws Exception {
     	MongoDBProvider.getInstance().getDatastore().createQuery(FlatSellRealty.class)
     	.getCollection().drop();
     	

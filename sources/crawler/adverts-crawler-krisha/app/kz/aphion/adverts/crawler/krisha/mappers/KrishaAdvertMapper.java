@@ -42,30 +42,34 @@ public class KrishaAdvertMapper {
 			if (Logger.isDebugEnabled())
 				Logger.debug("Advert with Id: " + (Long)rawAdvert.get("id") + " will be converted");
 			
-			Realty realty = convertRealtyToAdvertEntity(advertType, rawAdvert);
-			if (realty != null) {
-				
-				// Пробуем замапить внешние регионы на внутренние
-				if (StringUtils.isBlank(realty.location.externalRegionId)) {
-					Logger.error("FOUND ADVERT [" + realty.source.externalAdvertId + "] WITHOUT REGION!!!");
-				} else {
-					//Logger.error("ADVERT [" + realty.source.externalAdvertId + "] REGION: [" + realty.location.externalRegionId + "]");
-					KrishaRegionEntity krishaRegionEntity = KrishaDataManager.getKrishaRegion(realty.location.externalRegionId);
-					if (krishaRegionEntity != null) {
-						realty.location.region = KrishaDataManager.getRegion(krishaRegionEntity.region);
-						realty.location.regions = KrishaDataManager.getRegionsTree(krishaRegionEntity.region);
+			try {
+				Realty realty = convertRealtyToAdvertEntity(advertType, rawAdvert);
+				if (realty != null) {
+					
+					// Пробуем замапить внешние регионы на внутренние
+					if (StringUtils.isBlank(realty.location.externalRegionId)) {
+						Logger.error("FOUND ADVERT [" + realty.source.externalAdvertId + "] WITHOUT REGION!!!");
 					} else {
-						// ПЛОХО ЧТО РЕГИОН НЕ НАШЛИ НУЖНО РУГАТЬСЯ
+						//Logger.error("ADVERT [" + realty.source.externalAdvertId + "] REGION: [" + realty.location.externalRegionId + "]");
+						KrishaRegionEntity krishaRegionEntity = KrishaDataManager.getKrishaRegion(realty.location.externalRegionId);
+						if (krishaRegionEntity != null) {
+							realty.location.region = KrishaDataManager.getRegion(krishaRegionEntity.region);
+							realty.location.regions = KrishaDataManager.getRegionsTree(krishaRegionEntity.region);
+						} else {
+							// ПЛОХО ЧТО РЕГИОН НЕ НАШЛИ НУЖНО РУГАТЬСЯ
+						}
 					}
+					if (realty.location.region == null) {
+						Logger.error("ATTENTION: Advert.Id [" + realty.source.externalAdvertId + "] Can't map krisha geo id [" + realty.location.externalRegionId + "] in internal region dictionary.");
+					}
+					
+					adverts.add(realty);
+				} else {
+					// NULL - это проблема, видимо что-то случилось
+					Logger.error("ATTENTION: Advert with id [" + (Long)rawAdvert.get("id") + "] wasn't processed!");
 				}
-				if (realty.location.region == null) {
-					Logger.error("ATTENTION: Advert.Id [" + realty.source.externalAdvertId + "] Can't map krisha geo id [" + realty.location.externalRegionId + "] in internal region dictionary.");
-				}
-				
-				adverts.add(realty);
-			} else {
-				// NULL - это проблема, видимо что-то случилось
-				Logger.error("ATTENTION: Advert with id [" + (Long)rawAdvert.get("id") + "] wasn't processed!");
+			} catch (Exception e) {
+				Logger.error(e, "ATTENTION: Advert with id [" + (Long)rawAdvert.get("id") + "] wasn't processed because of errors!");
 			}
 		}
 		

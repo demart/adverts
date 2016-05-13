@@ -16,3 +16,8 @@ include ':analyser'
 include ':subscriptions'
 
 include ':notifications'
+
+include ':phones'
+include ':phones:adverts-phone-core'
+include ':phones:adverts-phone-processor'
+include ':phones:adverts-phone-web'

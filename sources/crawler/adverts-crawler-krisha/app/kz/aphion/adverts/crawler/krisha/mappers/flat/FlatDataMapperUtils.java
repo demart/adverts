@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import org.apache.commons.lang.StringUtils;
 
 import kz.aphion.adverts.crawler.krisha.KrishaDataManager;
+import kz.aphion.adverts.crawler.krisha.entity.KrishaRegionEntity;
 import kz.aphion.adverts.crawler.krisha.entity.KrishaResidentalComplexEntity;
 import kz.aphion.adverts.crawler.krisha.mappers.CommonMapperUtils;
 import kz.aphion.adverts.persistence.realty.building.ResidentialComplex;
@@ -34,24 +35,36 @@ import play.Logger;
 public class FlatDataMapperUtils {
 
 	
-	public static void mapResidentialComplex(ResidentialComplex complex) {
+	public static void mapResidentialComplex(Map<String, Object> advert, ResidentialComplex complex) {
 		if (StringUtils.isBlank(complex.externalComplexId))
 			return;
 		
-			KrishaResidentalComplexEntity complexEntity = KrishaDataManager.getResidentalComplex(complex.externalComplexId);
-			
-			if (complexEntity == null) {
-				// Пробуем замапить по Имени и Региону
-				// А так как нету региона пока здесь, оставлю это затею
-				Logger.error("KrishaResidentialComplex with id [%s] not found!", complex.externalComplexId);
-			} else {
-				if (complexEntity.complex != null) {
+		
+		KrishaResidentalComplexEntity complexEntity = KrishaDataManager.getResidentalComplex(complex.externalComplexId);
+		
+		if (complexEntity == null) {
+			String regionId = (String)advert.get("map.geo_id");
+			KrishaRegionEntity krishaRegion = KrishaDataManager.getKrishaRegion(regionId);
+			if (krishaRegion != null) {
+				complexEntity = KrishaDataManager.getResidentalComplex(complex.externalComplexId,krishaRegion.region.id);
+				
+				if (complexEntity == null) {
+					Logger.error("KrishaResidentalComplex with name [%s] and region.id [%d] not found", complex.externalComplexId, krishaRegion.region.id);
+				} else {
 					complex.relationId = complexEntity.id;
 					complex.name = complexEntity.name;
-				} else {
-					Logger.error("KrishaResidentialComplex with id [%s] doens't have link to ResidentialComplex.");
 				}
+			} else {
+				Logger.error("KrishaResidentialComplex with id [%s] not found!", complex.externalComplexId);
 			}
+		} else {
+			if (complexEntity.complex != null) {
+				complex.relationId = complexEntity.id;
+				complex.name = complexEntity.name;
+			} else {
+				Logger.error("KrishaResidentialComplex with id [%s] doens't have link to ResidentialComplex.");
+			}
+		}
 	}
 	
 	

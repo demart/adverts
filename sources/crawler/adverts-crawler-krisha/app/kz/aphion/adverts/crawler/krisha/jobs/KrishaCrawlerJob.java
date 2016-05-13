@@ -5,6 +5,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import javax.jms.JMSException;
+
+import kz.aphion.adverts.common.models.mq.phones.RegisterPhoneModel;
 import kz.aphion.adverts.crawler.core.CrawlerHttpClient;
 import kz.aphion.adverts.crawler.core.DataManager;
 import kz.aphion.adverts.crawler.core.MongoDBProvider;
@@ -25,6 +28,8 @@ import kz.aphion.adverts.crawler.krisha.QueryBuilder;
 import kz.aphion.adverts.crawler.krisha.mappers.KrishaAdvertMapper;
 import kz.aphion.adverts.crawler.krisha.mappers.RealtyComparator;
 import kz.aphion.adverts.persistence.SourceSystemType;
+import kz.aphion.adverts.persistence.phones.PhoneSource;
+import kz.aphion.adverts.persistence.phones.PhoneSourceCategory;
 import kz.aphion.adverts.persistence.realty.Realty;
 import kz.aphion.adverts.persistence.realty.RealtyAdvertStatus;
 
@@ -37,7 +42,6 @@ import org.mongodb.morphia.query.UpdateOperations;
 import play.Logger;
 import play.db.DB;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -65,7 +69,7 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 		//c3p0();
 	}
 	
-	private void startCrawle() throws CrawlerException, IOException {
+	private void startCrawle() throws CrawlerException, IOException, Exception {
 		// Метод проводит валидацию обязательный полей
 		validateModel();
 		
@@ -96,8 +100,6 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 		// Были ли новые объявления в выборке
 		// Нужно для того чтобы завершить выборки постраничные
 		boolean foundNewAdverts = false;
-		// Нужно ли продолжать цикл DO-WHILE
-		boolean needContinue = false;
 		
 		// STATS
 		int foundNewAdvertsCount = 0;
@@ -203,7 +205,13 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 							 // Сохраняем новую версию
 							 ds.save(realty);
 							 
+							 // Отправляем сообщение в очередь обработки телефонов
+							 // ПОКА ПОД ВОПРОСОМ ТАК КАК МНОГО СООБЩЕНИЙ ПОЙДЕТ В ОЧЕРЕДЬ ТЕЛЕФОНОВ
+							 sendPhoneNumberRegistrationMessage(realty);
+							 
 							 Logger.info("Advert [%s] with id [%s] was moved to archive, with id [%s] added.", realty.source.externalAdvertId, existingRealty.id, realty.id);
+							 
+							 /*
 							 GsonBuilder builder = new GsonBuilder();
 							 builder.setPrettyPrinting();
 							 Gson gson = builder.create();
@@ -212,7 +220,7 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 							 Logger.warn("");
 							 Logger.warn(gson.toJson(existingRealty));
 							 Logger.warn("");
-							 
+							 */
 						 } else {
 							 // Ничего не делаем, так как по умолчанию считаем что объявление не изменилось
 							 Logger.info("Advert [" + realty.source.externalAdvertId + "] already exists and up-to-date.");
@@ -224,6 +232,12 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 						 foundNewAdvertsCount += 1;
 						 //Logger.info("Advert is new one, we can process it");
 						 ds.save(realty);
+						 
+						 // Отправляем сообщени в очердеь обработки объявления
+						 // 
+						 
+						 // Отправляем сообщение в очередь обработки телефонов
+						 sendPhoneNumberRegistrationMessage(realty);
 					 }
 					 
 					 // Нашли новые объявления (даже если они уже есть в БД,
@@ -274,6 +288,29 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 		 return q.asList();
 	}
 	
+	
+	/**
+	 * Отправляет необходимую информацию для регистрации телефона в объявлении
+	 * 
+	 * @param realty
+	 */
+	private void sendPhoneNumberRegistrationMessage(Realty realty) {
+		RegisterPhoneModel model = new RegisterPhoneModel();
+		model.source = PhoneSource.KRISHA;
+		model.category = PhoneSourceCategory.REALTY;
+		model.time = realty.publishedAt;
+		model.phone = realty.publisher.phones;
+		model.region = realty.location.region;
+		model.regions = realty.location.regions;
+		
+		String message = new GsonBuilder().setPrettyPrinting().create().toJson(model);
+		
+		try {
+			getMqProvider().sendTextMessageToQueue("adverts.phones.registration", message);
+		} catch (JMSException | CrawlerException e) {
+			Logger.error(e, "Error seding message to Phone registration queue");
+		}
+	}
 	
 	
 	/**
