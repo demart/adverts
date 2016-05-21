@@ -42,7 +42,7 @@ public abstract class AbstractAdvertMapper<T extends Realty> {
 		for (Entry<String,Object> entry : advert.entrySet()) {
 			switch (entry.getKey()) {
 			case "id":
-				realty.source.externalAdvertId = entry.getValue().toString();
+				realty.source.externalAdvertId = (String)entry.getValue();
 				break;
 			case "storage_id":
 				// Никак не используем
@@ -51,7 +51,8 @@ public abstract class AbstractAdvertMapper<T extends Realty> {
 			case "version":
 				// Никак не используем, но возможно нужно, 
 				// как раз смотреть на версию, чтобы обновлять данные у себя
-				realty.source.sourceDataVersion = entry.getValue().toString();
+				//realty.source.sourceDataVersion = entry.getValue().toString();
+				realty.source.sourceDataVersion = (String)entry.getValue();
 				break;
 			case "created_at":
 				// Пока никак не используем

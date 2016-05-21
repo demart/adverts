@@ -1,4 +1,4 @@
-package kz.aphion.adverts.crawler.krisha.jobs;
+package kz.aphion.adverts.crawler.olx.jobs;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -13,20 +13,16 @@ import kz.aphion.adverts.crawler.core.DataManager;
 import kz.aphion.adverts.crawler.core.MongoDBProvider;
 import kz.aphion.adverts.crawler.core.annotations.CrawlerJob;
 import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
-import kz.aphion.adverts.crawler.core.exceptions.CrawlersNotFoundException;
 import kz.aphion.adverts.crawler.core.jobs.CrawlerProcessJob;
-import kz.aphion.adverts.crawler.core.models.CrawlerModel;
-import kz.aphion.adverts.crawler.core.models.CrawlerParameterModel;
 import kz.aphion.adverts.crawler.core.models.ProxyServerModel;
 import kz.aphion.adverts.crawler.core.models.UserAgentModel;
 import kz.aphion.adverts.crawler.entity.CrawlerSourceSystemTypeEnum;
 import kz.aphion.adverts.crawler.entity.ProxyServerTypeEnum;
 import kz.aphion.adverts.crawler.entity.UserAgentTypeEnum;
-import kz.aphion.adverts.crawler.krisha.KrishaAdvertCategoryType;
-import kz.aphion.adverts.crawler.krisha.KrishaJsonToMapParser;
-import kz.aphion.adverts.crawler.krisha.QueryBuilder;
-import kz.aphion.adverts.crawler.krisha.mappers.KrishaAdvertMapper;
-import kz.aphion.adverts.crawler.krisha.mappers.RealtyComparator;
+import kz.aphion.adverts.crawler.olx.OlxJsonToMapParser;
+import kz.aphion.adverts.crawler.olx.OlxRealtyComparator;
+import kz.aphion.adverts.crawler.olx.QueryBuilder;
+import kz.aphion.adverts.crawler.olx.mappers.OlxAdvertMapper;
 import kz.aphion.adverts.persistence.SourceSystemType;
 import kz.aphion.adverts.persistence.phones.PhoneOwner;
 import kz.aphion.adverts.persistence.phones.PhoneSource;
@@ -47,13 +43,14 @@ import com.google.gson.GsonBuilder;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
- * Crawler который выполняет выгрузку данных с сайта krisha.kz
- * 
+ * Класс маркер для того чтобы указать что в данном проекте есть Crawler который отвечает
+ * за обработку объявлений OLX
  * @author artem.demidovich
  *
+ * Created at May 18, 2016
  */
-@CrawlerJob(source=CrawlerSourceSystemTypeEnum.KRISHA)
-public class KrishaCrawlerJob extends CrawlerProcessJob {
+@CrawlerJob(source=CrawlerSourceSystemTypeEnum.OLX)
+public class OlxRealtyCrawlerJob extends CrawlerProcessJob  {
 
 	@Override
 	public void doJob() throws Exception {
@@ -63,7 +60,7 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 		Thread.currentThread().setName(crawlerModel.getCralwerFullAlias());
 		
 		Logger.info("Crawler started");
-
+		
 		try {
 			startCrawle();
 		} catch (Exception ex) {
@@ -74,7 +71,8 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 		//c3p0();
 	}
 	
-	private void startCrawle() throws CrawlerException, IOException, Exception {
+	
+	private void startCrawle() throws Exception {
 		// Метод проводит валидацию обязательный полей
 		validateModel();
 		
@@ -89,6 +87,7 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 			return;
 		}
 		
+		
 		// Подключение к Монго
 		Datastore ds = MongoDBProvider.getInstance().getDatastore();
 		
@@ -100,7 +99,7 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 		Calendar startProcessingTime = null;
 		
 		// Выгружаемая страница
-		int page = -1;
+		int page = 0;
 		
 		// Были ли новые объявления в выборке
 		// Нужно для того чтобы завершить выборки постраничные
@@ -123,12 +122,15 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 			String jsonContent = callServerAndGetJsonData(targetUrl);
 			
 			// Время запуска процесса для отсеивания обработки
-			if (page == 0) {
+			if (page == 1) {
 				startProcessingTime = Calendar.getInstance();
+				
+				// Отнимаем минуту чтобы не пропутить предыдущие записи
+				crawlerModel.lastSourceSystemScannedTime.add(Calendar.MINUTE, -3);
 			}
 			
 			// Конвертируем полученные ответ с сервера в JSON Map
-			Map<String, Object> jsonResponseMap = KrishaJsonToMapParser.convertJson(jsonContent);
+			Map<String, Object> jsonResponseMap = OlxJsonToMapParser.convertJson(jsonContent);
 			
 			// Проверка на корректный ответ с сервера
 			boolean isResponseStatusOk = isResponseStatusOk(jsonResponseMap);
@@ -137,12 +139,9 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 				Logger.error("Response from Krisha was not OK. Proccessing stuck. Please check service URL:" + targetUrl);
 				return;
 			}
-					
-			// Получаем тип объявления для разбора
-			KrishaAdvertCategoryType advertType = getAdvertType(crawlerModel);
 			
 			// Корвертируем объекты
-			List<Realty> adverts= KrishaAdvertMapper.extractAndConvertAdverts(advertType, jsonResponseMap);
+			List<Realty> adverts = OlxAdvertMapper.extractAndConvertAdverts(jsonResponseMap);
 			if (adverts == null) {
 				Logger.info("No any adverts to process. Compliting process.");
 				// TODO Completing process
@@ -169,36 +168,12 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 						 Realty existingRealty = (Realty)existingAdverts.get(0);
 						 boolean wasUpdated = false;
 						 
-						 wasUpdated = RealtyComparator.isUpdated(existingRealty, realty);
-						 
-						 // Проверяем совпадает ли версия
-						 // Если версии совпадают, можно расчитывать на то что нет необходимости
-						 // сравнивать данные внутри объявления
-						 //if (!realty.source.sourceDataVersion.equals(existingRealty.source.sourceDataVersion)) {
-						 //	 wasUpdated = true;
-						 //}
-						 
-						 // Совпадают даты публикации или нет
-						 //if (realty.publishedAt.compareTo(existingRealty.publishedAt) != 0) {
-							 // Даты не совпадают
-						 //	 wasUpdated = true;
-						 //}
-						 
-						 // Можно сравнить дату show_till - 7 дней и наличие system_data.re
-						 // Если они одни и теже, значит чувак просто продлил объявление
-						 // Тут нужно принципиально подумать нужно ли в этом случае
-						 // извещать систему о новом объявлении и соответственно
-						 // запускать полный процесс обновления, анализа, подписок и так далее
-						 // ведь в этом случае человек увидит тоже самое объявления что видел 
-						 // немногим ранее (например неделю назад)
-						 // Также следует учесть что если объявление было сгруппировано и находилось
-						 // У кого нить в подписках, то нужно поднять это объявление так как оно новое
+						 wasUpdated = OlxRealtyComparator.isRealtyUpdated(existingRealty, realty);
 						 
 						 if (wasUpdated) {
 							 foundExistingUpdateAdvertsCount +=1;
 							 
 							 // TODO что-то сделать
-							 //Logger.info("Advert [" + realty.source.externalAdvertId + "] exists but changed.");							 
 							 // Пока возьмем и старое в архив, а новое запишем
 							 // потом отправим с обработку с пометкой
 							 
@@ -235,7 +210,7 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 						 //Logger.info("Advert was found in db with ActualStatus. Need to check and update");
 					 } else {
 						 foundNewAdvertsCount += 1;
-						 //Logger.info("Advert is new one, we can process it");
+						 Logger.info("Advert is new one, we can process it");
 						 ds.save(realty);
 						 
 						 // Отправляем сообщени в очердеь обработки объявления
@@ -257,11 +232,16 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 				}
 			}
 			
-			// Проверка на выход из цикла
-			// ПРОБЛЕМА! - КАК СДЕЛАТЬ ТАК ЧТОБЫ МОЖНО БЫЛО ВЫГРУЗИТЬ ВСЕ ЗА ОПРЕДЕЛЕННОЕ ВРЕМЯ
-			//	СЕЙЧАС ИЗ ЗА UP И ДР СЕРВИСОВ К 4Й СТРАНИЦЫ ИДУТ ПОВТОРЯШКИ И ПРОЦЕСС ЗАКАНЧИВАЕТСЯ
-			// 	КАК ПРОБЕГАТЬСЯ ДО КОНЦА
-			// 		ВОЗМОЖНО ПРОСТО УВЕЛИЧИТЬ КОЛ_ВО ВЫГРУЗОК ДО 10? ТОГДА БУДЕТ НЕ ВАЖНО НО ТОЛЬКО С ТЕКУЩЕГО ВРЕМЕНИ
+			
+			// На OLX можно просматривать только 500 последних страниц.
+			// Поэтому если ограничение сработало то нужно заканчивать
+			// При нормальной стабильной работе мы до сюда даже доходить не должны
+			// Я так понимаю, что они сделали эти ограничения потому что нормальный человек
+			// даже 500 страниц просматривать не будет, он скорее всего начнет сужать критерии
+			// поиска до получаения наилучшей выборки
+			if (page == 500)
+				foundNewAdverts = false;
+			
 		} while(foundNewAdverts);
 
 		// Статистика
@@ -274,7 +254,8 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 		
 		// Обновляем время последнего запуска
 		crawlerModel.lastSourceSystemScannedTime = startProcessingTime;
-		DataManager.updateLastSourceScannedTime(crawlerModel, startProcessingTime);
+		DataManager.updateLastSourceScannedTime(crawlerModel, startProcessingTime);		
+		
 	}
 	
 	/**
@@ -288,11 +269,10 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 		 
 		 q.field("status").equal(RealtyAdvertStatus.ACTIVE);
 		 q.field("source.externalAdvertId").equal(realty.source.externalAdvertId);
-		 q.field("source.sourceType").equal(SourceSystemType.KRISHA);
+		 q.field("source.sourceType").equal(SourceSystemType.OLX);
 		 
 		 return q.asList();
 	}
-	
 	
 	/**
 	 * Отправляет необходимую информацию для регистрации телефона в объявлении
@@ -302,7 +282,7 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 	private void sendPhoneNumberRegistrationMessage(Realty realty) {
 		try {
 			RegisterPhoneModel model = new RegisterPhoneModel();
-			model.source = PhoneSource.KRISHA;
+			model.source = PhoneSource.OLX;
 			model.category = PhoneSourceCategory.REALTY;
 			model.time = realty.publishedAt;
 			model.phone = realty.publisher.phones;
@@ -344,6 +324,23 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 	}
 	
 	
+	// Статистика обработки в памяти доступная по JMX
+	// Состояние обработки в памяти доступное по REST или JMX
+	// Логирование в общий лог и лог каждого crawlerа
+	// Отправка стат данных в MQ -> elasticsearch + kebana
+	// Локальный кэш объявлений для проверки уже пройденных
+	
+	private void validateModel() throws CrawlerException {
+		if (StringUtils.isBlank(crawlerModel.destinationQueueName))
+			throw new CrawlerException("Destination queue name for crawler is empty");
+		
+		if (StringUtils.isBlank(crawlerModel.alias))
+			throw new CrawlerException("Alias for crawler is empty");
+		
+		if (crawlerModel.parameters == null || crawlerModel.parameters.size() == 0)
+			throw new CrawlerException("Parameters for crawler is empty");
+	}
+
 	/**
 	 * Метод выполняет вызов сервера источника для получения JSON ответа.
 	 * Также метод выполняет проврерку на необхдоимость использования прокси сервера или разных заголовков
@@ -386,66 +383,20 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 	
 	
 	/**
-	 * Извлекает вид объявлений crawler'a
-	 * 
-	 * @param crawlerModel
-	 * @return
-	 * @throws CrawlersNotFoundException Если не удалось найти в настройках тип выгружаемых объявлений
-	 */
-	private KrishaAdvertCategoryType getAdvertType(CrawlerModel crawlerModel) throws CrawlersNotFoundException {
-		for (CrawlerParameterModel model : crawlerModel.parameters) {
-			if ("CATEGORY".equalsIgnoreCase(model.key)) {
-				for (KrishaAdvertCategoryType type : KrishaAdvertCategoryType.values()) {
-					if (type.getValue() == Integer.parseInt(model.value))
-						return type;
-				}
-				
-			}
-		}
-		throw new CrawlersNotFoundException("Could not define krisha advert type to crawle");
-	}
-
-	// Статистика обработки в памяти доступная по JMX
-	// Состояние обработки в памяти доступное по REST или JMX
-	// Логирование в общий лог и лог каждого crawlerа
-	// Отправка стат данных в MQ -> elasticsearch + kebana
-	// Локальный кэш объявлений для проверки уже пройденных
-	
-	private void validateModel() throws CrawlerException {
-		if (StringUtils.isBlank(crawlerModel.destinationQueueName))
-			throw new CrawlerException("Destination queue name for crawler is empty");
-		
-		if (StringUtils.isBlank(crawlerModel.alias))
-			throw new CrawlerException("Alias for crawler is empty");
-		
-		if (crawlerModel.parameters == null || crawlerModel.parameters.size() == 0)
-			throw new CrawlerException("Parameters for crawler is empty");
-	}
-	
-	
-	/**
 	 * Метод проверяет корректный ли ответ с сервера
 	 * @param jsonResponseMap
 	 * @return
 	 */
 	private boolean isResponseStatusOk(Map<String, Object> jsonResponseMap) {
-		if (jsonResponseMap.containsKey("status")) {
-			if ("ok".equalsIgnoreCase((String)jsonResponseMap.get("status"))) {
-				// Всё хорошо идем дальше
-				if (Logger.isDebugEnabled())
-					Logger.debug("Received data with status: 'ok' from krisha.kz");
-				return true;
-			} else {
-				// Что-то случилось ругаемся и завершаем.
-				Logger.error("Received data with unexpected status: " + jsonResponseMap.get("Status"));
-				return false;
-			}
+		if (jsonResponseMap.containsKey("total_ads")) {
+			return true;
 		} else {
 			// нет в отчете статуса.. Чет не так ответили, поругаться и завершить обработку
-			Logger.error("Received data with empty status field. Stopping current processing.");
+			Logger.error("Received data with empty total_ads field. Stopping current processing.");
 			return false;
 		}
 	}
+	
 	
 	
 	public static void c3p0() {

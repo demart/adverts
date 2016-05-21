@@ -1,4 +1,4 @@
-package kz.aphion.adverts.crawler.krisha;
+package kz.aphion.adverts.crawler.olx;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

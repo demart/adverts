@@ -5,23 +5,28 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
-import kz.aphion.adverts.phone.processors.RegistrationPhoneProcessor;
+import kz.aphion.adverts.phone.processors.AbstractAppExistanceProcessor;
 import play.Logger;
 
+public class AppExistanceCheckListener<T extends AbstractAppExistanceProcessor> implements MessageListener  {
 
-public class RegistrationPhoneQueueListener implements MessageListener {
-
+	protected Class<T> classForT;
+	
+	public AppExistanceCheckListener(Class<T> clazz) {
+		  this.classForT=clazz;
+	}
+	
 	@Override
 	public void onMessage(Message message) {
-		Thread.currentThread().setName("RegPhoneQListener");
 		try {
+			Thread.currentThread().setName(classForT.getName() + "QListener");
         	if (message instanceof TextMessage) {
                 TextMessage textMessage = (TextMessage) message;
                 String text = textMessage.getText();
                 Logger.info("Received new message");
                 
-                RegistrationPhoneProcessor processor = new RegistrationPhoneProcessor();
-            	processor.processRegistrationMessage(text);
+                AbstractAppExistanceProcessor processor = classForT.newInstance();
+            	processor.processMessage(text);
 
             	Logger.info("Processing completed");
             } else {
@@ -31,7 +36,7 @@ public class RegistrationPhoneQueueListener implements MessageListener {
         } catch (JMSException e) {
         	Logger.error(e, "");
         } catch (Exception e) {
-        	Logger.error(e, "Error during processing registration phone message");
+        	Logger.error(e, "Error during processing " + classForT.getName() + " check request message");
         	try {
 				Logger.error("JSON was received:\n%s", ((TextMessage)message).getText());
 			} catch (JMSException e1) {
@@ -39,5 +44,4 @@ public class RegistrationPhoneQueueListener implements MessageListener {
 			}
 		}
 	}
-
 }

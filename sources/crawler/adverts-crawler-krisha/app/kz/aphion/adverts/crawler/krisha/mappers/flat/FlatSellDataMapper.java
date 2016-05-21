@@ -70,49 +70,49 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 				realty.data.flatBuildingType = FlatDataMapperUtils.getFlatBuildingType(dataItem);
 				break;
 			case "house.year": // Год постройки (сдачи в <nobr>эксплуатацию) *
-				if (dataItem.getValue() instanceof Long) {
-					realty.data.houseYear = (Long)dataItem.getValue();
-				} else {
+				//if (dataItem.getValue() instanceof Long) {
+				//	realty.data.houseYear = (Long)dataItem.getValue();
+				//} else {
 					String houseYear = (String)dataItem.getValue();
 					houseYear = houseYear.replaceAll("[^\\d]", "");
 					realty.data.houseYear = Long.parseLong(houseYear);
-				}
+				//}
 				break;
 			case "map.house_num": // Номер дома
-				if (dataItem.getValue() instanceof Long) {
-					realty.location.houseNumber = ((Long)dataItem.getValue()).toString();
-				} else {
+				//if (dataItem.getValue() instanceof Long) {
+				//	realty.location.houseNumber = ((Long)dataItem.getValue()).toString();
+				//} else {
 					String houseNumber = (String)dataItem.getValue();
 					realty.location.houseNumber = houseNumber;
-				}
+				//}
 				break;
 			case "flat.floor": // Этаж
-				if (dataItem.getValue() instanceof Long) {
-					realty.data.flatFloor = (Long)dataItem.getValue();
-				} else {
+				//if (dataItem.getValue() instanceof Long) {
+				//	realty.data.flatFloor = (Long)dataItem.getValue();
+				//} else {
 					String flatFloor = (String)dataItem.getValue();
 					realty.data.flatFloor = Long.parseLong(flatFloor);
-				}
+				//}
 				break;
 			case "house.floor_num": // Всего этажей
-				if (dataItem.getValue() instanceof Long) {
-					realty.data.houseFloorCount = (Long)dataItem.getValue();
-				} else {
+				//if (dataItem.getValue() instanceof Long) {
+				//	realty.data.houseFloorCount = (Long)dataItem.getValue();
+				//} else {
 					String flatFloorNum = (String)dataItem.getValue();
 					realty.data.houseFloorCount = Long.parseLong(flatFloorNum);
-				}
+				//}
 				break;
 			case "live.square": // Площадь, м
-				if (dataItem.getValue() instanceof Long) {
-					realty.data.square = Float.parseFloat(dataItem.getValue().toString());
-				} else {
-					if (dataItem.getValue() instanceof Float) {
-						realty.data.square = (Float)dataItem.getValue();
-					} else {
+				//if (dataItem.getValue() instanceof Long) {
+				//	realty.data.square = Float.parseFloat(dataItem.getValue().toString());
+				//} else {
+				//	if (dataItem.getValue() instanceof Float) {
+				//		realty.data.square = (Float)dataItem.getValue();
+				//	} else {
 						String liveSquare = (String)dataItem.getValue();
 						realty.data.square = Float.parseFloat(liveSquare);
-					}
-				}
+				//	}
+				//}
 				break;
 			case "live.square_l":
 				String liveSquareLiving = (String)dataItem.getValue();
@@ -162,12 +162,12 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 				break;
 			case "map.geo_id": // ID региона
 				// TODO Нужно конвертировать во внутренний регион
-				if (dataItem.getValue() instanceof Long) {
-					realty.location.externalRegionId = ((Long)dataItem.getValue()).toString();
-				} else {
+				//if (dataItem.getValue() instanceof Long) {
+				//	realty.location.externalRegionId = ((Long)dataItem.getValue()).toString();
+				//} else {
 					String mapGeoId = dataItem.getValue().toString();
 					realty.location.externalRegionId = mapGeoId;
-				}
+				//}
 				break;
 			case "house.complex_name": // Название жилого комплекса
 				String houseComplexName = (String)dataItem.getValue();
@@ -303,16 +303,16 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 				realty.data.text = text;
 				break;
 			case "ceiling": // Высота потолков
-				if (dataItem.getValue() instanceof Long) {
-					realty.data.ceilingHeight = Float.parseFloat(dataItem.getValue().toString());
-				} else {
-					if (dataItem.getValue() instanceof Long) {
-						realty.data.ceilingHeight = (Float)dataItem.getValue();
-					} else {
+				//if (dataItem.getValue() instanceof Long) {
+				//	realty.data.ceilingHeight = Float.parseFloat(dataItem.getValue().toString());
+				//} else {
+				//	if (dataItem.getValue() instanceof Long) {
+				//		realty.data.ceilingHeight = (Float)dataItem.getValue();
+				//	} else {
 						String ceiling = (String)dataItem.getValue();
 						realty.data.ceilingHeight = Float.parseFloat(ceiling);
-					}
-				}
+				//	}
+				//}
 				break;
 				
 			case "company.id": // Идентификатор компании
@@ -321,8 +321,9 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 				realty.publisher.company.externalId = companyId;
 				break;
 			case"user_id": // ID пользователя внешйней системы
-				Long userId = (Long)dataItem.getValue();
-				realty.publisher.externalUserId = String.valueOf(userId);
+				//Long userId = (Long)dataItem.getValue();
+				//realty.publisher.externalUserId = String.valueOf(userId);
+				realty.publisher.externalUserId = (String)dataItem.getValue();
 				break;
 				
 			case "advert.type":

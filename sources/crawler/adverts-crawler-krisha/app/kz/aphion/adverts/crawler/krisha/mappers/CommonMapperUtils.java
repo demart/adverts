@@ -40,11 +40,11 @@ public class CommonMapperUtils {
 			if (serviceDataEntry.containsKey("cat_id")) {
 				Object categoryEntry = (Object)serviceDataEntry.get("cat_id");
 				String categoryId = null;
-				if (categoryEntry instanceof Number) {
+				//if (categoryEntry instanceof Number) {
 					categoryId = String.valueOf(categoryEntry);
-				} else {
-					categoryId = (String)categoryEntry;
-				}
+				//} else {
+				//	categoryId = (String)categoryEntry;
+				//}
 				
 				for (KrishaAdvertCategoryType type : KrishaAdvertCategoryType.values()) {
 					if (type.getValue() == Integer.parseInt(categoryId)) {
@@ -150,7 +150,8 @@ public class CommonMapperUtils {
 			switch (systemDataItem.getKey()) {
 			case "price-2":
 				// Пока ничего не делаем
-				realty.price = (Long)systemDataItem.getValue();
+				//realty.price = (Long)systemDataItem.getValue();
+				realty.price = Long.parseLong((String)systemDataItem.getValue());
 				break;
 			case "price-3":
 				// Пока ничего не делаем						
@@ -388,18 +389,10 @@ public class CommonMapperUtils {
 					photo.path = (String)rawPhotoItem.getValue();
 					break;
 				case "width":
-					if (rawPhotoItem.getValue() instanceof String) {
-						photo.width = Long.parseLong((String)rawPhotoItem.getValue());
-					} else {
-						photo.width = (Long)rawPhotoItem.getValue();
-					}
+					photo.width = Long.parseLong((String)rawPhotoItem.getValue());
 					break;
 				case "height":
-					if (rawPhotoItem.getValue() instanceof String) {
-						photo.height = Long.parseLong((String)rawPhotoItem.getValue());
-					} else {
-						photo.height = (Long)rawPhotoItem.getValue();
-					}	
+					photo.height = Long.parseLong((String)rawPhotoItem.getValue());
 					break;
 				case "thumbnails":
 					photo.thumbnails = new ArrayList<RealtyPhoto>();
@@ -414,18 +407,10 @@ public class CommonMapperUtils {
 								thumb.path = (String)map.getValue();
 								break;
 							case "width":
-								if (map.getValue() instanceof String) {
-									thumb.width = Long.parseLong((String)map.getValue());
-								} else {
-									thumb.width = (Long)map.getValue();
-								}	
+								thumb.width = Long.parseLong((String)map.getValue());
 								break;
 							case "height":
-								if (map.getValue() instanceof String) {
-									thumb.height = Long.parseLong((String)map.getValue());
-								} else {
-									thumb.height = (Long)map.getValue();
-								}	
+								thumb.height = Long.parseLong((String)map.getValue());
 								break;
 							default:
 								break;

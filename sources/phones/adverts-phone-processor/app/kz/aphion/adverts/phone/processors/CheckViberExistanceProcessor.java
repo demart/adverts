@@ -6,6 +6,15 @@ package kz.aphion.adverts.phone.processors;
  * @author artem.demidovich
  *
  */
-public class CheckViberExistanceProcessor {
+public class CheckViberExistanceProcessor extends AbstractAppExistanceProcessor  {
 
+	/**
+	 * Обрабатывает запрос на проверку наличия приложения
+	 * @param message JSON сообщение
+	 * @throws Exception
+	 */
+	public void processMessage(String message) throws Exception {
+		// TODO IMPLEMENT THIS CHECKER
+	}
+	
 }
