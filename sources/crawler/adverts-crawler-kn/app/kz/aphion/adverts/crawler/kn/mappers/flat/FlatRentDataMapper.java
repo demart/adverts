@@ -137,11 +137,32 @@ public class FlatRentDataMapper  extends AbstractAdvertMapper<FlatRentRealty> {
 		if (adv.select("div.contact-name").size() > 0) {
 			if (adv.select("div.contact-name").select("strong").text().equals("Частное лицо"))
 				realty.publisher.publisherType = RealtyPublisherType.OWNER;
-			else
-				realty.publisher.publisherType = RealtyPublisherType.REALTOR;
+			else {
+				if (adv.select("div.company-main-info").size() > 0) {
+					realty.publisher.publisherType = RealtyPublisherType.REALTOR_COMPANY;
+					if (adv.select("div.field").size() > 0)
+						if (adv.select("div.field").get(0).select("a[href]").size() > 0)
+							if (CommonMapperUtils.getRealtorName(adv.select("div.field").get(0).select("a[href]").first().text()) != null)
+								realty.publisher.name = CommonMapperUtils.getRealtorName(adv.select("div.field").get(0).select("a[href]").first().text());
+				
+				}
+				
+				else {
+					realty.publisher.publisherType = RealtyPublisherType.REALTOR;
+					if (adv.select("div.field").size() > 0)
+						if (adv.select("div.field").get(0).select("a[href]").size() > 0)
+							if (CommonMapperUtils.getRealtorName(adv.select("div.field").get(0).select("a[href]").first().text()) != null)
+								realty.publisher.name = CommonMapperUtils.getRealtorName(adv.select("div.field").get(0).select("a[href]").first().text());
+					}
+				}
 		}
-		else
+		else {
 			realty.publisher.publisherType = RealtyPublisherType.REALTOR_COMPANY;
+			if (adv.select("div.field").size() > 0)
+				if (adv.select("div.field").get(0).select("a[href]").size() > 0)
+					if (CommonMapperUtils.getRealtorName(adv.select("div.field").get(0).select("a[href]").first().text()) != null)
+						realty.publisher.name = CommonMapperUtils.getRealtorName(adv.select("div.field").get(0).select("a[href]").first().text());
+		}
 	}
 	
 }

@@ -144,5 +144,17 @@ public class CommonMapperUtils {
 		}
 		return houseNumber;
 	}
+
+	/**
+	 * Выдергиваем имя
+	 * @param text
+	 * @return
+	 */
+	public static String getRealtorName(String text) {
+		String name = null;
+		if (text.length() > 0)
+			name = text;
+		return name;
+	}
 	
 }
