@@ -2,26 +2,33 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'groovy'
+
+
  
 repositories {
     mavenCentral()
-}
+
+   }
 
 dependencies {
     compile 'org.mongodb.morphia:morphia:1.0.1'
 	compile project(":common:adverts-common-persistence")
     compile project(":crawler:adverts-crawler-core")
+
+
 }
 
 
 task runCrawlerKrisha(type:Exec) {
     
         println 'Starting play crawler krisha'
-
+		
+		commandLine ('play', 'run') 
+		
         def stdout = new ByteArrayOutputStream() 
-        commandLine('play', 'run') 
+        
         ext.output = {
-            return stdout
+            return stdout.toString()
         }
 
        // commandLine('tail', '-f', 'system.out') 
