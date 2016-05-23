@@ -1,6 +1,7 @@
 rootProject.name = 'adverts-project'
 
 include ':common:adverts-common-persistence'
+include ':common:adverts-common'
 
 include ':crawler:adverts-crawler-core'
 include ':crawler:adverts-crawler-persistence'
@@ -15,3 +16,8 @@ include ':analyser'
 include ':subscriptions'
 
 include ':notifications'
+
+include ':phones'
+include ':phones:adverts-phone-core'
+include ':phones:adverts-phone-processor'
+include ':phones:adverts-phone-web'

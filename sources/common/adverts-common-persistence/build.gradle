@@ -10,7 +10,9 @@ repositories {
  
 
 dependencies {
-	compile 'com.google.code.maven-play-plugin.org.playframework:play:1.2.7'
+	//compile 'com.google.code.maven-play-plugin.org.playframework:play:1.2.7'
+	
+	compile 'org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final'
 	compile 'org.mongodb.morphia:morphia:1.0.1'
 }
 
@@ -40,6 +42,18 @@ jar {
 			into file(getRootDir().getAbsolutePath() + '/crawler/adverts-crawler-olx/lib/')
 		}
 		println 'to: ' + getRootDir().getAbsolutePath() + '/crawler/adverts-crawler-olx/lib/'
+
+		copy {
+			from file(archivePath)
+			into file(getRootDir().getAbsolutePath() + '/phones/adverts-phone-processor/lib/')
+		}
+		println 'to: ' + getRootDir().getAbsolutePath() + '/phones/adverts-phone-processor/lib/'
+
+		copy {
+			from file(archivePath)
+			into file(getRootDir().getAbsolutePath() + '/phones/adverts-phone-web/lib/')
+		}
+		println 'to: ' + getRootDir().getAbsolutePath() + '/phones/adverts-phone-web/lib/'
 	}
 }
 

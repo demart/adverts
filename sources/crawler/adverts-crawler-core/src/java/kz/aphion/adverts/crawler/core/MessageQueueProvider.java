@@ -97,14 +97,14 @@ public class MessageQueueProvider {
 
         // Create a MessageProducer from the Session to the Topic or Queue
         MessageProducer producer = session.createProducer(destination);
-        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+        producer.setDeliveryMode(DeliveryMode.PERSISTENT);
 
         // Create a messages
-        text = "Hello world! From: " + Thread.currentThread().getName() + " : " + this.hashCode();
+        //text = "Hello world! From: " + Thread.currentThread().getName() + " : " + this.hashCode();
         TextMessage message = session.createTextMessage(text);
 
         // Tell the producer to send the message
-        System.out.println("Sent message: "+ message.hashCode() + " : " + Thread.currentThread().getName());
+        //System.out.println("Sent message: "+ message.hashCode() + " : " + Thread.currentThread().getName());
         producer.send(message);
 
         // Clean up

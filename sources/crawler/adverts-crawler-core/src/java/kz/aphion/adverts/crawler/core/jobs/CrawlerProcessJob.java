@@ -1,6 +1,9 @@
 package kz.aphion.adverts.crawler.core.jobs;
 
+import javax.jms.JMSException;
+
 import kz.aphion.adverts.crawler.core.MessageQueueProvider;
+import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
 import kz.aphion.adverts.crawler.core.models.CrawlerModel;
 import kz.aphion.adverts.crawler.entity.CrawlerSourceSystemTypeEnum;
 import play.jobs.Job;
@@ -27,8 +30,12 @@ public abstract class CrawlerProcessJob extends Job {
 	
 	/**
 	 * Провайдер MQ для отправки сообщений в очередь
+	 * @throws CrawlerException 
+	 * @throws JMSException 
 	 */
-	public MessageQueueProvider mqProvider;
+	public MessageQueueProvider getMqProvider() throws JMSException, CrawlerException {
+		return MessageQueueProvider.getInstance();
+	}
 	
 	
 	public CrawlerModel getCrawlerModel() {

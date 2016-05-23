@@ -1,0 +1,54 @@
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'groovy'
+ 
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+	compile "javax.jms:javax.jms-api:2.0"
+	compile 'org.apache.activemq:activemq-broker:5.13.2'
+	compile 'org.apache.activemq:activemq-client:5.13.2'
+	compile 'org.fusesource.hawtbuf:hawtbuf:1.11'
+	compile 'org.apache.geronimo.specs:geronimo-j2ee-management_1.1_spec:1.0.1'
+	
+	compile 'org.mongodb.morphia:morphia:1.0.1'
+
+	compile project(":common:adverts-common")
+	compile project(":common:adverts-common-persistence")
+	compile project(":phones:adverts-phone-core")
+}
+
+
+task runPhoneProcessor(type:Exec) {
+    
+        println 'Starting play phone processor'
+
+        def stdout = new ByteArrayOutputStream() 
+        commandLine('play', 'run') 
+        ext.output = {
+            return stdout
+        }
+
+       // commandLine('tail', '-f', 'system.out') 
+}
+
+runPhoneProcessor.dependsOn project.jar
+runPhoneProcessor.dependsOn project.assemble
+project.build.dependsOn runPhoneProcessor
+
+
+sourceSets {
+    main {
+        java {
+            srcDir 'app'
+        }
+        resources {
+            srcDir 'conf'
+        }
+    }
+}

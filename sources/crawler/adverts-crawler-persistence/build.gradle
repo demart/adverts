@@ -10,6 +10,7 @@ repositories {
  
 
 dependencies {
+	//compile 'org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final'
 	compile 'com.google.code.maven-play-plugin.org.playframework:play:1.2.7'
 }
 

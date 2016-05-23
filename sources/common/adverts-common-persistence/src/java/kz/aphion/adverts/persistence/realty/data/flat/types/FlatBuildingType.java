@@ -33,7 +33,17 @@ public enum FlatBuildingType {
 	FRAME_REED,
 	
 	/**
+	 * Блочный
+	 */
+	BLOCK,
+	
+	/**
+	 * Деревянный
+	 */
+	WOODEN,
+	
+	/**
 	 * Иное
 	 */
-	OTHER,
+	OTHER,	
 }

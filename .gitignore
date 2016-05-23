@@ -1,6 +1,16 @@
 
 
 workspace
+sources/common/adverts-common/build/*
+sources/common/adverts-common/tmp/*
+sources/common/adverts-common/eclipse/*
+sources/common/adverts-common/logs/*
+sources/common/adverts-common/bin/*
+sources/common/adverts-common/.project
+sources/common/adverts-common/.settings
+sources/common/adverts-common/.DS_Store
+sources/common/adverts-common/.classpath
+
 sources/common/adverts-common-persistence/build/*
 sources/common/adverts-common-persistence/tmp/*
 sources/common/adverts-common-persistence/eclipse/*
@@ -75,7 +85,43 @@ sources/crawler/adverts-crawler-olx/.settings
 sources/crawler/adverts-crawler-olx/.DS_Store
 sources/crawler/adverts-crawler-olx/.classpath
 
+
+sources/phones/adverts-phone-core/build/*
+sources/phones/adverts-phone-core/tmp/*
+sources/phones/adverts-phone-core/eclipse/*
+sources/phones/adverts-phone-core/logs/*
+sources/phones/adverts-phone-core/bin/*
+sources/phones/adverts-phone-core/lib/*
+sources/phones/adverts-phone-core/.project
+sources/phones/adverts-phone-core/.settings
+sources/phones/adverts-phone-core/.DS_Store
+sources/phones/adverts-phone-core/.classpath
+
+sources/phones/adverts-phone-processor/build/*
+sources/phones/adverts-phone-processor/tmp/*
+sources/phones/adverts-phone-processor/eclipse/*
+sources/phones/adverts-phone-processor/logs/*
+sources/phones/adverts-phone-processor/bin/*
+sources/phones/adverts-phone-processor/lib/*
+sources/phones/adverts-phone-processor/.project
+sources/phones/adverts-phone-processor/.settings
+sources/phones/adverts-phone-processor/.DS_Store
+sources/phones/adverts-phone-processor/.classpath
+
+sources/phones/adverts-phone-web/build/*
+sources/phones/adverts-phone-web/tmp/*
+sources/phones/adverts-phone-web/eclipse/*
+sources/phones/adverts-phone-web/logs/*
+sources/phones/adverts-phone-web/bin/*
+sources/phones/adverts-phone-web/lib/*
+sources/phones/adverts-phone-web/.project
+sources/phones/adverts-phone-web/.settings
+sources/phones/adverts-phone-web/.DS_Store
+sources/phones/adverts-phone-web/.classpath
+
 sources/libs/*
+
+
 
 .DS_Store
 

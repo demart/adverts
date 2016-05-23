@@ -10,9 +10,10 @@ To run project required following middleware or tools:
 
 ## Start project preparations
 
-1. Create DB name adverts in Postgres using scripts in db/full-dump-09-05-16-02-27.sql (or the latest full script)
+1. Create DB name adverts in Postgres using scripts in db/full-dump-09-05-16-04-35.sql (or the latest full script)
 2. Run Mongo (default port)
 3. Run ActiveMQ
+4. Set path to jvm /sources/gradle.properties (example org.gradle.java.home=/Library/Java/JavaVirtualMachines/jdk1.7.0_79.jdk/Contents/Home/)
 4. Execute command ./gradlew clean build
 5. Execute command ./gradlew eclise (or idea)
 
@@ -25,12 +26,20 @@ To run project required following middleware or tools:
 
 #### To run play crawlers applications
 ##### Krisha
-Execute gradle command: ./gradlew clean runCrawlerKrisha
+Change directory to source folder
+Execute gradle command (Linux): ./gradlew clean runCrawlerKrisha
+Execute gradle command (Windiws): gradlew(.bat) clean runCrawlerKrisha
 ##### KN
+Change directory to source folder
 Execute gradle command: ./gradlew clean runCrawlerKn
+Execute gradle command (Windiws): gradlew(.bat) clean runCrawlerKn
 ##### IRR
+Change directory to source folder
 Execute gradle command: ./gradlew clean runCrawlerIrr
+Execute gradle command (Windiws): gradlew(.bat) clean runCrawlerIrr
 ##### OLX
+Change directory to source folder
 Execute gradle command: ./gradlew clean runCrawlerOlx
+Execute gradle command (Windiws): gradlew(.bat) clean runCrawlerOlx
 
 The result of execution of this command will be compile all dependecy projects and run play server

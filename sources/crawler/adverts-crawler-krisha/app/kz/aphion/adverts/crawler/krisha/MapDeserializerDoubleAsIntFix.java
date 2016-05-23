@@ -46,15 +46,17 @@ public class MapDeserializerDoubleAsIntFix implements JsonDeserializer<Map<Strin
             }else if(prim.isString()){
                 return prim.getAsString();
             }else if(prim.isNumber()){
-                Number num = prim.getAsNumber();
+            	return prim.toString();
+                /*
+            	Number num = prim.getAsNumber();
                 // here you can handle double int/long values
                 // and return any type you want
                 // this solution will transform 3.0 float to long values
-                if(Math.ceil(num.doubleValue())  == num.longValue())
-                   return num.longValue();
-                else{
-                    return num.doubleValue();
-                }
+	            if(Math.ceil(num.doubleValue())  == num.longValue())
+	               return num.longValue();
+	            else{
+	                return num.doubleValue();
+	            }*/
             }
         }
         return null;
