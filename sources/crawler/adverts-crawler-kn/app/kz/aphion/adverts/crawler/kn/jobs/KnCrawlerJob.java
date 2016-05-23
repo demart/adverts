@@ -64,8 +64,8 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 		}
 		
 		catch (Exception e) {
-			Logger.error(e.getMessage());
-			e.printStackTrace();
+			Logger.error(e, "We've got an error during crawler process. Please see error information.");
+			
 		}
 		//c3p0();
 	}
