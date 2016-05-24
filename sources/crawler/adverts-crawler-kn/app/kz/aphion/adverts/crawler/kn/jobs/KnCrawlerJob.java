@@ -144,13 +144,13 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 			    		String targetUrl = queryBuilder.buildQueryUrl(currentPage);
 			        	
 			    		//Получаем страницу с объявлениями
-			    		String content = callServerAndGetData(targetUrl);
+			    		String content = callServerAndGetData(targetUrl, crawlerModel);
 			    		
 						// Получаем тип объявления для разбора
 						KnAdvertCategoryType advertType = getAdvertType(crawlerModel);
 			    		
 			    		//Готовый список объявлений со странице
-						List<Realty> adverts = KnAdvertMapper.parseAdvertsFromCurrentPageAndConvert(advertType, content, queryBuilder);
+						List<Realty> adverts = KnAdvertMapper.parseAdvertsFromCurrentPageAndConvert(advertType, content, queryBuilder, crawlerModel);
 			        	
 			    		//Условия для торможения цикла, а именно получения страниц
 						//Если вернулся пустой список, тонадо тормозить цикл
@@ -236,17 +236,7 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 		 return q.asList();
 	}
     
-	
-	
-	/**
-	 * Метод выполняет вызов сервера источника для получения ответа.
-	 * Также метод выполняет проврерку на необхдоимость использования прокси сервера или разных заголовков
-	 * @param targetUrl
-	 * @return
-	 * @throws CrawlerException
-	 * @throws IOException
-	 */
-	private String callServerAndGetData(String targetUrl) throws CrawlerException, IOException {
+	public static String callServerAndGetData(String targetUrl, CrawlerModel crawlerModel) throws CrawlerException, IOException {
 		// TODO: Увеличить счетчики использования User-Agent и Proxy Servers
 		UserAgentModel uam = null;
 		if (crawlerModel.crawlerGroup.useUserAgents) {
@@ -278,6 +268,47 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 		}
 	}
 	
+	/**
+	 * Метод выполняет вызов сервера источника для получения ответа.
+	 * Также метод выполняет проврерку на необхдоимость использования прокси сервера или разных заголовков
+	 * @param targetUrl
+	 * @return
+	 * @throws CrawlerException
+	 * @throws IOException
+	 */
+	/*
+	private String callServerAndGetData(String targetUrl) throws CrawlerException, IOException {
+		// TODO: Увеличить счетчики использования User-Agent и Proxy Servers
+		UserAgentModel uam = null;
+		if (crawlerModel.crawlerGroup.useUserAgents) {
+			uam = DataManager.getRandomUserAgent(UserAgentTypeEnum.BROWSER);
+			
+			if (Logger.isDebugEnabled())
+				Logger.debug("User-Agent: " + uam.userAgent + " with name [" + uam.name + "]");
+		} 
+		
+		ProxyServerModel psm = null;
+		if (crawlerModel.crawlerGroup.useProxyServers) {
+			psm = DataManager.getRandomProxyServer(ProxyServerTypeEnum.HTTPS);
+			if (Logger.isDebugEnabled())
+				Logger.debug("Proxy-server: " + psm.host + ":" + psm.port + " with name [" + psm.name + "]");
+		}
+		if (uam == null) {
+			if (psm == null) {
+				return CrawlerHttpClient.getContent(targetUrl);
+			} else {
+				return CrawlerHttpClient.getContent(targetUrl, psm.host, psm.port, null);
+			}
+			
+		} else {
+			if (psm == null) {
+				return CrawlerHttpClient.getContent(targetUrl, null, null, uam.userAgent);
+			} else {
+				return CrawlerHttpClient.getContent(targetUrl, psm.host, psm.port, uam.userAgent);
+			}
+		}
+	}
+	*/
 	
 	// Статистика обработки в памяти доступная по JMX
 	// Состояние обработки в памяти доступное по REST или JMX

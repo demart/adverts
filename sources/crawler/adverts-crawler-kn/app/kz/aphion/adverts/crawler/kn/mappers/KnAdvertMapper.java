@@ -15,6 +15,7 @@ import org.jsoup.nodes.Element;
 import kz.aphion.adverts.crawler.core.CrawlerHttpClient;
 import kz.aphion.adverts.crawler.core.DataManager;
 import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
+import kz.aphion.adverts.crawler.core.models.CrawlerModel;
 import kz.aphion.adverts.crawler.core.models.UserAgentModel;
 import kz.aphion.adverts.crawler.entity.UserAgentTypeEnum;
 import kz.aphion.adverts.crawler.kn.mappers.flat.FlatRentDataMapper;
@@ -38,7 +39,7 @@ import play.Logger;
  */
 public class KnAdvertMapper {
 
-	public static List<Realty> parseAdvertsFromCurrentPageAndConvert (KnAdvertCategoryType advertType, String content, QueryBuilder queryBuilder) throws CrawlerException, ParseException, IOException {
+	public static List<Realty> parseAdvertsFromCurrentPageAndConvert (KnAdvertCategoryType advertType, String content, QueryBuilder queryBuilder, CrawlerModel crawlerModel) throws CrawlerException, ParseException, IOException {
 		//Список объявлений со страницы
 		List<Realty> adverts = new ArrayList<Realty> ();		
 		
@@ -58,7 +59,7 @@ public class KnAdvertMapper {
     			//Необходимая проверка из-за рекламного блока на каждой странице
     			if (!parsedAdvert.select("a[href]").isEmpty()) {
     				String advertUrl = queryBuilder.buildQueryUrlForAdvert(parsedAdvert.select("a[href]").first().attr("href").toString());
-    				Realty realty = convertRealtyToAdvertEntity(advertType, advertUrl, queryBuilder);
+    				Realty realty = convertRealtyToAdvertEntity(advertType, advertUrl, queryBuilder, crawlerModel);
     				
     				if (realty != null) {
     					if (StringUtils.isBlank(realty.location.externalRegionId)) {
@@ -89,15 +90,13 @@ public class KnAdvertMapper {
 		return adverts;
 	}
 	
-	private static Realty convertRealtyToAdvertEntity(KnAdvertCategoryType advertType, String advertUrl, QueryBuilder queryBuilder) throws ParseException, CrawlerException, IOException {
-		// Тип нашего объявления
-		KnAdvertCategoryType category = advertType;
+	private static Realty convertRealtyToAdvertEntity(KnAdvertCategoryType advertType, String advertUrl, QueryBuilder queryBuilder, CrawlerModel crawlerModel) throws ParseException, CrawlerException, IOException {
 		
 		//Получаем страницу объявления
 		//TODO подумать как сделать по-другому
-		UserAgentModel uam = DataManager.getRandomUserAgent(UserAgentTypeEnum.BROWSER);
-		String content = CrawlerHttpClient.getContent(advertUrl, null, null, uam.userAgent);
-				
+		//UserAgentModel uam = DataManager.getRandomUserAgent(UserAgentTypeEnum.BROWSER);
+		//String content = CrawlerHttpClient.getContent(advertUrl, null, null, uam.userAgent);
+		String content = KnCrawlerJob.callServerAndGetData(advertUrl, crawlerModel);		
 		
 		Realty realty = null;
 		
