@@ -70,6 +70,8 @@ public class KnAdvertMapper {
     						if (knRegionEntity != null) {
     							realty.location.region = KnDataManager.getRegion(knRegionEntity.region);
     						    realty.location.regions = KnDataManager.getRegionsTree(knRegionEntity.region);
+    						    
+    						       						
     						} else {
     							// ПЛОХО ЧТО РЕГИОН НЕ НАШЛИ НУЖНО РУГАТЬСЯ
     						}

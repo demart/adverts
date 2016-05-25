@@ -16,9 +16,11 @@ import org.jsoup.select.Elements;
 
 import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
 import kz.aphion.adverts.crawler.kn.KnAdvertCategoryType;
+import kz.aphion.adverts.crawler.kn.KnDataManager;
 import kz.aphion.adverts.crawler.kn.QueryBuilder;
 import kz.aphion.adverts.crawler.kn.mappers.AbstractAdvertMapper;
 import kz.aphion.adverts.crawler.kn.mappers.CommonMapperUtils;
+import kz.aphion.adverts.crawler.kn.entity.KnResidentalComplexEntity;
 import kz.aphion.adverts.persistence.SourceSystemType;
 import kz.aphion.adverts.persistence.realty.Realty;
 import kz.aphion.adverts.persistence.realty.RealtyAdvertStatus;
@@ -100,12 +102,21 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 			if (tr.select("th").text().equals("Материал стен"))
 				realty.data.flatBuildingType = FlatDataMapperUtils.getFlatBuildingType(tr.select("td").text());
 			
-			//TODO доработать по ЖК
 			
-			if (tr.select("th").text().equals("Название ЖК")) 
-				if (FlatDataMapperUtils.convertComplexName(tr.select("td").text()) != null)
+			if (tr.select("th").text().equals("Название ЖК")) {
 					realty.data.residentalComplex.externalComplexName = FlatDataMapperUtils.convertComplexName(tr.select("td").text());
-		
+					
+					KnResidentalComplexEntity complexEntity = KnDataManager.getResidentalComplex(FlatDataMapperUtils.convertComplexName(tr.select("td").text()), CommonMapperUtils.getRegionName(adv.select("div.address").text()));
+					 if (complexEntity != null) {
+							realty.data.residentalComplex.relationId = complexEntity.id;
+							realty.data.residentalComplex.name = complexEntity.name;
+						} 
+					 else {
+							Logger.error("Requested residental complex with name [" + realty.data.residentalComplex.externalComplexName + "] not found.");
+					 }
+						
+				}
+				
 		}
 		
 		//Цена
@@ -140,6 +151,7 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 		//Ищем к какому объекту из регионов относится. Варианты: область, город, район
 		realty.location.externalRegionId = CommonMapperUtils.getRegionName(adv.select("div.address").text());
 
+		
 		//Улица и номер дома
 		realty.location.streetName = CommonMapperUtils.getStreetName(adv.select("div.col-content").select("h1").text());
 		if (CommonMapperUtils.getHouseNumber(adv.select("div.col-content").select("h1").text()) != null)

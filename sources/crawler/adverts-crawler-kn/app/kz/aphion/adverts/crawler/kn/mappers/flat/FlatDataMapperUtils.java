@@ -202,7 +202,7 @@ public class FlatDataMapperUtils {
 	}
 	
 	//TODO мапинг комплексов
-	
+	/*
 	public static void mapResidentialComplex(ResidentialComplex complex) {
 		if (StringUtils.isBlank(complex.externalComplexId))
 			return;
@@ -222,7 +222,7 @@ public class FlatDataMapperUtils {
 				}
 			}
 	}
-
+*/
 	/**
 	 * Конвертирует цену
 	 * @param text
@@ -257,7 +257,7 @@ public class FlatDataMapperUtils {
 	public static String convertComplexName(String text) {
         String complexName = null;
         if (text.length() > 0)
-        	complexName = text.substring(2);
+        	complexName = text.substring(3);
 		return complexName;
 	}
 

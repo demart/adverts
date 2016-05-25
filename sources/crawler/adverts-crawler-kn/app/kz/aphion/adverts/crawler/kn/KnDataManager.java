@@ -93,21 +93,36 @@ public class KnDataManager {
 	}
 	
 	/**
-	 * Метод возвращает ЖК по полченному названию
+	 * Метод возвращает ЖК по полченному названию и полученному названию Региона
 	 * @param complexName
 	 * @return
 	 */
-	public static KnResidentalComplexEntity getResidentalComplex(String complexName) {
+	public static KnResidentalComplexEntity getResidentalComplex(String complexName, String regionName) {
 		List<KnResidentalComplexEntity> results = (List<KnResidentalComplexEntity>)JPA.em().createQuery("from KnResidentalComplexEntity where name = :key")
-				.setMaxResults(1)
 				.setParameter("key", complexName)
 				.getResultList();
+		
+		if (regionName.equals("Сарырка"))
+			regionName = "Сарыаркинский";
+		if (regionName.equals("Алматы"))
+			regionName = "Алматинский";
+		if (regionName.equals("Есиль"))
+			regionName = "Есильский";
+		
+		String region = regionName + " р-н";
+		
 		if (results.size() > 0) {
-			return results.get(0);
-		} else {
-			Logger.error("Requested residental complex with name [" + complexName + "] not found.");
-			return null;
-		}
+			for (int i = 0; i < results.size(); i++) {
+				if (results.get(i).complex.region.name.equals(regionName)) {
+					return results.get(i);
+				}
+				else if (results.get(i).complex.region.name.equals(region)) {
+					return results.get(i);
+				}
+
+			}
+		} 		
+		return null;
 	}
 	
 }

@@ -199,6 +199,7 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 		        	}
 		        	
 		        	catch (Exception e) {
+		        		currentPage--;
 		        		Logger.error(e.getMessage());
 		    			e.printStackTrace();
 		        	}
@@ -246,7 +247,9 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 				Logger.debug("User-Agent: " + uam.userAgent + " with name [" + uam.name + "]");
 		} 
 		
+		
 		ProxyServerModel psm = null;
+		
 		if (crawlerModel.crawlerGroup.useProxyServers) {
 			psm = DataManager.getRandomProxyServer(ProxyServerTypeEnum.HTTPS);
 			if (Logger.isDebugEnabled())

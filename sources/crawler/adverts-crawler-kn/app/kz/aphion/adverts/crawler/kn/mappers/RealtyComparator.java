@@ -23,6 +23,24 @@ public class RealtyComparator {
 	 */
 	public static boolean isUpdated(Realty oldRealty, Realty newRealty) {
 		
+		//Проверяем описание
+		FlatSellRealty oldDataRealty = (FlatSellRealty) oldRealty;
+		FlatSellRealty newDataRealty = (FlatSellRealty) newRealty;
+		if (oldDataRealty.data.text != null) {
+			if (newDataRealty.data.text != null) {
+				if (!oldDataRealty.data.text.equals(newDataRealty.data.text)) {
+					Logger.info("Adverts [%s] and [%s] have different description", oldRealty.source.externalAdvertId, newRealty.source.externalAdvertId);
+					return true;
+				}
+			}
+		}
+		
+		//Проверяем осталась ли прежняя цена
+		if (!oldRealty.price.equals(newRealty.price)) {
+			Logger.info("Adverts [%s] and [%s] have different price", oldRealty.source.externalAdvertId, newRealty.source.externalAdvertId);
+			return true;
+		}
+		
 		//Логика следующая. Как я понял то на кн поднимать и изменять можно раз в сутки.
 		//Поэтому если уже вытаскивал данное объявление, то больше не надо. Оно уже проверенно.
 		if (oldRealty.publishedAt.getTimeInMillis() - newRealty.publishedAt.getTimeInMillis() == 0l) {
@@ -31,15 +49,6 @@ public class RealtyComparator {
 		}
 		
 				
-		//Проверяем осталась ли прежняя цена
-		if ((oldRealty.price != newRealty.price)) {
-			Logger.info("Adverts [%s] and [%s] have different price", oldRealty.source.externalAdvertId, newRealty.source.externalAdvertId);
-			return true;
-		}
-		
-		//Проверяем описание
-		//TODO не могу сравнивать параметры data. Проблем в realty
-		
 		// Фотографии редактируются отдельно и проходят проверку. 
 		// Нужно сравнивать были ли изменения даже в случае если кол-во одинаковое 
 		if ((oldRealty.photos != null && newRealty.photos == null) ||
