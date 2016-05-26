@@ -111,15 +111,23 @@ public class KnDataManager {
 		
 		String region = regionName + " р-н";
 		
+		//Тут есть проблемы. Некоторые люди указывают район и ЖК, которые находятся в разных районах
+		//И не пойми либо случайно ткнули не на то район или же ЖК.
+		//Поэтому коль непонятно где ошиблись, ЖК все равно будет мапится.
 		if (results.size() > 0) {
-			for (int i = 0; i < results.size(); i++) {
-				if (results.get(i).complex.region.name.equals(regionName)) {
-					return results.get(i);
-				}
-				else if (results.get(i).complex.region.name.equals(region)) {
-					return results.get(i);
-				}
-
+			if (results.size() == 1)
+				return results.get(0);
+			
+			else {
+				for (int i = 0; i < results.size(); i++) {
+					if (results.get(i).complex.region.name.equals(regionName)) {
+						return results.get(i);
+					}
+					else if (results.get(i).complex.region.name.equals(region)) {
+						return results.get(i);
+					}
+	
+				  }
 			}
 		} 		
 		return null;

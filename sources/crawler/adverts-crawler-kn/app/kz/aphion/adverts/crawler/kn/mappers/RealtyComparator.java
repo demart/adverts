@@ -41,6 +41,28 @@ public class RealtyComparator {
 			}
 		}
 		
+		//Есть проблема, что люди указывают ЖК и район, которые находятся в совершенно разных местах,
+		//то есть район и район где находится ЖК не совпадают. Поэтому необходимо проверять данные параметры
+		//возможно будут исправлены ошибки. Так как изначально тяжело понять где они ошиблись
+		if (oldDataRealty.data.residentalComplex != null) {
+			if (newDataRealty.data.residentalComplex != null) {
+				if (oldDataRealty.data.residentalComplex.relationId != null) {
+					if (newDataRealty.data.residentalComplex.relationId != null) {
+						if (!newDataRealty.data.residentalComplex.relationId.equals(oldDataRealty.data.residentalComplex.relationId)) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		
+		if (oldDataRealty.location != null && newDataRealty.location != null) {
+			if (oldDataRealty.location.region != null && newDataRealty.location.region != null) {
+				if (!oldDataRealty.location.region.code.equals(newDataRealty.location.region.code))
+					return true;
+			}
+		}
+		
 		//Проверяем осталась ли прежняя цена
 		if (!oldRealty.price.equals(newRealty.price)) {
 			Logger.info("Adverts [%s] and [%s] have different price", oldRealty.source.externalAdvertId, newRealty.source.externalAdvertId);
@@ -91,8 +113,6 @@ public class RealtyComparator {
 		//Проверяем описание
 		FlatRentRealty oldDataRealty = (FlatRentRealty) oldRealty;
 		FlatRentRealty newDataRealty = (FlatRentRealty) newRealty;
-
-		
 		
 		if (oldDataRealty.data.text != null) {
 			if (newDataRealty.data.text != null) {
@@ -102,6 +122,29 @@ public class RealtyComparator {
 				}
 			}
 		}
+		
+		//Есть проблема, что люди указывают ЖК и район, которые находятся в совершенно разных местах,
+		//то есть район и район где находится ЖК не совпадают. Поэтому необходимо проверять данные параметры
+		//возможно будут исправлены ошибки. Так как изначально тяжело понять где они ошиблись
+		if (oldDataRealty.data.residentalComplex != null) {
+			if (newDataRealty.data.residentalComplex != null) {
+				if (oldDataRealty.data.residentalComplex.relationId != null) {
+					if (newDataRealty.data.residentalComplex.relationId != null) {
+						if (!newDataRealty.data.residentalComplex.relationId.equals(oldDataRealty.data.residentalComplex.relationId)) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		
+		if (oldDataRealty.location != null && newDataRealty.location != null) {
+			if (oldDataRealty.location.region != null && newDataRealty.location.region != null) {
+				if (!oldDataRealty.location.region.code.equals(newDataRealty.location.region.code))
+					return true;
+			}
+		}
+		
 		
 		//Проверяем осталась ли прежняя цена
 		if (!oldRealty.price.equals(newRealty.price)) {
@@ -115,6 +158,7 @@ public class RealtyComparator {
 			Logger.info("Advert [%s] published date don't changed. [%s] and [%s]", oldRealty.source.externalAdvertId, oldRealty.publishedAt.getTime().toLocaleString(), newRealty.publishedAt.getTime().toLocaleString());
 			return false;
 		}
+		
 		
 				
 		// Фотографии редактируются отдельно и проходят проверку. 
