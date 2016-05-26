@@ -89,7 +89,7 @@ public class FlatRentDataMapper  extends AbstractAdvertMapper<FlatRentRealty> {
 			if (tr.select("th").text().equals("Мебель")) 
 				realty.data.furnitureType = FlatDataMapperUtils.convertFurniture(tr.select("td").text());
 			
-			if (tr.select("th").text().equals("Название ЖК")) {
+			if (tr.select("th").text().equals("Название комплекса")) {
 					realty.data.residentalComplex.externalComplexName = FlatDataMapperUtils.convertComplexName(tr.select("td").text());
 					 KnResidentalComplexEntity complexEntity = KnDataManager.getResidentalComplex(FlatDataMapperUtils.convertComplexName(tr.select("td").text()), CommonMapperUtils.getRegionName(adv.select("div.address").text()));
 					 if (complexEntity != null) {
