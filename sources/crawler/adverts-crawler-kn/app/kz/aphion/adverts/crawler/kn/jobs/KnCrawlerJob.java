@@ -170,8 +170,14 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 									 
 								// Так как поидее не должно быть больше одного
 							    Realty existingRealty = (Realty)existingAdverts.get(0); 
-							    wasUpdated = RealtyComparator.isUpdated(existingRealty, realty);
+							   
+							    //Проверяем на измения объявления
+							    if (advertType == KnAdvertCategoryType.SELL_APARTMENT)
+							    	wasUpdated = RealtyComparator.isUpdatedFlatSellRealty(existingRealty, realty);
 							    
+							    if (advertType == KnAdvertCategoryType.RENT_APARTMENT || advertType == KnAdvertCategoryType.RENT_APARTMENT_DAILY)
+							    	wasUpdated = RealtyComparator.isUpdatedFlatRentRealty(existingRealty, realty);
+							  
 							    if (wasUpdated) {
 							    	foundExistingUpdateAdvertsCount++;
 							    	
