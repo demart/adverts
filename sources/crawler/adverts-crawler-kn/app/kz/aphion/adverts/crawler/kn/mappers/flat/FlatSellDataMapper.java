@@ -111,9 +111,6 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 							realty.data.residentalComplex.relationId = complexEntity.id;
 							realty.data.residentalComplex.name = complexEntity.name;
 						} 
-					 else {
-							Logger.error("Requested residental complex with name [" + realty.data.residentalComplex.externalComplexName + "] not found.");
-					 }
 						
 				}
 				

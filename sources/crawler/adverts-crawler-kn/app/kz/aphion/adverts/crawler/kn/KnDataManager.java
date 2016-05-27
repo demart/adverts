@@ -118,7 +118,7 @@ public class KnDataManager {
 			if (results.size() == 1)
 				return results.get(0);
 			
-			else {
+			else if (results.size() > 1) {
 				for (int i = 0; i < results.size(); i++) {
 					if (results.get(i).complex.region.name.equals(regionName)) {
 						return results.get(i);
@@ -126,10 +126,21 @@ public class KnDataManager {
 					else if (results.get(i).complex.region.name.equals(region)) {
 						return results.get(i);
 					}
+					
+					else {
+						Logger.error("Requested residental complex with name [" + complexName + "] not found in SELECTED REGION [" + regionName + "].");
+						
+					}
 	
 				  }
 			}
-		} 		
+			
+			} 
+		else {
+			Logger.error("Requested residental complex with name [" + complexName + "] not found.");
+			return null;
+		}
+		
 		return null;
 	}
 	
