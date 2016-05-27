@@ -1,0 +1,171 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.3.9
+-- Dumped by pg_dump version 9.3.9
+-- Started on 2016-05-27 10:45:04
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 186 (class 1259 OID 116643)
+-- Name: region_kn; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE region_kn (
+    id bigint NOT NULL,
+    key character varying(255),
+    name character varying(255),
+    region_id bigint
+);
+
+
+ALTER TABLE public.region_kn OWNER TO postgres;
+
+--
+-- TOC entry 2001 (class 0 OID 116643)
+-- Dependencies: 186
+-- Data for Name: region_kn; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO region_kn (id, key, name, region_id) VALUES (1, 'almaty', 'Алматы', 2);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (2, 'astana', 'Астана', 105);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (3, 'karaganda', 'Караганда', 239);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (4, 'ust-kamenogorsk', 'Усть-Каменогорск', 224);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (5, 'uralsk', 'Уральск', 234);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (6, 'atyrau', 'Атырау', 214);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (7, 'aktau', 'Актау', 258);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (8, 'abay', 'Абай', 236);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (53, 'kulsary', 'Кульсары', 215);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (9, 'abay-almatinskaya-oblast', 'Алматинская обл.', 132);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (10, 'akkol', 'Акколь', 113);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (11, 'zhambylskaya-oblast', 'Жамбылская обл.', 227);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (54, 'kostanayskaya-oblast', 'Костанайская обл.', 247);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (12, 'zhanaozen', 'Жанаозен', 259);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (55, 'kostanay', 'Костанай', 250);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (14, 'zharkent', 'Жаркент', 160);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (13, 'zhanatas', 'Жанатас', 228);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (15, 'zhezkazgan', 'Жезказган', 238);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (17, 'sarkand', 'Сарканд', 193);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (18, 'satpaev', 'Сатпаев', 244);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (19, 'severo-kazahstanskaya-oblast', 'Северо-Казахстанская обл.', 264);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (20, 'semey', 'Семей', 222);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (56, 'kokshetau', 'Кокшетау', 119);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (57, 'kentau', 'Кентау', 273);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (58, 'kaskelen', 'Каскелен', 172);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (59, 'karatau', 'Каратау', 229);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (60, 'karazhal', 'Каражал', 240);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (61, 'karagandinskaya-oblast', 'Карагандинская обл.', 235);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (22, 'stepnogorsk', 'Степногорск', 121);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (23, 'zapadno-kazahstanskaya-oblast', 'Западно-Казахстанская обл.', 232);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (24, 'zyryanovsk', 'Зыряновск', 219);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (25, 'tayynsha', 'Тайынша', 269);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (26, 'talgar', 'Талгар', 194);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (27, 'taldykorgan', 'Талдыкорган', 195);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (28, 'taraz', 'Тараз', 230);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (29, 'tekeli', 'Текели', 197);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (30, 'temirtau', 'Темиртау', 245);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (31, 'turkestan', 'Туркестан', 276);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (32, 'usharal', 'Ушарал', 202);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (33, 'ushtobe', 'Уштобе', 1745);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (34, 'hromtau', 'Хромтау', 129);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (35, 'shahtinsk', 'Шахтинск', 246);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (36, 'shu', 'Шу', 231);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (37, 'shymkent', 'Шымкент', 278);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (38, 'shchuchinsk', 'Щучинск', 123);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (39, 'ekibastuz', 'Экибастуз', 263);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (47, 'mangistauskaya-oblast', 'Мангыстауская обл.', 257);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (50, 'kyzylordinskaya-oblast', 'Кызылординская обл.', 253);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (16, 'saran', 'Сарань', 243);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (21, 'sergeevka', 'Сергеевка', 1317);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (62, 'kapshagay', 'Капшагай', 2000);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (40, 'yuzhno-kazahstanskaya-oblast', 'Южно-Казахстанская обл.', 270);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (41, 'rudniy', 'Рудный', 252);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (42, 'ridder', 'Риддер', 221);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (43, 'priozersk', 'Приозерск', 242);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (44, 'petropavlovsk', 'Петропавловск', 267);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (45, 'pavlodarskaya-oblast', 'Павлодарская обл.', 260);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (46, 'pavlodar', 'Павлодар', 262);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (48, 'mamlyutka', 'Мамлютка', 266);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (49, 'lisakovsk', 'Лисаковск', 251);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (51, 'kyzylorda', 'Кызылорда', 256);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (52, 'kurchatov', 'Курчатов', 220);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (63, 'akmolinskaya-oblast', 'Акмолинская обл.', 112);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (64, 'aksay', 'Аксай', 1787);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (65, 'aksu', 'Аксу', 261);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (66, 'aktobe', 'Актобе', 125);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (67, 'aktyubinskaya-oblast', 'Актюбинская обл.', 124);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (68, 'aralsk', 'Аральск', 254);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (69, 'arkalyk', 'Аркалык', 248);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (71, 'atyrauskaya-oblast', 'Атырауская обл.', 213);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (72, 'ayagoz', 'Аягоз', 217);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (74, 'balhash', 'Балхаш', 237);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (75, 'borovoe', 'Боровое', 115);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (76, 'bulaevo', 'Булаево', 265);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (77, 'vostochno-kazahstanskaya-oblas', 'Восточно-Казахстанская обл.', 216);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (73, 'bayterek', 'Байтерек', 145);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (70, 'arys', 'Арысь', 271);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (94, '37557679', 'Федоровка', 33538);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (78, '42874623', 'Алатауский', 3);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (80, '27671457', 'Ауэзовский', 29);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (81, '8916474', 'Бостандыкский', 73);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (82, '28538280', 'Жетысуский', 83);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (85, '28451689', 'Медеуский', 89);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (87, '28968815', 'Турксибский', 99);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (79, '9256312', 'Алмалинский', 26);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (86, '24800606', 'Наурызбайский', 783);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (83, '34366614', 'Илийский', 34528);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (84, '31419755', 'Карасайский', 34529);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (88, '2067403', 'Майкудук', 34530);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (89, '21618525', 'Михайловка', 34531);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (90, '26466238', 'Пришахтинск', 34532);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (91, '36231046', 'р-н ЖБИ', 34533);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (92, '37238760', 'р-н Нового рынка', 33534);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (98, '34191971', 'Косши', 731);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (93, '6776875', 'Юго-Восток', 33536);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (101, NULL, 'Топар', 401);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (100, NULL, 'Актас', 371);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (102, NULL, 'Шахан', 392);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (103, NULL, 'Каркаралинск', 241);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (96, '6309988', 'Сарыарка', 107);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (97, '26636760', 'Есильский р-н', 291);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (120, NULL, 'Талгарский', 2500);
+INSERT INTO region_kn (id, key, name, region_id) VALUES (95, '2927387', 'Алматинский р-н', 106);
+
+
+--
+-- TOC entry 1892 (class 2606 OID 116682)
+-- Name: region_kn_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY region_kn
+    ADD CONSTRAINT region_kn_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1893 (class 2606 OID 116704)
+-- Name: fk46e768ec9a34725; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY region_kn
+    ADD CONSTRAINT fk46e768ec9a34725 FOREIGN KEY (region_id) REFERENCES region(id);
+
+
+-- Completed on 2016-05-27 10:45:04
+
+--
+-- PostgreSQL database dump complete
+--
+
