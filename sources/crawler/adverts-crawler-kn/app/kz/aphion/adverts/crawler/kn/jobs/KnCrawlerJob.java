@@ -218,11 +218,9 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 				crawlerModel.lastSourceSystemScannedTime = startProcessingTime;
 				DataManager.updateLastSourceScannedTime(crawlerModel, startProcessingTime);
 
-		        Logger.info ("Count of Adverts: " + totalCount +
-		        					"; foundExistingUpdateAdvertsCount: " + foundExistingUpdateAdvertsCount +
-		        					"; foundNewAdvertsCount: " + foundNewAdvertsCount + 
-		        					"; foundExistingAdvertsCount: " + foundExistingAdvertsCount);
-		
+				// Статистика
+				Logger.info("{\"new\":%d, \"up-to-date\":%d, \"updated\":%d, \"total\":%d}", foundNewAdvertsCount, foundExistingAdvertsCount, foundExistingUpdateAdvertsCount, totalCount);
+				
 	}
 	
 	
