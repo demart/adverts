@@ -49,6 +49,7 @@ public class RealtyComparator {
 				if (oldDataRealty.data.residentalComplex.relationId != null) {
 					if (newDataRealty.data.residentalComplex.relationId != null) {
 						if (!newDataRealty.data.residentalComplex.relationId.equals(oldDataRealty.data.residentalComplex.relationId)) {
+							Logger.info("Advert [%s] complex changed from [%s] to [%s]", oldRealty.source.externalAdvertId, oldDataRealty.data.residentalComplex.relationId, newDataRealty.data.residentalComplex.relationId);
 							return true;
 						}
 					}
@@ -63,9 +64,49 @@ public class RealtyComparator {
 			}
 		}
 		
+		//Проверяем этаж
+		if (oldDataRealty.data.flatFloor != null && newDataRealty.data.flatFloor != null) {
+			if (!oldDataRealty.data.flatFloor.equals(newDataRealty.data.flatFloor)) {
+				Logger.info("Adverts [%s] floor changed from [%s] to [%s]", oldRealty.source.externalAdvertId, oldDataRealty.data.flatFloor, newDataRealty.data.flatFloor);
+				return true;
+			}
+		}
+		
+		//Проверяем площадь
+		if (oldDataRealty.data.square != null && newDataRealty.data.square  != null) {
+			if (!oldDataRealty.data.square.equals(newDataRealty.data.square)) {
+				Logger.info("Adverts [%s] square changed from [%s] to [%s]", oldRealty.source.externalAdvertId, oldDataRealty.data.square, newDataRealty.data.square);
+				return true;
+			}
+		}
+		
+		//Проверяем год постройки
+		if (oldDataRealty.data.houseYear != null && newDataRealty.data.houseYear  != null) {
+			if (!oldDataRealty.data.houseYear.equals(newDataRealty.data.houseYear)) {
+				Logger.info("Adverts [%s] house year changed from [%s] to [%s]", oldRealty.source.externalAdvertId, oldDataRealty.data.houseYear, newDataRealty.data.houseYear);
+				return true;
+			}
+		}
+		
+		//Проверяем всего этажей
+		if (oldDataRealty.data.houseFloorCount != null && newDataRealty.data.houseFloorCount  != null) {
+			if (!oldDataRealty.data.houseFloorCount.equals(newDataRealty.data.houseFloorCount)) {
+				Logger.info("Adverts [%s] house floor count changed from [%s] to [%s]", oldRealty.source.externalAdvertId, oldDataRealty.data.houseFloorCount, newDataRealty.data.houseFloorCount);
+				return true;
+			}
+		}
+		
+		//Проверяем количество комнат
+		if (oldDataRealty.data.rooms != null && newDataRealty.data.rooms  != null) {
+			if (!oldDataRealty.data.rooms.equals(newDataRealty.data.rooms)) {
+				Logger.info("Adverts [%s] house floor count changed from [%s] to [%s]", oldRealty.source.externalAdvertId, oldDataRealty.data.rooms, newDataRealty.data.rooms);
+				return true;
+			}
+		}
+		
 		//Проверяем осталась ли прежняя цена
 		if (!oldRealty.price.equals(newRealty.price)) {
-			Logger.info("Adverts [%s] and [%s] have different price", oldRealty.source.externalAdvertId, newRealty.source.externalAdvertId);
+			Logger.info("Adverts [%s] price changed from [%s] to [%s]", oldRealty.source.externalAdvertId, oldRealty.price, newRealty.price);
 			return true;
 		}
 		
@@ -131,6 +172,7 @@ public class RealtyComparator {
 				if (oldDataRealty.data.residentalComplex.relationId != null) {
 					if (newDataRealty.data.residentalComplex.relationId != null) {
 						if (!newDataRealty.data.residentalComplex.relationId.equals(oldDataRealty.data.residentalComplex.relationId)) {
+							Logger.info("Advert [%s] complex changed from [%s] to [%s]", oldRealty.source.externalAdvertId, oldDataRealty.data.residentalComplex.relationId, newDataRealty.data.residentalComplex.relationId);
 							return true;
 						}
 					}
@@ -146,9 +188,41 @@ public class RealtyComparator {
 		}
 		
 		
+		//Проверяем этаж
+		if (oldDataRealty.data.flatFloor != null && newDataRealty.data.flatFloor != null) {
+			if (!oldDataRealty.data.flatFloor.equals(newDataRealty.data.flatFloor)) {
+				Logger.info("Adverts [%s] floor changed from [%s] to [%s]", oldRealty.source.externalAdvertId, oldDataRealty.data.flatFloor, newDataRealty.data.flatFloor);
+				return true;
+			}
+		}
+		
+		//Проверяем площадь
+		if (oldDataRealty.data.square != null && newDataRealty.data.square  != null) {
+			if (!oldDataRealty.data.square.equals(newDataRealty.data.square)) {
+				Logger.info("Adverts [%s] square changed from [%s] to [%s]", oldRealty.source.externalAdvertId, oldDataRealty.data.square, newDataRealty.data.square);
+				return true;
+			}
+		}
+		
+		//Проверяем год постройки
+		if (oldDataRealty.data.houseYear != null && newDataRealty.data.houseYear  != null) {
+			if (!oldDataRealty.data.houseYear.equals(newDataRealty.data.houseYear)) {
+				Logger.info("Adverts [%s] house year changed from [%s] to [%s]", oldRealty.source.externalAdvertId, oldDataRealty.data.houseYear, newDataRealty.data.houseYear);
+				return true;
+			}
+		}
+		
+		//Проверяем всего этажей
+		if (oldDataRealty.data.houseFloorCount != null && newDataRealty.data.houseFloorCount  != null) {
+			if (!oldDataRealty.data.houseFloorCount.equals(newDataRealty.data.houseFloorCount)) {
+				Logger.info("Adverts [%s] house floor count changed from [%s] to [%s]", oldRealty.source.externalAdvertId, oldDataRealty.data.houseFloorCount, newDataRealty.data.houseFloorCount);
+				return true;
+			}
+		}
+		
 		//Проверяем осталась ли прежняя цена
 		if (!oldRealty.price.equals(newRealty.price)) {
-			Logger.info("Adverts [%s] and [%s] have different price", oldRealty.source.externalAdvertId, newRealty.source.externalAdvertId);
+			Logger.info("Adverts [%s] price changed from [%s] to [%s]", oldRealty.source.externalAdvertId, oldRealty.price, newRealty.price);
 			return true;
 		}
 		

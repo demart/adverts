@@ -1,5 +1,6 @@
 package kz.aphion.adverts.crawler.irr.mappers.flat;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +75,12 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 									case "meters-total":
 										String square = (String)keys.getValue();
 										square = square.replaceAll(",", ".");
+										//Бывает слишком много символов после запятой, поэтому необходимо вначале отформатирвоать
+										Float litersOfPetrol2 = Float.parseFloat(square);
+										DecimalFormat df2 = new DecimalFormat("0.0");
+										df2.setMaximumFractionDigits(2);
+										square = df2.format(litersOfPetrol2);
+										square = square.replaceAll(",", ".");	
 										realty.data.square = Float.parseFloat(square);
 										break;
 									
@@ -81,12 +88,24 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 									case "meters-living":
 										String livingSquare = (String)keys.getValue();
 										livingSquare = livingSquare.replaceAll(",", ".");
+										//Бывает слишком много символов после запятой, поэтому необходимо вначале отформатирвоать
+										Float litersOfPetrol3 = Float.parseFloat(livingSquare);
+										DecimalFormat df3 = new DecimalFormat("0.0");
+										df3.setMaximumFractionDigits(2);
+										livingSquare = df3.format(litersOfPetrol3);
+										livingSquare = livingSquare.replaceAll(",", ".");
 										realty.data.squareLiving = Float.parseFloat(livingSquare);
 										break;
 										
 									//Площадь кухни
 									case "kitchen":
 										String kitchenSquare = (String)keys.getValue();
+										kitchenSquare = kitchenSquare.replaceAll(",", ".");
+										//Бывает слишком много символов после запятой, поэтому необходимо вначале отформатирвоать
+										Float litersOfPetrol=Float.parseFloat(kitchenSquare);
+										DecimalFormat df = new DecimalFormat("0.0");
+										df.setMaximumFractionDigits(2);
+										kitchenSquare = df.format(litersOfPetrol);
 										kitchenSquare = kitchenSquare.replaceAll(",", ".");
 										realty.data.squareKitchen = Float.parseFloat(kitchenSquare);
 										break;
@@ -129,6 +148,12 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 									case "house-ceiling-height":
 										String ceilingHeight = (String)keys.getValue();
 										ceilingHeight = ceilingHeight.replace(",", "");
+										//Бывает слишком много символов после запятой, поэтому необходимо вначале отформатирвоать
+										Float litersOfPetrol1 = Float.parseFloat(ceilingHeight);
+										DecimalFormat df1 = new DecimalFormat("0.0");
+										df1.setMaximumFractionDigits(2);
+										ceilingHeight = df1.format(litersOfPetrol1);
+										ceilingHeight = ceilingHeight.replaceAll(",", ".");
 										realty.data.ceilingHeight = Float.parseFloat(ceilingHeight);
 										break;
 										
