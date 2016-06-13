@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import javax.jms.JMSException;
+
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,7 +24,10 @@ import org.mongodb.morphia.mapping.Mapper;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 
+import com.google.gson.GsonBuilder;
+
 import controllers.Application;
+import kz.aphion.adverts.common.models.mq.phones.RegisterPhoneModel;
 import kz.aphion.adverts.crawler.core.CrawlerHttpClient;
 import kz.aphion.adverts.crawler.core.DataManager;
 import kz.aphion.adverts.crawler.core.MongoDBProvider;
@@ -42,6 +47,9 @@ import kz.aphion.adverts.crawler.kn.QueryBuilder;
 import kz.aphion.adverts.crawler.kn.mappers.KnAdvertMapper;
 import kz.aphion.adverts.crawler.kn.mappers.RealtyComparator;
 import kz.aphion.adverts.persistence.SourceSystemType;
+import kz.aphion.adverts.persistence.phones.PhoneOwner;
+import kz.aphion.adverts.persistence.phones.PhoneSource;
+import kz.aphion.adverts.persistence.phones.PhoneSourceCategory;
 import kz.aphion.adverts.persistence.realty.Realty;
 import kz.aphion.adverts.persistence.realty.RealtyAdvertStatus;
 import play.Logger;
@@ -70,7 +78,7 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 		//c3p0();
 	}
 	
-	private void startCrawle() throws CrawlerException, IOException, ParseException {
+	private void startCrawle() throws Exception {
 		// Метод проводит валидацию обязательный полей
 		validateModel();
 		
@@ -188,6 +196,8 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 									
 									 // Сохраняем новую версию
 									 ds.save(realty);
+									 // Отправляем сообщение в очередь обработки телефонов
+									 sendPhoneNumberRegistrationMessage(realty);
 									 
 									 Logger.info("Advert [%s] with id [%s] was moved to archive, with id [%s] added.", realty.source.externalAdvertId, existingRealty.id, realty.id); 	
 							    }
@@ -199,6 +209,8 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 							    else {
 							    	foundNewAdvertsCount++;
 							    	ds.save(realty);
+									 // Отправляем сообщение в очередь обработки телефонов
+									 sendPhoneNumberRegistrationMessage(realty);
 							    }
 							}
 			    		}
@@ -272,6 +284,55 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 			} else {
 				return CrawlerHttpClient.getContent(targetUrl, psm.host, psm.port, uam.userAgent);
 			}
+		}
+	}
+	
+	/**
+	 * Отправляет необходимую информацию для регистрации телефона в объявлении
+	 * 
+	 * @param realty
+	 */
+	private void sendPhoneNumberRegistrationMessage(Realty realty) {
+		try {
+			RegisterPhoneModel model = new RegisterPhoneModel();
+			model.source = PhoneSource.KN;
+			model.category = PhoneSourceCategory.REALTY;
+			model.time = realty.publishedAt;
+			model.phone = realty.publisher.phones;
+			model.region = realty.location.region;
+			model.regions = realty.location.regions;
+			
+			if (realty.publisher == null) {
+				Logger.error("Advert Id [%s] with Id[%s] Can't send message to registration phone queue, published is null.", realty.source.externalAdvertId, realty.id);
+			}
+			
+			switch (realty.publisher.publisherType) {
+				case DEVELOPER_COMPANY:
+					model.owner = PhoneOwner.DEVELOPER_COMPANY;
+					break;
+				case OWNER:
+					model.owner = PhoneOwner.OWNER;
+					break;
+				case REALTOR:
+					model.owner = PhoneOwner.REALTOR;
+					break;
+				case REALTOR_COMPANY:
+					model.owner = PhoneOwner.REALTOR_COMPANY;
+					break;
+				case UNDEFINED:
+					model.owner = PhoneOwner.UNDEFINED;
+					break;
+				default:
+					model.owner = PhoneOwner.UNDEFINED;
+					break;
+			}
+			
+			String message = new GsonBuilder().setPrettyPrinting().create().toJson(model);
+			
+		
+			getMqProvider().sendTextMessageToQueue("adverts.phones.registration", message);
+		} catch (JMSException | CrawlerException e) {
+			Logger.error(e, "Error seding message to Phone registration queue");
 		}
 	}
 	

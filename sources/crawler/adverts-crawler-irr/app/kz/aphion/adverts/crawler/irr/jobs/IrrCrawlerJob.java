@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.jms.JMSException;
 
+import kz.aphion.adverts.common.models.mq.phones.RegisterPhoneModel;
 import kz.aphion.adverts.crawler.core.CrawlerHttpClient;
 import kz.aphion.adverts.crawler.core.DataManager;
 import kz.aphion.adverts.crawler.core.MongoDBProvider;
@@ -27,6 +28,9 @@ import kz.aphion.adverts.crawler.irr.QueryBuilder;
 import kz.aphion.adverts.crawler.irr.mappers.IrrAdvertMapper;
 import kz.aphion.adverts.crawler.irr.mappers.RealtyComparator;
 import kz.aphion.adverts.persistence.SourceSystemType;
+import kz.aphion.adverts.persistence.phones.PhoneOwner;
+import kz.aphion.adverts.persistence.phones.PhoneSource;
+import kz.aphion.adverts.persistence.phones.PhoneSourceCategory;
 import kz.aphion.adverts.persistence.realty.Realty;
 import kz.aphion.adverts.persistence.realty.RealtyAdvertStatus;
 
@@ -187,6 +191,9 @@ public class IrrCrawlerJob extends CrawlerProcessJob {
 								 // Сохраняем новую версию
 								 ds.save(realty);
 								 
+								 // Отправляем сообщение в очередь обработки телефонов
+								 sendPhoneNumberRegistrationMessage(realty);
+								 
 								 Logger.info("Advert [%s] with id [%s] was moved to archive, with id [%s] added.", realty.source.externalAdvertId, existingRealty.id, realty.id);
 								 
 							 } else {
@@ -200,6 +207,9 @@ public class IrrCrawlerJob extends CrawlerProcessJob {
 							 foundNewAdvertsCount += 1;
 							 //Logger.info("Advert is new one, we can process it");
 							 ds.save(realty);
+							 
+							 // Отправляем сообщение в очередь обработки телефонов
+							 sendPhoneNumberRegistrationMessage(realty);
 							 
 							 // Отправляем сообщени в очердеь обработки объявления
 							 // 
@@ -248,7 +258,54 @@ public class IrrCrawlerJob extends CrawlerProcessJob {
 		 return q.asList();
 	}
 	
-	
+	/**
+	 * Отправляет необходимую информацию для регистрации телефона в объявлении
+	 * 
+	 * @param realty
+	 */
+	private void sendPhoneNumberRegistrationMessage(Realty realty) {
+		try {
+			RegisterPhoneModel model = new RegisterPhoneModel();
+			model.source = PhoneSource.IRR;
+			model.category = PhoneSourceCategory.REALTY;
+			model.time = realty.publishedAt;
+			model.phone = realty.publisher.phones;
+			model.region = realty.location.region;
+			model.regions = realty.location.regions;
+			
+			if (realty.publisher == null) {
+				Logger.error("Advert Id [%s] with Id[%s] Can't send message to registration phone queue, published is null.", realty.source.externalAdvertId, realty.id);
+			}
+			
+			switch (realty.publisher.publisherType) {
+				case DEVELOPER_COMPANY:
+					model.owner = PhoneOwner.DEVELOPER_COMPANY;
+					break;
+				case OWNER:
+					model.owner = PhoneOwner.OWNER;
+					break;
+				case REALTOR:
+					model.owner = PhoneOwner.REALTOR;
+					break;
+				case REALTOR_COMPANY:
+					model.owner = PhoneOwner.REALTOR_COMPANY;
+					break;
+				case UNDEFINED:
+					model.owner = PhoneOwner.UNDEFINED;
+					break;
+				default:
+					model.owner = PhoneOwner.UNDEFINED;
+					break;
+			}
+			
+			String message = new GsonBuilder().setPrettyPrinting().create().toJson(model);
+			
+		
+			getMqProvider().sendTextMessageToQueue("adverts.phones.registration", message);
+		} catch (JMSException | CrawlerException e) {
+			Logger.error(e, "Error seding message to Phone registration queue");
+		}
+	}
 
 	
 	/**
