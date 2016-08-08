@@ -1,0 +1,51 @@
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'groovy'
+ 
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+	compile 'com.google.code.maven-play-plugin.org.playframework:play:1.2.7'
+	compile "javax.jms:javax.jms-api:2.0"
+	compile 'org.apache.activemq:activemq-broker:5.13.2'
+	compile 'org.apache.activemq:activemq-client:5.13.2'
+	compile 'org.fusesource.hawtbuf:hawtbuf:1.11'
+	compile 'org.apache.geronimo.specs:geronimo-j2ee-management_1.1_spec:1.0.1'
+	
+	compile 'org.mongodb.morphia:morphia:1.0.1'
+
+	compile project(":common:adverts-common")
+	compile project(":common:adverts-common-persistence")
+}
+
+
+jar {
+	doLast {
+		println 'Copy jar file: ' + archiveName.toString() + '  to processor and web app';
+		println 'From: ' + archivePath
+		assert file(archivePath).exists();	
+		copy {
+			from file(archivePath)
+			into file(getRootDir().getAbsolutePath() + '/analyser/adverts-analyser-processor/lib/')
+		}
+		println 'to: ' + getRootDir().getAbsolutePath() + '/analyser/adverts-analyser-processor/lib/'
+	}
+}
+
+
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/java'
+        }
+        resources {
+            srcDir 'src/resources'
+        }
+    }
+}

@@ -12,6 +12,9 @@ include ':crawler:adverts-crawler-olx'
 include ':crawler:adverts-crawler-irr'
 
 include ':analyser'
+include ':analyser:adverts-analyser-core'
+include ':analyser:adverts-analyser-processor'
+
 
 include ':subscriptions'
 

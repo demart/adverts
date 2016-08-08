@@ -53,6 +53,12 @@ jar {
 			into file(getRootDir().getAbsolutePath() + '/phones/adverts-phone-web/lib/')
 		}
 		println 'to: ' + getRootDir().getAbsolutePath() + '/phones/adverts-phone-web/lib/'
+
+		copy {
+			from file(archivePath)
+			into file(getRootDir().getAbsolutePath() + '/analyser/adverts-analyser-processor/lib/')
+		}
+		println 'to: ' + getRootDir().getAbsolutePath() + '/analyser/adverts-analyser-processor/lib/'
 	}
 }
 

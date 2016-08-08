@@ -2,6 +2,9 @@ package kz.aphion.adverts.common.models.mq.realties;
 
 import java.util.Calendar;
 
+import kz.aphion.adverts.persistence.realty.types.RealtyOperationType;
+import kz.aphion.adverts.persistence.realty.types.RealtyType;
+
 /**
  * Модель для передачи сообщения о необходимости обработки объявления о недвижимости
  * с crawler в analyze систему
@@ -20,6 +23,16 @@ public class ProcessRealtyModel {
 	 * Идентификатор обновленного объявления
 	 */
 	public String oldAdvertId;
+	
+	/**
+	 * Вид недвижимости
+	 */
+	public RealtyType type;
+	
+	/**
+	 * Вид операции (Продажа, Аренда)
+	 */
+	public RealtyOperationType operation; 
 	
 	/**
 	 * Статус объявления для обработки

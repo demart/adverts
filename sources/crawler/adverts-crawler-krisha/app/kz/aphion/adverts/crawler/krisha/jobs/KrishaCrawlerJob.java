@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.jms.JMSException;
 
 import kz.aphion.adverts.common.models.mq.phones.RegisterPhoneModel;
+import kz.aphion.adverts.common.models.mq.realties.ProcessRealtyModel;
+import kz.aphion.adverts.common.models.mq.realties.RealtyProcessStatus;
 import kz.aphion.adverts.crawler.core.CrawlerHttpClient;
 import kz.aphion.adverts.crawler.core.DataManager;
 import kz.aphion.adverts.crawler.core.MongoDBProvider;
@@ -210,22 +212,14 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 							 // Сохраняем новую версию
 							 ds.save(realty);
 							 
+							 // Отправляем сообщени в очередь обработки объявления
+							 sendMessageForProcessing(realty, true, existingRealty);
+							 
 							 // Отправляем сообщение в очередь обработки телефонов
-							 // ПОКА ПОД ВОПРОСОМ ТАК КАК МНОГО СООБЩЕНИЙ ПОЙДЕТ В ОЧЕРЕДЬ ТЕЛЕФОНОВ
 							 sendPhoneNumberRegistrationMessage(realty);
 							 
 							 Logger.info("Advert [%s] with id [%s] was moved to archive, with id [%s] added.", realty.source.externalAdvertId, existingRealty.id, realty.id);
 							 
-							 /*
-							 GsonBuilder builder = new GsonBuilder();
-							 builder.setPrettyPrinting();
-							 Gson gson = builder.create();
-							 Logger.warn("");
-							 Logger.warn(gson. toJson(realty));
-							 Logger.warn("");
-							 Logger.warn(gson.toJson(existingRealty));
-							 Logger.warn("");
-							 */
 						 } else {
 							 // Ничего не делаем, так как по умолчанию считаем что объявление не изменилось
 							 Logger.info("Advert [" + realty.source.externalAdvertId + "] already exists and up-to-date.");
@@ -238,8 +232,8 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 						 //Logger.info("Advert is new one, we can process it");
 						 ds.save(realty);
 						 
-						 // Отправляем сообщени в очердеь обработки объявления
-						 // 
+						 // Отправляем сообщени в очередь обработки объявления
+						 sendMessageForProcessing(realty, false, null);
 						 
 						 // Отправляем сообщение в очередь обработки телефонов
 						 sendPhoneNumberRegistrationMessage(realty);
@@ -266,12 +260,7 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 
 		// Статистика
 		Logger.info("{\"new\":%d, \"existing\":%d, \"up-to-date\":%d, \"updated\":%d, \"skipped\":%d, \"total\":%d}", foundNewAdvertsCount, foundExistingAdvertsCount, foundExistingUpToDateAdvertsCount, foundExistingUpdateAdvertsCount, skippedAdvertsCount, totalCount);
-		
-		// Закончили обработку
-		
-		// Массово??? отправляем в очередь или сохраняем в БД
-		// TODO:
-		
+				
 		// Обновляем время последнего запуска
 		crawlerModel.lastSourceSystemScannedTime = startProcessingTime;
 		DataManager.updateLastSourceScannedTime(crawlerModel, startProcessingTime);
@@ -293,6 +282,33 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 		 return q.asList();
 	}
 	
+	/**
+	 * Отправляет необходимую информацию для регистрации телефона в объявлении
+	 * 
+	 * @param realty
+	 */
+	private void sendMessageForProcessing(Realty newRealty, boolean wasUpdated, Realty oldRealty) {
+		try {
+			ProcessRealtyModel model = new ProcessRealtyModel();
+			
+			model.advertId = newRealty.id.toString();
+			model.status = wasUpdated == false ? RealtyProcessStatus.NEW : RealtyProcessStatus.UPDATED; 
+			model.oldAdvertId = wasUpdated == false ? null : oldRealty.id.toString();
+			model.eventTime = Calendar.getInstance();			
+			
+			model.type = newRealty.type;
+			model.operation = newRealty.operation;
+			
+			String message = new GsonBuilder().setPrettyPrinting().create().toJson(model);
+		
+			getMqProvider().sendTextMessageToQueue(this.crawlerModel.destinationQueueName, message);
+			
+			Logger.debug("Message was successfully sent to " + this.crawlerModel.destinationQueueName + " for further processing.");
+		} catch (JMSException | CrawlerException e) {
+			Logger.error(e, "Error seding message to " + this.crawlerModel.destinationQueueName + " queue");
+		}
+	}	
+	
 	
 	/**
 	 * Отправляет необходимую информацию для регистрации телефона в объявлении
@@ -309,8 +325,9 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 			model.region = realty.location.region;
 			model.regions = realty.location.regions;
 			
-			if (realty.publisher == null) {
+			if (realty.publisher == null || realty.publisher.publisherType == null) {
 				Logger.error("Advert Id [%s] with Id[%s] Can't send message to registration phone queue, published is null.", realty.source.externalAdvertId, realty.id);
+				return;
 			}
 			
 			switch (realty.publisher.publisherType) {

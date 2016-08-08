@@ -105,6 +105,11 @@ public class OlxRealtyComparator {
 					}
 				}
 				
+				if (oldRealty.publisher.phones.size() != newRealty.publisher.phones.size()) {
+					isUpdated = true;
+					Logger.info("Advert [%s] contact phones size changed from [" + oldRealty.publisher.phones.size() + "] to [" + newRealty.publisher.phones.size() + "]", oldRealty.source.externalAdvertId);
+				}
+				
 			} else {
 				// new Advert is older so there is no any changes
 			}

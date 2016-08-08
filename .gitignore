@@ -1,4 +1,6 @@
 
+.gradle
+.gradle/
 
 workspace
 sources/common/adverts-common/build/*
