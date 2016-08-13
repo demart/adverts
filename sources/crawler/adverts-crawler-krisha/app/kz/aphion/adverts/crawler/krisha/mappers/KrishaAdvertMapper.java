@@ -66,10 +66,10 @@ public class KrishaAdvertMapper {
 					adverts.add(realty);
 				} else {
 					// NULL - это проблема, видимо что-то случилось
-					Logger.error("ATTENTION: Advert with id [" + (Long)rawAdvert.get("id") + "] wasn't processed!");
+					Logger.error("ATTENTION: Advert with id [" + rawAdvert.get("id") + "] wasn't processed!");
 				}
 			} catch (Exception e) {
-				Logger.error(e, "ATTENTION: Advert with id [" + (Long)rawAdvert.get("id") + "] wasn't processed because of errors!");
+				Logger.error(e, "ATTENTION: Advert with id [" + rawAdvert.get("id") + "] wasn't processed because of errors!");
 			}
 		}
 		

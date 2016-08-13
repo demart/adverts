@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
+
 import kz.aphion.adverts.crawler.krisha.mappers.AbstractAdvertMapper;
 import kz.aphion.adverts.crawler.krisha.mappers.CommonMapperUtils;
 import kz.aphion.adverts.persistence.realty.RealtyPublisherCompany;
@@ -209,12 +211,18 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 					}
 				break;
 			case "has_change": // Обмен
-				String hasChange = (String)dataItem.getValue();
+				String hasChange = CommonMapperUtils.getEntryStringValue(dataItem);
 				switch (hasChange) {
 				case "0": // Запретить
 					// Не используется
 					break;
 				case "1": // Разрешить
+					// Не используется
+					break;
+				case "false": // Разрешить
+					// Не используется
+					break;
+				case "true": // Разрешить
 					// Не используется
 					break;
 				default:

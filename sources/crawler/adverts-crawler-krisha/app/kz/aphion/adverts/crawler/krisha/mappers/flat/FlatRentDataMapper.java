@@ -216,12 +216,18 @@ public class FlatRentDataMapper  extends AbstractAdvertMapper<FlatRentRealty> {
 					}
 				break;
 			case "has_change": // Обмен
-				String hasChange = (String)dataItem.getValue();
+				String hasChange = CommonMapperUtils.getEntryStringValue(dataItem);
 				switch (hasChange) {
 				case "0": // Запретить
 					// Не используется
 					break;
 				case "1": // Разрешить
+					// Не используется
+					break;
+				case "true": // Запретить
+					// Не используется
+					break;
+				case "false": // Запретить
 					// Не используется
 					break;
 				default:

@@ -271,6 +271,10 @@ public class FlatDataMapperUtils {
 				return FlatBalconyGlazingType.NO;
 			case "1": // да
 				return FlatBalconyGlazingType.YES;
+			case "true": // нет
+				return FlatBalconyGlazingType.YES;
+			case "false": // нет
+				return FlatBalconyGlazingType.NO;
 			default:
 				Logger.error("ATTENTION! Found new [flat.balcony_g] value: " + flatBalconyGlazing);
 				return FlatBalconyGlazingType.UNDEFINED;

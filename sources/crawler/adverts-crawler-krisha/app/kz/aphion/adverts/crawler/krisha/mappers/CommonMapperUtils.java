@@ -62,7 +62,11 @@ public class CommonMapperUtils {
 		if (dataItem.getValue() instanceof Number) {
 			return String.valueOf(dataItem.getValue());
 		} else {
-			return (String)dataItem.getValue();
+			if (dataItem.getValue() instanceof Boolean) {
+				return dataItem.getValue().toString();
+			} else {
+				return (String)dataItem.getValue();
+			}
 		}
 	}
 	
