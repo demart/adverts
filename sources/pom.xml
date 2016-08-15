@@ -34,6 +34,8 @@
         <module>persistence</module>
         <module>analyser</module>
         <module>subscription</module>
+        <module>subscription-live</module>
+        <module>web-api</module>
     </modules>
 
     <properties>

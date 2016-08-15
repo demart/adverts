@@ -1,12 +1,12 @@
-package kz.aphion.adverts.analyser.listeners;
+package kz.aphion.adverts.subscription.live.listeners;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
-import kz.aphion.adverts.analyser.processors.AdvertAnalyserProcessor;
-import kz.aphion.adverts.analyser.processors.RealtyAdvertAnalyserProcessor;
+import kz.aphion.adverts.subscription.live.processors.AdvertSubscriptionProcessor;
+import kz.aphion.adverts.subscription.live.processors.RealtyAdvertSubscriptionProcessor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +18,9 @@ import org.slf4j.LoggerFactory;
  *
  * Created at Jun 12, 2016
  */
-public class RealtyAdvertListener implements MessageListener  {
+public class RealtyAdvertSubscriptionListener implements MessageListener  {
 	
-	private static Logger logger = LoggerFactory.getLogger(ApplicationStartupListener.class);
+	private static Logger logger = LoggerFactory.getLogger(RealtyAdvertSubscriptionListener.class);
 
 	@Override
 	public void onMessage(Message message) {
@@ -29,19 +29,19 @@ public class RealtyAdvertListener implements MessageListener  {
         	if (message instanceof TextMessage) {
                 TextMessage textMessage = (TextMessage) message;
                 String text = textMessage.getText();
-                logger.debug("Received new message");
+                logger.trace("Received new message");
                 
-                AdvertAnalyserProcessor processor = new RealtyAdvertAnalyserProcessor();
+                AdvertSubscriptionProcessor processor = new RealtyAdvertSubscriptionProcessor();
                 processor.processMessage(text);
 
-                logger.debug("Processing completed");
+                logger.trace("Processing completed");
             } else {
-            	logger.warn("Received: subscription id #" + message);
+            	logger.warn("Received: message #" + message);
             }
         } catch (JMSException e) {
         	logger.error("JMS ERROR", e);
         } catch (Exception e) {
-        	logger.error("Error during processing RealtyAdvertListener check request message", e);
+        	logger.error("Error during processing RealtyAdvertSubscriptionListener check request message", e);
         	try {
         		logger.error("JSON was received:\n%s", ((TextMessage)message).getText());
 			} catch (JMSException e1) {

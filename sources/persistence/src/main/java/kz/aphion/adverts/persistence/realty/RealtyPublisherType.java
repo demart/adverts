@@ -11,26 +11,34 @@ public enum RealtyPublisherType {
 	/**
 	 * Не определено
 	 */
-	UNDEFINED,
+	UNDEFINED(0),
 	
 	/**
 	 * Хозяин
 	 */
-	OWNER,
+	OWNER(1),
 	
 	/**
 	 * Риэлтор
 	 */
-	REALTOR,
+	REALTOR(2),
 	
 	/**
 	 * Компания риэлтор
 	 */
-	REALTOR_COMPANY,
+	REALTOR_COMPANY(3),
 	
 	/**
 	 * Компания застройщик
 	 */
-	DEVELOPER_COMPANY,
+	DEVELOPER_COMPANY(4);
+	
+	private final int value;
+	
+	private RealtyPublisherType(int value){
+		this.value = value;
+	}
+	
+	public int getValue() {return value;}
 	
 }

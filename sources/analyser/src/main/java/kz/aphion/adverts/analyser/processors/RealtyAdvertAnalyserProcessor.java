@@ -1,30 +1,33 @@
 package kz.aphion.adverts.analyser.processors;
 
+import java.util.Calendar;
+
+import javax.jms.JMSException;
+
+import kz.aphion.adverts.analyser.mq.AnalyserProcessStatus;
 import kz.aphion.adverts.analyser.mq.ProcessRealtyModel;
-import kz.aphion.adverts.analyser.searcher.DuplicateSearcher;
-import kz.aphion.adverts.analyser.searcher.DuplicateSearcherFactory;
+import kz.aphion.adverts.analyser.mq.QueueNameConstants;
+import kz.aphion.adverts.analyser.mq.RealtyAnalyserToSubscriptionProcessModel;
+import kz.aphion.adverts.analyser.providers.ActiveMqProvider;
 import kz.aphion.adverts.analyser.utils.MessageUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * 
- * Класс обработчик сообщений о недвижимости
- * 
- * @author artem.demidovich
- *
- * Created at Jun 12, 2016
- */
-public class RealtyAdvertAnalyserProcessor implements AdvertAnalyserProcessor {
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+public class RealtyAdvertAnalyserProcessor implements AdvertAnalyserProcessor  {
 	
 	private static Logger logger = LoggerFactory.getLogger(RealtyAdvertAnalyserProcessor.class);
 	
 	/**
 	 * Метод является входной точкой для обработки запроса на анализ объявления поступающие от краулера
 	 * @param message
+	 * @throws Exception 
+	 * @throws JMSException 
 	 */
-	public void processMessage(String message) {
+	public void processMessage(String message) throws JMSException, Exception {
 		ProcessRealtyModel model = MessageUtils.parseModel(message);
 		if (model == null) {
 			// Не смогли извлечь, ругаемся и приступаем к следующему сообщению
@@ -32,11 +35,13 @@ public class RealtyAdvertAnalyserProcessor implements AdvertAnalyserProcessor {
 			return;
 		}
 
-		// Если новое объявление то нужно получить похожие и сравнить на похожесть
-			// Если есть похожие то нужно оценить и добавить в группу
-			// Если нет похожих то создать новую группу
-		// Если сущаствующие нужно проверить что изменилось
-			// Если изменения значительные то нужно прогнать по группе и сделать переоценку
+		// Обработка без группировок
+		// В этой схеме рассматриваются только простые объявления которые могут быть:
+		//	1. Новыми, их сравнивать не нужно просто отравляем на обработку в модуль подписок
+		//	2. Существующими, их сравнивать нужно для того чтобы решить
+		//		2.1 Новое объявление (например когда опубликовали после длительного периода
+		//		2.2 Объявление улучшилось (цена изменилась или фотки появились)
+		//		2.3 Объявление ухудшилось (цена увеличилась, например)
 		
 		switch(model.status) {
 			case NEW:
@@ -55,25 +60,32 @@ public class RealtyAdvertAnalyserProcessor implements AdvertAnalyserProcessor {
 	/**
 	 * Метод обрабатывает все новые объявления
 	 * @param model
+	 * @throws Exception 
+	 * @throws JMSException 
 	 */
-	private void processNewAdvert(ProcessRealtyModel model) {
-		// Достать все похожие объявления
-		// Найти похожие объявления
-		//	Если есть похожие то посмотреть что в какие группы входят
-		//		Если группа одна то добавить в группу
-		//			Возможно пересичтать группу для того чтобы найти лучшее
-		//		Если групп несколько то это проблема, так как такого быть по хорошему не должно
-		//			Пока можно добавить в группу с большим совпадением
-		//	Если нет похожих объявлений то создаем группу
-		// Отправляем сообщение в очередь подписок для дальнейшей обработки
+	private void processNewAdvert(ProcessRealtyModel model) throws JMSException, Exception {
+		// Отправляем объявление в систему подписок
+		logger.debug("Realty model with id: "+ model.advertId + " is NEW and will be send to subscription module.");
 		
-		// Достаем запись из БД
+		// Формируем модель
+		RealtyAnalyserToSubscriptionProcessModel analyserModel = new RealtyAnalyserToSubscriptionProcessModel();
+		analyserModel.advertId = model.advertId;
+		analyserModel.oldAdvertId = model.oldAdvertId;
+		analyserModel.eventTime = Calendar.getInstance();
+		analyserModel.operation = model.operation;
+		analyserModel.type = model.type;
+		analyserModel.status = AnalyserProcessStatus.NEW;
 		
+		// Сериализуем
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		String text = gson.toJson(analyserModel);
 		
-		// Создаем подходящего искателя дубликатов
-		DuplicateSearcher searcher = DuplicateSearcherFactory.getDuplicateSearcherInstance(model);
-		searcher.searchDuplicates(model.advertId);
+		// Отправляем в очередь подписок
+		ActiveMqProvider.getInstance().sendTextMessageToQueue(QueueNameConstants.MQ_REALTY_ADVERTS_SUBSCRIPTION_QUEUE, text);
+		// Отправляем в очередь live подписок
+		ActiveMqProvider.getInstance().sendTextMessageToTopic(QueueNameConstants.MQ_REALTY_ADVERTS_SUBSCRIPTION_LIVE_QUEUE, text);
 		
+		logger.debug("Realty model with id: "+ model.advertId + " was sent to subscription module.");
 	}
 	
 	/**
@@ -81,6 +93,7 @@ public class RealtyAdvertAnalyserProcessor implements AdvertAnalyserProcessor {
 	 * @param model
 	 */
 	private void processExistingAdvert(ProcessRealtyModel model) {
+		logger.debug("Realty model with id: "+ model.advertId + " is UPDATED, for now skipped");
 		// Что делать если в подписках фигурирует старое объявление которое было заменнено новым?
 		// Надо как-то обработать эту ситуацию
 		

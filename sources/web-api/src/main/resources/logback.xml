@@ -8,13 +8,13 @@
 	</appender>
 
 	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>../logs/adverts-subscription.log</file>
+		<file>../logs/adverts-web-api.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- daily rollover
 			Once any of the below condition met, it will change the file name as below and compressed it. 
 			-->
 			
-			<fileNamePattern>../logs/adverts-subscription.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+			<fileNamePattern>../logs/adverts-web-api.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
 
 			<!-- keep 30 days' worth of history -->
 			<maxHistory>30</maxHistory>
@@ -31,14 +31,8 @@
 
 
 	<logger name="org.mongodb.driver.cluster" level="INFO"/>
-	<!-- 
-	<logger name="org.mongodb.driver" level="DEBUG"/>
-	<logger name="org.mongodb.morphia" level="DEBUG"/>
-	<logger name="org.mongodb.morphia.query" level="TRACE"/> 
-	-->
 	<logger name="org.apache.activemq.transport.AbstractInactivityMonitor" level="INFO"/>
-
-	<logger name="kz.aphion.adverts.subscription" level="DEBUG"/>
+	<logger name="kz.aphion.adverts.web.api" level="DEBUG" />
 
 	<root level="INFO">
 		<appender-ref ref="STDOUT" />

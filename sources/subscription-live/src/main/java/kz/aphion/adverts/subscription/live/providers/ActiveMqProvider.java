@@ -1,4 +1,4 @@
-package kz.aphion.adverts.analyser.providers;
+package kz.aphion.adverts.subscription.live.providers;
 
 import javax.jms.Connection;
 import javax.jms.DeliveryMode;
@@ -109,31 +109,6 @@ public class ActiveMqProvider {
         session.close();
 	}
 	
-	/**
-	 * Метод отправляет текстовое сообщение в указанный топик.
-	 * 
-	 * @param queueName Название очереди
-	 * @param text Текстовое сообщение
-	 * @throws JMSException Исключение в ходе отправки сообщения
-	 */
-	public void sendTextMessageToTopic(String queueName, String text) throws JMSException {
-        Session session = getSession();
-		// Create the destination (Topic or Queue)
-        Destination destination = session.createTopic(queueName);
-
-        // Create a MessageProducer from the Session to the Topic or Queue
-        MessageProducer producer = session.createProducer(destination);
-        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-
-        // Create a messages
-        TextMessage message = session.createTextMessage(text);
-
-        // Tell the producer to send the message
-        producer.send(message);
-
-        // Clean up
-        session.close();
-	}
 	
 	
 }
