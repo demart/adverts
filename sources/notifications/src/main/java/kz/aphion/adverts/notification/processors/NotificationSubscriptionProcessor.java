@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  *
  * Created at Jun 12, 2016
  */
-public class NotificationSubscriptionProcessor implements AdvertNotificationProcessor {
+public class NotificationSubscriptionProcessor {
 	
 	private static Logger logger = LoggerFactory.getLogger(NotificationSubscriptionProcessor.class);
 	
@@ -32,8 +32,6 @@ public class NotificationSubscriptionProcessor implements AdvertNotificationProc
 			logger.warn("Can't process message [" + message + "] Message does not belong to RealtyAnalyserToSubscriptionProcessModel");
 			return;
 		}
-		
-		
 		
 
 	}

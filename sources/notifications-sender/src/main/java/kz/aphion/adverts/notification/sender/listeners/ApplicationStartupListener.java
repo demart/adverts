@@ -1,14 +1,12 @@
-package kz.aphion.adverts.subscription.listeners;
+package kz.aphion.adverts.notification.sender.listeners;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import kz.aphion.adverts.subscription.MqConsumerInitializator;
-import kz.aphion.adverts.subscription.jobs.SchedulerJobManager;
-import kz.aphion.adverts.subscription.providers.ActiveMqProvider;
-import kz.aphion.adverts.subscription.providers.MongoDbProvider;
+import kz.aphion.adverts.notification.sender.mq.MqConsumerInitializator;
+import kz.aphion.adverts.notification.sender.providers.ActiveMqProvider;
+import kz.aphion.adverts.notification.sender.providers.MongoDbProvider;
 
-import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +16,7 @@ public class ApplicationStartupListener implements ServletContextListener  {
 
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
-		logger.info("Starting subscription application...");
+		logger.info("Starting analyser processor application...");
 		
 		try {
 			
@@ -26,7 +24,6 @@ public class ApplicationStartupListener implements ServletContextListener  {
 			logger.info("Initializing connection to MongoDB...");
 			MongoDbProvider.getInstance();
 			logger.info("MongoDB connection is opened.");
-		
 			
 			// Инициализируем подключение к ActiveMQ
 			logger.info("Initializing connection to ActiveMQ...");
@@ -38,18 +35,14 @@ public class ApplicationStartupListener implements ServletContextListener  {
 			MqConsumerInitializator.initListeners();
 			logger.info("MQ Listeners activated.");
 		
-			logger.info("Starting Scheduler...");
-			SchedulerJobManager.getInstance().startScheduler();
-			logger.info("Scheduler started...");
-			
 		} catch (Throwable e) {
-			logger.error("FATAL error while starting subscription application", e);
+			logger.error("FATAL error while starting analyser project", e);
 		}
 	}	
 	
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
-		logger.info("Shutting down subscription application.");
+		logger.info("Shutting down phone processor application.");
 		
 		// Завершаем работу потоков чтения сообщений из очередей		
 
@@ -58,22 +51,13 @@ public class ApplicationStartupListener implements ServletContextListener  {
 		try {
 			MongoDbProvider.getInstance().getDatastore().getMongo().close();
 			logger.info("MongoDB connection was closed.");
-			ActiveMqProvider.getInstance().getConnection().start();
 			ActiveMqProvider.getInstance().getConnection().close();
 			Thread.sleep(1000);
 		} catch (Exception e) {
 			logger.error("Error closing MongoDB connection", e);
 		}
 		
-		logger.info("Stopping Scheduler...");
-		try {
-			SchedulerJobManager.getInstance().stopScheduler();
-			logger.info("Scheduler stopped...");
-		} catch (SchedulerException e) {
-			logger.error("Error stopping scheduler...", e);
-		}
-		
-		logger.info("Subscription application stopped.");
+		logger.info("Analyser processor application stopped.");
 	}
 
 

@@ -1,4 +1,4 @@
-package kz.aphion.adverts.notification.processors;
+package kz.aphion.adverts.notification.sender.processors;
 
 import javax.jms.JMSException;
 
@@ -9,7 +9,7 @@ import javax.jms.JMSException;
  *
  * Created at Aug 10, 2016
  */
-public interface AdvertNotificationProcessor {
+public interface NotificationSenderProcessor {
 
 	/**
 	 * Метод принимает модель строкой для соотвествующего типа объявления

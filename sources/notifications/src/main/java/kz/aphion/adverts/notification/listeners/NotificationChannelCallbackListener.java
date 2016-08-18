@@ -5,21 +5,20 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
-import kz.aphion.adverts.notification.processors.NotificationSubscriptionProcessor;
+import kz.aphion.adverts.notification.processors.NotificationChannelCallbackProcessor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Класс листенер слушает очередь сообщений о недивжимости
- * 
+ * Класс подключается к очереди callback для чтение отметок и сохранения их в БД
  * @author artem.demidovich
  *
- * Created at Jun 12, 2016
+ * Created at Aug 16, 2016
  */
-public class NotificationSubscriptionListener implements MessageListener  {
+public class NotificationChannelCallbackListener implements MessageListener  {
 	
-	private static Logger logger = LoggerFactory.getLogger(NotificationSubscriptionListener.class);
+	private static Logger logger = LoggerFactory.getLogger(NotificationChannelCallbackListener.class);
 
 	@Override
 	public void onMessage(Message message) {
@@ -30,7 +29,7 @@ public class NotificationSubscriptionListener implements MessageListener  {
                 String text = textMessage.getText();
                 logger.trace("Received new message");
                 
-                new NotificationSubscriptionProcessor().processMessage(text);
+                new NotificationChannelCallbackProcessor().processMessage(text);
 
                 logger.trace("Processing completed");
             } else {
@@ -39,7 +38,7 @@ public class NotificationSubscriptionListener implements MessageListener  {
         } catch (JMSException e) {
         	logger.error("JMS ERROR", e);
         } catch (Exception e) {
-        	logger.error("Error during processing NotificationSubscriptionListener check request message", e);
+        	logger.error("Error during processing RealtyAdvertSubscriptionListener check request message", e);
         	try {
         		logger.error("JSON was received:\n%s", ((TextMessage)message).getText());
 			} catch (JMSException e1) {
@@ -47,5 +46,6 @@ public class NotificationSubscriptionListener implements MessageListener  {
 			}
 		}
 	}
+
 
 }

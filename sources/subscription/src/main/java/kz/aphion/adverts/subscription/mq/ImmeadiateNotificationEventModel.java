@@ -2,6 +2,8 @@ package kz.aphion.adverts.subscription.mq;
 
 import java.util.Calendar;
 
+import com.google.gson.Gson;
+
 /**
  * Модель передачи данных из модуля подписок в модуль уведолмений.
  * Должно использоваться при IMMEDIATE уведомлениях в подписках
@@ -9,7 +11,7 @@ import java.util.Calendar;
  *
  * Created at Aug 13, 2016
  */
-public class RealtySubscriptionToNotificationProcessModel {
+public class ImmeadiateNotificationEventModel {
 
 	/**
 	 * Идентификатор объявления
@@ -38,5 +40,20 @@ public class RealtySubscriptionToNotificationProcessModel {
 	 * Время события, для того чтобы потом отслеживать производительность
 	 */
 	public Calendar eventTime;
+	
+	/**
+	 * Разбирает JSON объект в модель для последующей обработки
+	 * @param jsonModel
+	 * @return
+	 */
+	public static ImmeadiateNotificationEventModel parseModel(String jsonModel) {
+		if (jsonModel == null)
+			return null;
+		
+		Gson gson = new Gson();
+		ImmeadiateNotificationEventModel model = gson.fromJson(jsonModel, ImmeadiateNotificationEventModel.class);
+		
+		return model;
+	}
 	
 }

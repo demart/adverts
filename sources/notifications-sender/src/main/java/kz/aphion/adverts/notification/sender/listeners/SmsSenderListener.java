@@ -1,36 +1,31 @@
-package kz.aphion.adverts.notification.listeners;
+package kz.aphion.adverts.notification.sender.listeners;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
-import kz.aphion.adverts.notification.processors.NotificationSubscriptionProcessor;
+import kz.aphion.adverts.notification.sender.processors.NotificationSenderProcessor;
+import kz.aphion.adverts.notification.sender.processors.SmsSenderProcessor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Класс листенер слушает очередь сообщений о недивжимости
- * 
- * @author artem.demidovich
- *
- * Created at Jun 12, 2016
- */
-public class NotificationSubscriptionListener implements MessageListener  {
+public class SmsSenderListener  implements MessageListener  {
 	
-	private static Logger logger = LoggerFactory.getLogger(NotificationSubscriptionListener.class);
+	private static Logger logger = LoggerFactory.getLogger(SmsSenderListener.class);
 
 	@Override
 	public void onMessage(Message message) {
 		try {
-			Thread.currentThread().setName("NotificationListener");
+			Thread.currentThread().setName("SmsSenderListener");
         	if (message instanceof TextMessage) {
                 TextMessage textMessage = (TextMessage) message;
                 String text = textMessage.getText();
                 logger.trace("Received new message");
                 
-                new NotificationSubscriptionProcessor().processMessage(text);
+                NotificationSenderProcessor processor = new SmsSenderProcessor();
+                processor.processMessage(text);
 
                 logger.trace("Processing completed");
             } else {
@@ -39,7 +34,7 @@ public class NotificationSubscriptionListener implements MessageListener  {
         } catch (JMSException e) {
         	logger.error("JMS ERROR", e);
         } catch (Exception e) {
-        	logger.error("Error during processing NotificationSubscriptionListener check request message", e);
+        	logger.error("Error during processing SmsSenderListener check request message", e);
         	try {
         		logger.error("JSON was received:\n%s", ((TextMessage)message).getText());
 			} catch (JMSException e1) {

@@ -12,7 +12,7 @@ import kz.aphion.adverts.persistence.subscription.SubscriptionAdvertStatus;
 import kz.aphion.adverts.persistence.subscription.notification.SubscriptionNotificationType;
 import kz.aphion.adverts.subscription.mq.QueueNameConstants;
 import kz.aphion.adverts.subscription.mq.RealtyAnalyserToSubscriptionProcessModel;
-import kz.aphion.adverts.subscription.mq.RealtySubscriptionToNotificationProcessModel;
+import kz.aphion.adverts.subscription.mq.ImmeadiateNotificationEventModel;
 import kz.aphion.adverts.subscription.mq.SubscriptionProcessStatus;
 import kz.aphion.adverts.subscription.providers.ActiveMqProvider;
 import kz.aphion.adverts.subscription.providers.MongoDbProvider;
@@ -239,7 +239,7 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 			if (SubscriptionNotificationType.IMMEDIATE.equals(subscription.notification.type)) {
 		
 				logger.debug("Building message to notification system with subscriptionAdvertId: {}", advert.id);
-				RealtySubscriptionToNotificationProcessModel model = new RealtySubscriptionToNotificationProcessModel();
+				ImmeadiateNotificationEventModel model = new ImmeadiateNotificationEventModel();
 				model.advertId = advert.advert.id.toString();
 				model.subscriptionId = subscription.id.toString();
 				model.subscriptionAdvertId = advert.id.toString();

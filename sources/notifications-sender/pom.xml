@@ -11,19 +11,23 @@
 	</parent>
 
 	<groupId>kz.aphion.adverts</groupId>
-	<artifactId>adverts-notification</artifactId>
+	<artifactId>adverts-notification-sender</artifactId>
 	<packaging>war</packaging>
 
-	<name>Adverts :: Notification</name>
+	<name>Adverts :: Notification Sender</name>
 	<version>1.0.0</version>
 
     <dependencies>
     	
-       <dependency>
+    	<!-- 
+    		Специально убрал зависимости, так как этот проект не должен 
+    		по хорошему ничего знать о сущностях и других специфичных вещах
+    	 -->
+       <!-- <dependency>
     		<groupId>kz.aphion.adverts</groupId>
 			<artifactId>adverts-persistence</artifactId>
 			<version>1.0.0</version>
-		</dependency>
+		</dependency> -->
         
 
         <dependency>
@@ -111,6 +115,13 @@
 		</dependency>
 
 
+		<!-- EMAIL Libs -->
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.5.5</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -161,7 +172,7 @@
 				<configuration>
 					<url>http://localhost:8090/manager/text</url>
 					<server>TomcatServer</server>
-					<path>/adverts-notifications</path>
+					<path>/adverts-notifications-sender</path>
 					<username>tomcat</username>
 					<password>tomcat</password>
 				</configuration>

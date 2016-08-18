@@ -55,7 +55,7 @@ public class NotificationChannel {
 	 * Общий статус уведомления для конкретного канала. Агрегируется из всех статусов.
 	 */
 	@Property
-	public NotificationStatus status; 
+	public NotificationProcessStatus status; 
 	
 	/**
 	 * Истрия изменения статусов

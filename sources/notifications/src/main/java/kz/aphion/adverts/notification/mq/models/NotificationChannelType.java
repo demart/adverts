@@ -1,11 +1,5 @@
-package kz.aphion.adverts.persistence.notification;
+package kz.aphion.adverts.notification.mq.models;
 
-/**
- * Типы каналов для отправки уведомлений
- * @author artem.demidovich
- *
- * Created at Aug 15, 2016
- */
 public enum NotificationChannelType {
 
 	/**
@@ -65,9 +59,7 @@ public enum NotificationChannelType {
 	 */
 	WEBSOCKET,
 	
-	/**
-	 * SMS уведомления
-	 */
+	
 	SMS,
 	
 }

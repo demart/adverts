@@ -14,7 +14,7 @@ public class NotificationChannelProgressStatus {
 	/**
 	 * Отметка статуса
 	 */
-	public NotificationStatus status;
+	public NotificationProcessStatus status;
 	
 	/**
 	 * Отметка времени

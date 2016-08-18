@@ -1,4 +1,4 @@
-package kz.aphion.adverts.notification.mq;
+package kz.aphion.adverts.notification.sender.mq;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +8,11 @@ import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.Session;
 
-import kz.aphion.adverts.notification.listeners.NotificationChannelCallbackListener;
-import kz.aphion.adverts.notification.listeners.NotificationEventListener;
-import kz.aphion.adverts.notification.providers.ActiveMqProvider;
+import kz.aphion.adverts.notification.sender.listeners.BrowserPushSenderListener;
+import kz.aphion.adverts.notification.sender.listeners.EmailSenderListener;
+import kz.aphion.adverts.notification.sender.listeners.PushSenderListener;
+import kz.aphion.adverts.notification.sender.listeners.SmsSenderListener;
+import kz.aphion.adverts.notification.sender.providers.ActiveMqProvider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,11 +31,13 @@ public class MqConsumerInitializator {
 	
 	public static void initListeners() throws JMSException, Exception {
 		Session session =  ActiveMqProvider.getInstance().getSession();
-				
-		registerQueueConsumer(session, QueueNameConstants.MQ_NOTIFICATION_QUEUE, new NotificationEventListener());
-		registerQueueConsumer(session, QueueNameConstants.MQ_NOTIFICATION_CALLBACK_QUEUE, new NotificationChannelCallbackListener());
 
+		registerQueueConsumer(session, QueueNameConstants.MQ_NOTIFICATION_BROWSER_QUEUE, new BrowserPushSenderListener());
+		registerQueueConsumer(session, QueueNameConstants.MQ_NOTIFICATION_EMAIL_QUEUE, new EmailSenderListener());
+		registerQueueConsumer(session, QueueNameConstants.MQ_NOTIFICATION_PUSH_QUEUE, new PushSenderListener());
+		registerQueueConsumer(session, QueueNameConstants.MQ_NOTIFICATION_SMS_QUEUE, new SmsSenderListener());		
 	}
+	
 	
 	private static void registerQueueConsumer(Session session, String queueName, MessageListener listener) throws JMSException {
 		logger.info("Initializing registration consumer for queue [%s]", queueName);

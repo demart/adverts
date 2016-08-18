@@ -69,7 +69,8 @@ public class Notification extends BaseEntity {
 	 * Если на одном канале человек просмотрел уведомление то общий статус должен быть просмотрен
 	 * Пока такая логика, дальше посморим.
 	 */
-	public NotificationStatus status;
+	@Property
+	public NotificationProcessStatus progressStatus;
 	
 	/**
 	 * Пользователь для которого предназначено данное уведомление.
@@ -80,5 +81,11 @@ public class Notification extends BaseEntity {
 	 */
 	@Reference
 	public User user;
+	
+	/**
+	 * Статус записи уведомления в БД
+	 */
+	@Property
+	public NotificationStatus status;
 	
 }
