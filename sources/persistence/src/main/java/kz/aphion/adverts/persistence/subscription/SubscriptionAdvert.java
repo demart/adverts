@@ -17,7 +17,7 @@ import org.mongodb.morphia.annotations.Reference;
  *
  * Created at Aug 11, 2016
  */
-@Entity("users.subscriptions.adverts")
+@Entity("adverts.users.subscriptions.adverts")
 @Converters(CalendarConverter.class)
 public class SubscriptionAdvert extends BaseEntity {
 

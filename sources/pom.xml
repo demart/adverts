@@ -32,10 +32,20 @@
 
     <modules>
         <module>persistence</module>
+
+        <module>crawler-core</module>
+        <module>crawler-krisha</module>
+        <module>crawler-kn</module>
+        <module>crawler-olx</module>
+        <module>crawler-irr</module>
+
         <module>analyser</module>
         <module>subscription</module>
         <module>subscription-live</module>
         <module>web-api</module>
+
+        <module>phones-core</module>
+        <module>phones-processor</module>
     </modules>
 
     <properties>

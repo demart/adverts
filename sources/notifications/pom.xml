@@ -129,8 +129,8 @@
 					<meminitial>512m</meminitial>
 					<maxmem>4096m</maxmem>
 					<optimize>true</optimize>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 					<encoding>UTF-8</encoding>
 					<verbose>true</verbose>
 					<compilerArgs>

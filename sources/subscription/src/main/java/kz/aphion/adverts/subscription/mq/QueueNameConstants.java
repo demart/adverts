@@ -8,13 +8,18 @@ public class QueueNameConstants {
 	public static final String MQ_REALTY_ADVERTS_SUBSCRIPTION_QUEUE = "adverts.realty.subscriptions.test";
 	
 	/**
-	 * Название очереди куда надо писать сообщения для Live Search
+	 * Очередь подготовки сообщений для отправки в систему уведомлений уведомлений
 	 */
-	public static final String MQ_REALTY_ADVERTS_SUBSCRIPTION_LIVE_QUEUE = "adverts.realty.subscriptions.live";
+	public static final String MQ_SUBSCRIPTION_ADVERTS_NOTIFICATION_BUILDER_QUEUE = "adverts.subscriptions.notifications.builder";
+		
+	/**
+	 * Очередь для приема отметок и статусов обработки от системы уведомлений.  
+	 */
+	public static final String MQ_SUBSCRIPTION_NOTIFICATION_CALLBACK_QUEUE = "adverts.subscriptions.notifications.callback";
 	
 	/**
-	 * Название очереди куда сообщения для немедленной рассылки с помощью модуля notification
+	 * Очередь куда нужно отправлять задачи для модуля уведомления
 	 */
-	public static final String MQ_ADVERTS_IMMEDIATE_NOTIFICATION_QUEUE = "adverts.notifications.immediate";
+	public static final String MQ_NOTIFICATION_QUEUE = "adverts.notifications";
 	
 }

@@ -1,6 +1,7 @@
 package kz.aphion.adverts.subscription.mq;
 
 import java.util.Calendar;
+import java.util.List;
 
 import com.google.gson.Gson;
 
@@ -11,22 +12,29 @@ import com.google.gson.Gson;
  *
  * Created at Aug 13, 2016
  */
-public class ImmeadiateNotificationEventModel {
+public class SubscriptionNotificationBuilderModel {
 
-	/**
-	 * Идентификатор объявления
-	 */
-	public String advertId;
-	
 	/**
 	 * Идентификатор подписки
 	 */
 	public String subscriptionId;
 	
 	/**
+	 * Список объявлений которые необходимо включить в уведомления пользователю
+	 */
+	public List<String> subscriptionAdvertIds;
+	
+	
+	/**
+	 * Идентификатор объявления
+	 */
+	//public String advertId;
+	
+	
+	/**
 	 * Идентификатор объявления в подписке
 	 */
-	public String subscriptionAdvertId;
+	//public String subscriptionAdvertId;
 	
 	/**
 	 * Статус объявления для конкретного пользователя
@@ -34,7 +42,7 @@ public class ImmeadiateNotificationEventModel {
 	 * подписался только сегодня, а объявление уже было до этого несколько дней и
 	 * только сегодня оно ухудшилось
 	 */
-	public SubscriptionProcessStatus status;
+	//public SubscriptionProcessStatus status;
 	
 	/**
 	 * Время события, для того чтобы потом отслеживать производительность
@@ -46,14 +54,24 @@ public class ImmeadiateNotificationEventModel {
 	 * @param jsonModel
 	 * @return
 	 */
-	public static ImmeadiateNotificationEventModel parseModel(String jsonModel) {
+	public static SubscriptionNotificationBuilderModel parseModel(String jsonModel) {
 		if (jsonModel == null)
 			return null;
 		
 		Gson gson = new Gson();
-		ImmeadiateNotificationEventModel model = gson.fromJson(jsonModel, ImmeadiateNotificationEventModel.class);
+		SubscriptionNotificationBuilderModel model = gson.fromJson(jsonModel, SubscriptionNotificationBuilderModel.class);
 		
 		return model;
 	}
 	
+	/**
+	 * Разбирает JSON объект в модель для последующей обработки
+	 * @param jsonModel
+	 * @return
+	 */
+	public String toJSON() {
+		Gson gson = new Gson();
+		String model = gson.toJson(this);
+		return model;
+	}
 }

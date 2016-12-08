@@ -19,7 +19,7 @@ import org.mongodb.morphia.annotations.Reference;
  *
  * Created at Aug 15, 2016
  */
-@Entity("users.notifications")
+@Entity("adverts.users.notifications")
 @Converters(CalendarConverter.class)
 public class Notification extends BaseEntity {
 

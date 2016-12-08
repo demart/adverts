@@ -1,6 +1,7 @@
 package kz.aphion.adverts.subscription.processors;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import kz.aphion.adverts.persistence.subscription.SubscriptionAdvertStatus;
 import kz.aphion.adverts.persistence.subscription.notification.SubscriptionNotificationType;
 import kz.aphion.adverts.subscription.mq.QueueNameConstants;
 import kz.aphion.adverts.subscription.mq.RealtyAnalyserToSubscriptionProcessModel;
-import kz.aphion.adverts.subscription.mq.ImmeadiateNotificationEventModel;
+import kz.aphion.adverts.subscription.mq.SubscriptionNotificationBuilderModel;
 import kz.aphion.adverts.subscription.mq.SubscriptionProcessStatus;
 import kz.aphion.adverts.subscription.providers.ActiveMqProvider;
 import kz.aphion.adverts.subscription.providers.MongoDbProvider;
@@ -239,18 +240,18 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 			if (SubscriptionNotificationType.IMMEDIATE.equals(subscription.notification.type)) {
 		
 				logger.debug("Building message to notification system with subscriptionAdvertId: {}", advert.id);
-				ImmeadiateNotificationEventModel model = new ImmeadiateNotificationEventModel();
-				model.advertId = advert.advert.id.toString();
+				SubscriptionNotificationBuilderModel model = new SubscriptionNotificationBuilderModel();
+
 				model.subscriptionId = subscription.id.toString();
-				model.subscriptionAdvertId = advert.id.toString();
+				model.subscriptionAdvertIds = Arrays.asList(advert.id.toString());
 				model.eventTime = Calendar.getInstance();
-				model.status = status;
+				//model.status = status; // прочитаем его из ьазы
 				
 				Gson gson = new GsonBuilder().setPrettyPrinting().create();
 				String message = gson.toJson(model);
 				
-				ActiveMqProvider.getInstance().sendTextMessageToQueue(QueueNameConstants.MQ_ADVERTS_IMMEDIATE_NOTIFICATION_QUEUE, message);
-				logger.debug("Message with immediate statys was sent to notification system.");
+				ActiveMqProvider.getInstance().sendTextMessageToQueue(QueueNameConstants.MQ_SUBSCRIPTION_ADVERTS_NOTIFICATION_BUILDER_QUEUE, message);
+				logger.debug("Message with immediate status was sent to notification system.");
 				
 			}
 		}

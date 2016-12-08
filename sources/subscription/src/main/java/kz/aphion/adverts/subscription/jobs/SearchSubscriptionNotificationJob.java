@@ -1,5 +1,7 @@
 package kz.aphion.adverts.subscription.jobs;
 
+import kz.aphion.adverts.subscription.adverts.searcher.SubscriptionAdvertsSearcher;
+
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -23,9 +25,15 @@ public class SearchSubscriptionNotificationJob implements org.quartz.Job {
     }
 
     public void execute(JobExecutionContext context) throws JobExecutionException {
-    	logger.info("Search adverts in subscription job run.");
+    	logger.debug("Search adverts in subscription job run.");
     	
-    	logger.info("Search adverts in subscription job finished.");
+    	try {
+    		new SubscriptionAdvertsSearcher().search();
+    	} catch (Exception ex) {
+    		logger.error("Got error during execution SearchSubscriptionNotificationJob", ex);
+    	}
+    	
+    	logger.debug("Search adverts in subscription job finished.");
     }
 
 }

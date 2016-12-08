@@ -10,7 +10,7 @@ import org.mongodb.morphia.annotations.Reference;
  * @author artem.demidovich
  *
  */
-@Entity(value="adverts.dic.regions")
+@Entity(value="adverts.regions")
 public class Region extends BaseEntity {
 	
 	/**

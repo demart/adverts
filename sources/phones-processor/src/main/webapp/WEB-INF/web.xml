@@ -1,0 +1,15 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+    metadata-complete="false"
+    version="3.0">
+
+    <display-name>Adverts Phones Processor</display-name>
+    <description>Adverts Phones Processor</description> 
+	
+	<listener>
+        <description>ApplicationStartupListener</description>
+        <listener-class>kz.aphion.adverts.phone.listener.ApplicationStartupListener</listener-class>
+	</listener>
+	
+</web-app>
