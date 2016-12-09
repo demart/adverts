@@ -3,6 +3,7 @@
 .gradle/
 
 workspace
+backups
 
 build/
 eclipse/

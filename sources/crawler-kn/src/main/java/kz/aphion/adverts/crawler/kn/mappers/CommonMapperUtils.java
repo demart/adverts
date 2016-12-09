@@ -98,10 +98,12 @@ public class CommonMapperUtils {
 			
 			else {
 				geoName = value.substring(value.indexOf(", ") + 2);
+				/* Commented because updated in DB
 				if (geoName.equals("Алматы"))
 					geoName = "Алматинский р-н";
 				if (geoName.equals("Есиль"))
 					geoName = "Есильский р-н";
+					*/
 			}
 		}
 		

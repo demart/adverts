@@ -91,12 +91,15 @@ public class FlatRentDataMapper extends AbstractAdvertMapper<FlatRentRealty> {
 				try {
 					String complexName = FlatDataMapperUtils.convertComplexName(tr.select("td").text());
 					String regionName = CommonMapperUtils.getRegionName(adv.select("div.address").text());
-					//realty.data.residentalComplex.externalComplexName = FlatDataMapperUtils.convertComplexName(tr.select("td").text());
-						KnResidentialComplex complexEntity;
-					complexEntity = KnDataManager.getResidentalComplex(complexName, regionName);
-					realty.data.residentalComplex = complexEntity.complex;
+					KnResidentialComplex complexEntity = KnDataManager.getResidentalComplex(complexName, regionName);
+					if (complexEntity != null) {
+						realty.data.residentalComplex = complexEntity.complex;
+					} else {
+						// If not found, what to do
+					}
 				} catch (Exception e) {
-					logger.warn("Error during trying to parse ResidentialComplex", e);
+					logger.warn("WARN ResidentialComplex not found, error: " + e.getMessage());
+ 					logger.debug("Error during trying to parse ResidentialComplex", e);
 				}
 			}
 		}

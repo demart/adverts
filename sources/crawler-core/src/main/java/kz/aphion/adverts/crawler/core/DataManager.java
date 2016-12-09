@@ -20,6 +20,7 @@ import kz.aphion.adverts.persistence.crawler.UserAgent;
 import kz.aphion.adverts.persistence.crawler.UserAgentStatusEnum;
 import kz.aphion.adverts.persistence.crawler.UserAgentTypeEnum;
 
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 
@@ -160,15 +161,28 @@ public class DataManager {
 		.executeUpdate();
 		*/
 		
+		Query<Crawler> q = MongoDBProvider.getInstance().getDatastore().createQuery(Crawler.class);		 
+		q.field("id").equal(new ObjectId(model.id));
+		List<Crawler> crawlers = q.asList();
+		
+		if (crawlers.size() > 0) {
+			Crawler crwl = crawlers.get(0);
+			crwl.lastSourceSystemScannedTime = lastSourceScannedTime;
+			MongoDBProvider.getInstance().getDatastore().merge(crwl);
+		} else {
+			// TODO Show WARN message
+		}
+		
+		/* replaced with merge operations
 		UpdateOperations<Crawler> ops = MongoDBProvider
 			.getInstance().getDatastore()
 			.createUpdateOperations(Crawler.class)
-			.set("time", lastSourceScannedTime);
+			.set("lastSourceSystemScannedTime", lastSourceScannedTime);
 			
 			
 		MongoDBProvider.getInstance().getDatastore().update(
-				MongoDBProvider.getInstance().getDatastore().createQuery(Crawler.class).field("id").equal(model.id), ops);
-		
+				MongoDBProvider.getInstance().getDatastore().createQuery(Crawler.class).field("id").equal(new ObjectId(model.id)), ops);
+		*/
 	}
 	
 }

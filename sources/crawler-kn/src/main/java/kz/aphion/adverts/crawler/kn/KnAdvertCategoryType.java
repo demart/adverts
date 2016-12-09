@@ -21,7 +21,12 @@ public enum KnAdvertCategoryType {
 	/**
 	 * Аренда квартир посуточно
 	 */
-	RENT_APARTMENT_DAILY("arenda-kvartir-posutochno");
+	RENT_APARTMENT_DAILY("arenda-kvartir-posutochno"),
+	
+	/**
+	 * Аренда комнат посуточно
+	 */
+	RENT_ROOMS("arenda-komnat");
 	
 	private String value;
 	

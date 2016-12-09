@@ -320,7 +320,7 @@ public class IrrCrawlerJob extends CrawlerProcessJob {
 		// TODO: Увеличить счетчики использования User-Agent и Proxy Servers
 		UserAgentModel uam = null;
 		if (crawlerModel.crawlerGroup.useUserAgents) {
-			uam = DataManager.getRandomUserAgent(UserAgentTypeEnum.BROWSER);
+			uam = DataManager.getRandomUserAgent(UserAgentTypeEnum.MOBILE_PLATFORM);
 			
 			if (logger.isDebugEnabled())
 				logger.debug("User-Agent: " + uam.userAgent + " with name [" + uam.name + "]");

@@ -134,15 +134,15 @@ public class KnDataManager {
 		q.field("name").equal(complexName);
 		List<KnResidentialComplex> results = q.asList(); 
 		
-		
+		/* ARTEM
 		if (regionName.equals("Сарырка"))
 			regionName = "Сарыаркинский";
 		if (regionName.equals("Алматы"))
 			regionName = "Алматинский";
 		if (regionName.equals("Есиль"))
 			regionName = "Есильский";
-		
-		String region = regionName + " р-н";
+		*/
+		String region = regionName;// + " р-н"; // ARTEM
 		
 		//Тут есть проблемы. Некоторые люди указывают район и ЖК, которые находятся в разных районах
 		//И не пойми либо случайно ткнули не на то район или же ЖК.

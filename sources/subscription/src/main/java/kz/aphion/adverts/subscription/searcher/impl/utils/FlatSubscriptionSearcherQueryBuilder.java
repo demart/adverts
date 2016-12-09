@@ -698,14 +698,15 @@ public class FlatSubscriptionSearcherQueryBuilder {
 		return q;
 	}
 	
+	// TODO Внимание заменил externalComplexId на ObjectId так как поменяли связь в БДшке
 	private static Query<Subscription> buildResidentialComplexQuery(Query<Subscription> q, FlatRealtyBaseData data) {
-		if (data.residentalComplex != null && data.residentalComplex.relationId != null) {
+		if (data.residentalComplex != null && data.residentalComplex.id != null) {
 			// Если есть ЖК то проверяем подписки где это не указано или где указан именно этот ЖК
-			logger.debug("Realty.data.residentalComplex: {}, {}", data.residentalComplex.externalComplexId, data.residentalComplex.name);
+			logger.debug("Realty.data.residentalComplex: {}, {}", data.residentalComplex.externalComplexId, data.residentalComplex.id);
 			q.and(
 				q.or(
 					q.criteria("criteria.residentalComplexs").doesNotExist(),
-					q.criteria("criteria.residentalComplexs.relationId").hasAnyOf(Arrays.asList(data.residentalComplex.relationId))
+					q.criteria("criteria.residentalComplexs.id").hasAnyOf(Arrays.asList(data.residentalComplex.id))
 				)
 			);
 		} else {

@@ -2,8 +2,6 @@ package kz.aphion.adverts.subscription.live.models.realty.flat;
 
 import java.util.List;
 
-import kz.aphion.adverts.persistence.Region;
-import kz.aphion.adverts.persistence.realty.Realty;
 import kz.aphion.adverts.persistence.realty.data.flat.FlatRealtyBaseData;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBalconyGlazingType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBalconyType;
@@ -22,9 +20,11 @@ import kz.aphion.adverts.persistence.realty.data.flat.types.FlatSecurityType;
 import kz.aphion.adverts.persistence.realty.types.SquareType;
 import kz.aphion.adverts.subscription.live.models.realty.RealtyBaseSubscriptionCriteria;
 
+import org.apache.commons.lang.StringUtils;
+
 public class RealtyFlatBaseSubscriptionCriteria extends RealtyBaseSubscriptionCriteria {
 
-	public List<Long> residentialComplexes;
+	public List<String> residentialComplexes;
 	
 	/**
 	 * Общая площадь от
@@ -243,8 +243,8 @@ public class RealtyFlatBaseSubscriptionCriteria extends RealtyBaseSubscriptionCr
 			if (data.residentalComplex == null)
 				return false;
 			
-			for (Long complexCode : residentialComplexes) {
-				if (complexCode.equals(data.residentalComplex.relationId))
+			for (String complexObjectId : residentialComplexes) {
+				if (StringUtils.isNotBlank(complexObjectId) && complexObjectId.equals(data.residentalComplex.id.toHexString()))
 					return true;
 			}
 			

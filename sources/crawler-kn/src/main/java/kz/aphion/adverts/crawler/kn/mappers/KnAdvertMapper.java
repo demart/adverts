@@ -4,32 +4,27 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
+import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
+import kz.aphion.adverts.crawler.core.models.CrawlerModel;
+import kz.aphion.adverts.crawler.kn.KnAdvertCategoryType;
+import kz.aphion.adverts.crawler.kn.KnDataManager;
+import kz.aphion.adverts.crawler.kn.QueryBuilder;
+import kz.aphion.adverts.crawler.kn.jobs.KnCrawlerJob;
+import kz.aphion.adverts.crawler.kn.mappers.flat.FlatRentDataMapper;
+import kz.aphion.adverts.crawler.kn.mappers.flat.FlatSellDataMapper;
+import kz.aphion.adverts.crawler.kn.persistence.KnRegion;
+import kz.aphion.adverts.persistence.realty.Realty;
+import kz.aphion.adverts.persistence.realty.data.flat.FlatRentRealty;
+import kz.aphion.adverts.persistence.realty.data.flat.FlatSellRealty;
 
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import kz.aphion.adverts.crawler.core.CrawlerHttpClient;
-import kz.aphion.adverts.crawler.core.DataManager;
-import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
-import kz.aphion.adverts.crawler.core.models.CrawlerModel;
-import kz.aphion.adverts.crawler.core.models.UserAgentModel;
-import kz.aphion.adverts.persistence.crawler.UserAgentTypeEnum;
-import kz.aphion.adverts.crawler.kn.mappers.flat.FlatRentDataMapper;
-import kz.aphion.adverts.crawler.kn.mappers.flat.FlatSellDataMapper;
-import kz.aphion.adverts.crawler.kn.KnAdvertCategoryType;
-import kz.aphion.adverts.crawler.kn.KnDataManager;
-import kz.aphion.adverts.crawler.kn.QueryBuilder;
-import kz.aphion.adverts.crawler.kn.persistence.KnRegion;
-import kz.aphion.adverts.crawler.kn.jobs.KnCrawlerJob;
-import kz.aphion.adverts.persistence.realty.Realty;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatRentRealty;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatSellRealty;
 
 /**
  * Класс конвертации объектов объявлений
@@ -69,21 +64,17 @@ public class KnAdvertMapper {
 	    					if (StringUtils.isBlank(realty.location.externalRegionId)) {
 	    						logger.error("FOUND ADVERT [" + realty.source.externalAdvertId + "] WITHOUT REGION!!!");
 	    					} else {
-	    						//Logger.error("ADVERT [" + realty.source.externalAdvertId + "] REGION: [" + realty.location.externalRegionId + "]");
 	    						KnRegion knRegion = KnDataManager.getKnRegion(realty.location.externalRegionId);
 	    						if (knRegion != null) {
 	    							realty.location.region = KnDataManager.getRegion(knRegion.region);
 	    						    realty.location.regions = KnDataManager.getRegionsTree(knRegion.region);
 	    						    
+	    						    adverts.add(realty);
 	    						} else {
 	    							// ПЛОХО ЧТО РЕГИОН НЕ НАШЛИ НУЖНО РУГАТЬСЯ
+	    							logger.error("ATTENTION: Advert.Id [" + realty.source.externalAdvertId + "] Can't map kn geo id [" + realty.location.externalRegionId + "] in internal region dictionary.");
 	    						}
 	    					} 
-	    					if (realty.location.region == null) {
-	    						logger.error("ATTENTION: Advert.Id [" + realty.source.externalAdvertId + "] Can't map kn geo id [" + realty.location.externalRegionId + "] in internal region dictionary.");
-	    					}
-	    					
-	    					adverts.add(realty);
 	    				}
 	    			}
 	    			
@@ -124,6 +115,8 @@ public class KnAdvertMapper {
 				FlatRentDataMapper rentFlatDailyMapper = new FlatRentDataMapper(new FlatRentRealty());
 				realty = rentFlatDailyMapper.mapAdvertObject(content, queryBuilder, advertType);
 				break;
+				
+			// TODO ADD RENT_ROOMS 
 		}
 		
 		return realty;

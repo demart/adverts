@@ -38,7 +38,7 @@
 	-->
 	<logger name="org.apache.activemq.transport.AbstractInactivityMonitor" level="INFO"/>
 
-	<logger name="kz.aphion.adverts.crawler" level="DEBUG"/>
+	<logger name="kz.aphion.adverts.crawler.kn" level="DEBUG"/>
 	<logger name="kz.aphion.adverts.crawler.core" level="INFO"/>
 
 	<root level="INFO">
