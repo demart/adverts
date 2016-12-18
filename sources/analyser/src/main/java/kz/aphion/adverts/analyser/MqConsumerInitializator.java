@@ -10,7 +10,7 @@ import javax.jms.Session;
 
 import kz.aphion.adverts.analyser.listeners.RealtyAdvertListener;
 import kz.aphion.adverts.analyser.mq.QueueNameConstants;
-import kz.aphion.adverts.analyser.providers.ActiveMqProvider;
+import kz.aphion.adverts.common.MQ;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ public class MqConsumerInitializator {
 	public static List<MessageListener> mqListeners = new ArrayList<MessageListener>();
 	
 	public static void initListeners() throws JMSException, Exception {
-		Session session =  ActiveMqProvider.getInstance().getSession();
+		Session session =  MQ.INSTANCE.getSession();
 				
 		// Запускаем Listener по обработке объявлений о недвижимости
 		logger.info("Initializing registration consumer for queue [%s]", QueueNameConstants.MQ_REALTY_ADVERTS_QUEUE);

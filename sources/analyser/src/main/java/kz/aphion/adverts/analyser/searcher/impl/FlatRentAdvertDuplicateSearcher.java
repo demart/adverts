@@ -3,8 +3,8 @@ package kz.aphion.adverts.analyser.searcher.impl;
 import java.util.List;
 
 import kz.aphion.adverts.analyser.processors.RealtyAdvertAnalyserProcessor;
-import kz.aphion.adverts.analyser.providers.MongoDbProvider;
 import kz.aphion.adverts.analyser.searcher.DuplicateSearcher;
+import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.persistence.realty.RealtyAdvertStatus;
 import kz.aphion.adverts.persistence.realty.data.flat.FlatRentRealty;
 
@@ -37,7 +37,7 @@ public class FlatRentAdvertDuplicateSearcher implements DuplicateSearcher {
 	
 	
 	private List<FlatRentRealty> getSimilarAdvertObjects(FlatRentRealty realty) throws Exception {
-		Query q = MongoDbProvider.getInstance().getDatastore().createQuery(FlatRentRealty.class);
+		Query q = DB.DS().createQuery(FlatRentRealty.class);
 		
 		q.field("status").equal(RealtyAdvertStatus.ACTIVE);
 		
@@ -54,7 +54,7 @@ public class FlatRentAdvertDuplicateSearcher implements DuplicateSearcher {
 	
 	
 	private FlatRentRealty getAdvertObject(String advertId) throws Exception {
-		Query q = MongoDbProvider.getInstance().getDatastore().createQuery(FlatRentRealty.class);
+		Query q = DB.DS().createQuery(FlatRentRealty.class);
 		 
 		q.field("status").equal(RealtyAdvertStatus.ACTIVE);
 		q.field("id").equal(new ObjectId(advertId));

@@ -8,8 +8,8 @@ import kz.aphion.adverts.analyser.mq.AnalyserProcessStatus;
 import kz.aphion.adverts.analyser.mq.ProcessRealtyModel;
 import kz.aphion.adverts.analyser.mq.QueueNameConstants;
 import kz.aphion.adverts.analyser.mq.RealtyAnalyserToSubscriptionProcessModel;
-import kz.aphion.adverts.analyser.providers.ActiveMqProvider;
 import kz.aphion.adverts.analyser.utils.MessageUtils;
+import kz.aphion.adverts.common.MQ;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,9 +81,9 @@ public class RealtyAdvertAnalyserProcessor implements AdvertAnalyserProcessor  {
 		String text = gson.toJson(analyserModel);
 		
 		// Отправляем в очередь подписок
-		ActiveMqProvider.getInstance().sendTextMessageToQueue(QueueNameConstants.MQ_REALTY_ADVERTS_SUBSCRIPTION_QUEUE, text);
+		MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_REALTY_ADVERTS_SUBSCRIPTION_QUEUE, text);
 		// Отправляем в очередь live подписок
-		ActiveMqProvider.getInstance().sendTextMessageToTopic(QueueNameConstants.MQ_REALTY_ADVERTS_SUBSCRIPTION_LIVE_QUEUE, text);
+		MQ.INSTANCE.sendTextMessageToTopic(QueueNameConstants.MQ_REALTY_ADVERTS_SUBSCRIPTION_LIVE_QUEUE, text);
 		
 		logger.debug("Realty model with id: "+ model.advertId + " was sent to subscription module.");
 	}
