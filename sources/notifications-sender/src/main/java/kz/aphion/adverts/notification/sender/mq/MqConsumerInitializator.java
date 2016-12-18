@@ -8,11 +8,11 @@ import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.Session;
 
+import kz.aphion.adverts.common.MQ;
 import kz.aphion.adverts.notification.sender.listeners.BrowserPushSenderListener;
 import kz.aphion.adverts.notification.sender.listeners.EmailSenderListener;
 import kz.aphion.adverts.notification.sender.listeners.PushSenderListener;
 import kz.aphion.adverts.notification.sender.listeners.SmsSenderListener;
-import kz.aphion.adverts.notification.sender.providers.ActiveMqProvider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ public class MqConsumerInitializator {
 	public static List<MessageListener> mqListeners = new ArrayList<MessageListener>();
 	
 	public static void initListeners() throws JMSException, Exception {
-		Session session =  ActiveMqProvider.getInstance().getSession();
+		Session session =  MQ.INSTANCE.getSession();
 
 		registerQueueConsumer(session, QueueNameConstants.MQ_NOTIFICATION_BROWSER_QUEUE, new BrowserPushSenderListener());
 		registerQueueConsumer(session, QueueNameConstants.MQ_NOTIFICATION_EMAIL_QUEUE, new EmailSenderListener());

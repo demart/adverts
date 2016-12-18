@@ -2,11 +2,11 @@ package kz.aphion.adverts.subscription.searcher.impl;
 
 import java.util.List;
 
+import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.persistence.BaseEntity;
 import kz.aphion.adverts.persistence.realty.data.flat.FlatSellRealty;
 import kz.aphion.adverts.persistence.subscription.Subscription;
 import kz.aphion.adverts.subscription.processors.RealtyAdvertSubscriptionProcessor;
-import kz.aphion.adverts.subscription.providers.MongoDbProvider;
 import kz.aphion.adverts.subscription.searcher.SubscriptionSearcher;
 import kz.aphion.adverts.subscription.searcher.impl.utils.FlatSubscriptionSearcherQueryBuilder;
 
@@ -46,7 +46,7 @@ public class FlatSellSubscriptionSearcher implements SubscriptionSearcher {
 	@Override
 	public List<Subscription> search() {
 		try {
-			Datastore ds = MongoDbProvider.getInstance().getDatastore();
+			Datastore ds = DB.DS();
 			
 			realty = ds.get(FlatSellRealty.class, advertId);
 			if (realty == null) {

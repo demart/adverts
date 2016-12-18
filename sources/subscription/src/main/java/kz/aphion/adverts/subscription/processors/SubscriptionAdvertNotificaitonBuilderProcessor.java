@@ -2,8 +2,8 @@ package kz.aphion.adverts.subscription.processors;
 
 import javax.jms.JMSException;
 
+import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.subscription.mq.SubscriptionNotificationBuilderModel;
-import kz.aphion.adverts.subscription.providers.MongoDbProvider;
 
 import org.mongodb.morphia.Datastore;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ public class SubscriptionAdvertNotificaitonBuilderProcessor implements AdvertSub
 		}
 		
 		
-		Datastore ds = MongoDbProvider.getInstance().getDatastore();
+		Datastore ds = DB.DS();
 		
 		// Получаем сообщение
 		// Проверяем не исчек ли срок жизни, так как мало ли что у нас могли где застрять

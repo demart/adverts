@@ -2,12 +2,12 @@ package kz.aphion.adverts.subscription.live.processors;
 
 import javax.jms.JMSException;
 
+import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.persistence.BaseEntity;
 import kz.aphion.adverts.persistence.realty.data.flat.FlatRentRealty;
 import kz.aphion.adverts.persistence.realty.data.flat.FlatSellRealty;
 import kz.aphion.adverts.subscription.live.ConnectionManager;
 import kz.aphion.adverts.subscription.live.mq.RealtyAnalyserToSubscriptionProcessModel;
-import kz.aphion.adverts.subscription.live.providers.MongoDbProvider;
 
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
@@ -42,7 +42,7 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 		
 		//logger.info("New message: {}", message);
 
-		Datastore ds = MongoDbProvider.getInstance().getDatastore();
+		Datastore ds = DB.DS();
 		
 		BaseEntity advert = null;
 				

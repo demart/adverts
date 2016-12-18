@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.jms.JMSException;
 
+import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.common.MQ;
 import kz.aphion.adverts.persistence.subscription.Subscription;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvert;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvertStatus;
@@ -15,8 +17,6 @@ import kz.aphion.adverts.subscription.mq.QueueNameConstants;
 import kz.aphion.adverts.subscription.mq.RealtyAnalyserToSubscriptionProcessModel;
 import kz.aphion.adverts.subscription.mq.SubscriptionNotificationBuilderModel;
 import kz.aphion.adverts.subscription.mq.SubscriptionProcessStatus;
-import kz.aphion.adverts.subscription.providers.ActiveMqProvider;
-import kz.aphion.adverts.subscription.providers.MongoDbProvider;
 import kz.aphion.adverts.subscription.searcher.SubscriptionSearcher;
 import kz.aphion.adverts.subscription.searcher.SubscriptionSearcherFactory;
 import kz.aphion.adverts.subscription.utils.MessageUtils;
@@ -106,7 +106,7 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 	
 	private void processAdvert(RealtyAnalyserToSubscriptionProcessModel model, SubscriptionAdvertStatus targetAdvertStatus, SubscriptionProcessStatus targetProcessStatus) throws JMSException, Exception {
 		
-		Datastore ds = MongoDbProvider.getInstance().getDatastore();
+		Datastore ds = DB.DS();
 		
 		// Получаем искателя подписок под соответсвующий тип
 		SubscriptionSearcher searcher = SubscriptionSearcherFactory.getRealtySubscriptionSearcher(model);
@@ -250,7 +250,7 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 				Gson gson = new GsonBuilder().setPrettyPrinting().create();
 				String message = gson.toJson(model);
 				
-				ActiveMqProvider.getInstance().sendTextMessageToQueue(QueueNameConstants.MQ_SUBSCRIPTION_ADVERTS_NOTIFICATION_BUILDER_QUEUE, message);
+				MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_SUBSCRIPTION_ADVERTS_NOTIFICATION_BUILDER_QUEUE, message);
 				logger.debug("Message with immediate status was sent to notification system.");
 				
 			}

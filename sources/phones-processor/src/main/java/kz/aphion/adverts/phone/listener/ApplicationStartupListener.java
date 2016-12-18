@@ -3,9 +3,9 @@ package kz.aphion.adverts.phone.listener;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.common.MQ;
 import kz.aphion.adverts.phone.MqConsumerInitializator;
-import kz.aphion.adverts.phone.providers.ActiveMqProvider;
-import kz.aphion.adverts.phone.providers.MongoDbProvider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +22,12 @@ public class ApplicationStartupListener  implements ServletContextListener  {
 			
 			// Инициализируем подключение к Mongo
 			logger.info("Initializing connection to MongoDB...");
-			MongoDbProvider dbProvider = MongoDbProvider.getInstance();
+			DB.INSTANCE.init();
 			logger.info("MongoDB connection is opened.");
 			
 			// Инициализируем подключение к ActiveMQ
 			logger.info("Initializing connection to ActiveMQ...");
-			ActiveMqProvider mqProvider = ActiveMqProvider.getInstance();
+			MQ.INSTANCE.init();
 			logger.info("ActiveMQ connection is opened.");
 			
 			// Запускаем Lister для обработки сообщений
@@ -35,7 +35,7 @@ public class ApplicationStartupListener  implements ServletContextListener  {
 			MqConsumerInitializator.initListeners();
 			logger.info("MQ Listeners activated.");
 			
-			mqProvider.getConnection().start();
+			MQ.INSTANCE.getConnection().start();
 			
 		} catch (Exception ex) {
 			logger.error("Can't start Phones Processor", ex);
@@ -52,7 +52,7 @@ public class ApplicationStartupListener  implements ServletContextListener  {
 		// Закрываем подключение к MongoDB
 		logger.info("Closing MongoDB connection...");
 		try {
-			MongoDbProvider.getInstance().getDatastore().getMongo().close();
+			DB.DS().getMongo().close();
 			logger.info("MongoDB connection was closed.");
 		} catch (Exception ex) {
 			logger.error("Can't close Mongo connection", ex);

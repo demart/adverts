@@ -8,10 +8,10 @@ import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.Session;
 
+import kz.aphion.adverts.common.MQ;
 import kz.aphion.adverts.subscription.listeners.RealtyAdvertSubscriptionListener;
 import kz.aphion.adverts.subscription.listeners.SubscriptionNotificationBuilderListener;
 import kz.aphion.adverts.subscription.mq.QueueNameConstants;
-import kz.aphion.adverts.subscription.providers.ActiveMqProvider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class MqConsumerInitializator {
 	public static List<MessageListener> mqListeners = new ArrayList<MessageListener>();
 	
 	public static void initListeners() throws JMSException, Exception {
-		Session session =  ActiveMqProvider.getInstance().getSession();
+		Session session =  MQ.INSTANCE.getSession();
 
 		registerQueueConsumer(session, QueueNameConstants.MQ_REALTY_ADVERTS_SUBSCRIPTION_QUEUE, new RealtyAdvertSubscriptionListener());
 		registerQueueConsumer(session, QueueNameConstants.MQ_SUBSCRIPTION_ADVERTS_NOTIFICATION_BUILDER_QUEUE, new SubscriptionNotificationBuilderListener());

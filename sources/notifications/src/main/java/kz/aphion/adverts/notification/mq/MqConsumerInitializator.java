@@ -8,9 +8,9 @@ import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.Session;
 
+import kz.aphion.adverts.common.MQ;
 import kz.aphion.adverts.notification.listeners.NotificationChannelCallbackListener;
 import kz.aphion.adverts.notification.listeners.NotificationEventListener;
-import kz.aphion.adverts.notification.providers.ActiveMqProvider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ public class MqConsumerInitializator {
 	public static List<MessageListener> mqListeners = new ArrayList<MessageListener>();
 	
 	public static void initListeners() throws JMSException, Exception {
-		Session session =  ActiveMqProvider.getInstance().getSession();
+		Session session =  MQ.INSTANCE.getSession();
 				
 		registerQueueConsumer(session, QueueNameConstants.MQ_NOTIFICATION_QUEUE, new NotificationEventListener());
 		registerQueueConsumer(session, QueueNameConstants.MQ_NOTIFICATION_CALLBACK_QUEUE, new NotificationChannelCallbackListener());

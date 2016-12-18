@@ -5,11 +5,10 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
+import kz.aphion.adverts.phone.processors.CheckViberExistanceProcessor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import kz.aphion.adverts.phone.processors.CheckViberExistanceProcessor;
-import kz.aphion.adverts.phone.providers.ActiveMqProvider;
 
 /**
  * Listener для получения сообщений из очереди для проверки наличие Viber приложения

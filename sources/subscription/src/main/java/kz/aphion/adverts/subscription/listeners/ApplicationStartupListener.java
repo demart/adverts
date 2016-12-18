@@ -3,10 +3,10 @@ package kz.aphion.adverts.subscription.listeners;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.common.MQ;
 import kz.aphion.adverts.subscription.MqConsumerInitializator;
 import kz.aphion.adverts.subscription.jobs.SchedulerJobManager;
-import kz.aphion.adverts.subscription.providers.ActiveMqProvider;
-import kz.aphion.adverts.subscription.providers.MongoDbProvider;
 
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
@@ -24,13 +24,13 @@ public class ApplicationStartupListener implements ServletContextListener  {
 			
 			// Инициализируем подключение к Mongo
 			logger.info("Initializing connection to MongoDB...");
-			MongoDbProvider.getInstance();
+			DB.INSTANCE.init();
 			logger.info("MongoDB connection is opened.");
 		
 			
 			// Инициализируем подключение к ActiveMQ
 			logger.info("Initializing connection to ActiveMQ...");
-			ActiveMqProvider.getInstance();
+			MQ.INSTANCE.init();
 			logger.info("ActiveMQ connection is opened.");
 			
 			// Запускаем Listener для обработки сообщений
@@ -56,10 +56,9 @@ public class ApplicationStartupListener implements ServletContextListener  {
 		// Закрываем подключение к MongoDB
 		logger.info("Closing MongoDB connection...");
 		try {
-			MongoDbProvider.getInstance().getDatastore().getMongo().close();
+			DB.DS().getMongo().close();
 			logger.info("MongoDB connection was closed.");
-			ActiveMqProvider.getInstance().getConnection().start();
-			ActiveMqProvider.getInstance().getConnection().close();
+			MQ.INSTANCE.getConnection().close();
 			Thread.sleep(1000);
 		} catch (Exception e) {
 			logger.error("Error closing MongoDB connection", e);

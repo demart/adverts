@@ -5,13 +5,13 @@ import java.util.Calendar;
 
 import javax.jms.JMSException;
 
+import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.common.MQ;
 import kz.aphion.adverts.notification.mq.QueueNameConstants;
 import kz.aphion.adverts.notification.mq.models.NotificationChannel;
 import kz.aphion.adverts.notification.mq.models.NotificationEventMessage;
 import kz.aphion.adverts.notification.mq.models.NotificationParameter;
 import kz.aphion.adverts.notification.mq.models.channel.NotificationChannelMessage;
-import kz.aphion.adverts.notification.providers.ActiveMqProvider;
-import kz.aphion.adverts.notification.providers.MongoDbProvider;
 import kz.aphion.adverts.persistence.notification.Notification;
 import kz.aphion.adverts.persistence.notification.NotificationCallback;
 import kz.aphion.adverts.persistence.notification.NotificationChannelProgressStatus;
@@ -54,7 +54,7 @@ public class NotificationEventProcessor {
 		// TODO Check access token
 		// TODO Validate model
 		
-		Datastore ds = MongoDbProvider.getInstance().getDatastore();
+		Datastore ds = DB.DS();
 		
 		if (isExistEventId(ds, model.eventId)) {
 			logger.warn("Can't process notification eventId, because it is already exists");
@@ -76,7 +76,7 @@ public class NotificationEventProcessor {
 					case ANDROID:
 					case IOS:
 					case WINDOWS_PHONE:	
-						ActiveMqProvider.getInstance().sendTextMessageToQueue(QueueNameConstants.MQ_NOTIFICATION_PUSH_QUEUE, jsonMessage);
+						MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_NOTIFICATION_PUSH_QUEUE, jsonMessage);
 						addProcessedStatus(channel);
 						break;
 					
@@ -84,17 +84,17 @@ public class NotificationEventProcessor {
 					case FIREFOX:
 					case OPERA:
 					case SAFARI:
-						ActiveMqProvider.getInstance().sendTextMessageToQueue(QueueNameConstants.MQ_NOTIFICATION_BROWSER_QUEUE, jsonMessage);
+						MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_NOTIFICATION_BROWSER_QUEUE, jsonMessage);
 						addProcessedStatus(channel);
 						break;
 						
 					case EMAIL:
-						ActiveMqProvider.getInstance().sendTextMessageToQueue(QueueNameConstants.MQ_NOTIFICATION_EMAIL_QUEUE, jsonMessage);
+						MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_NOTIFICATION_EMAIL_QUEUE, jsonMessage);
 						addProcessedStatus(channel);
 						break;
 						
 					case SMS:
-						ActiveMqProvider.getInstance().sendTextMessageToQueue(QueueNameConstants.MQ_NOTIFICATION_SMS_QUEUE, jsonMessage);
+						MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_NOTIFICATION_SMS_QUEUE, jsonMessage);
 						addProcessedStatus(channel);
 						break;
 						

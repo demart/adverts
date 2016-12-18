@@ -2,6 +2,7 @@ package kz.aphion.adverts.subscription;
 
 import java.util.Calendar;
 
+import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.persistence.realty.types.RealtyOperationType;
 import kz.aphion.adverts.persistence.realty.types.RealtyType;
 import kz.aphion.adverts.persistence.subscription.Subscription;
@@ -12,7 +13,6 @@ import kz.aphion.adverts.persistence.subscription.criteria.realty.RealtySellFlat
 import kz.aphion.adverts.persistence.subscription.notification.SubscriptionNotification;
 import kz.aphion.adverts.persistence.subscription.notification.SubscriptionNotificationScheduledType;
 import kz.aphion.adverts.persistence.subscription.notification.SubscriptionNotificationType;
-import kz.aphion.adverts.subscription.providers.MongoDbProvider;
 
 import org.mongodb.morphia.Datastore;
 
@@ -25,7 +25,7 @@ public class CreateTestSubscriptions {
 	}
 	
 	private static void createSellTest() throws Exception {
-		Datastore ds = MongoDbProvider.getInstance().getDatastore();
+		Datastore ds = DB.DS();
 		
 		
 		Subscription subscription = new Subscription();
@@ -108,7 +108,7 @@ public class CreateTestSubscriptions {
 	}
 	
 	private static void createRentTest() throws Exception {
-		Datastore ds = MongoDbProvider.getInstance().getDatastore();
+		Datastore ds = DB.DS();
 		
 		
 		Subscription subscription = new Subscription();

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import javax.jms.JMSException;
 
+import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.notification.mq.models.channel.NotificationChannelMessageCallback;
-import kz.aphion.adverts.notification.providers.MongoDbProvider;
 import kz.aphion.adverts.notification.utils.CallbackUtils;
 import kz.aphion.adverts.persistence.notification.Notification;
 import kz.aphion.adverts.persistence.notification.NotificationChannel;
@@ -40,7 +40,7 @@ public class NotificationChannelCallbackProcessor {
 		
 		// TODO validate model
 		
-		Datastore ds = MongoDbProvider.getInstance().getDatastore();
+		Datastore ds = DB.DS();
 		
 		Notification notification = ds.get(Notification.class, new ObjectId(model.notificationId));
 		if (notification == null) {

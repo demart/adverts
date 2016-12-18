@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.common.MQ;
 import kz.aphion.adverts.persistence.subscription.Subscription;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvert;
 import kz.aphion.adverts.subscription.mq.QueueNameConstants;
 import kz.aphion.adverts.subscription.mq.SubscriptionNotificationBuilderModel;
-import kz.aphion.adverts.subscription.providers.ActiveMqProvider;
-import kz.aphion.adverts.subscription.providers.MongoDbProvider;
 
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
@@ -30,7 +30,7 @@ public class SubscriptionAdvertsSearcher {
 	
 	public void search() throws Exception {
 		logger.debug("Starts searching for adverts in subscriptions...");
-		Datastore ds = MongoDbProvider.getInstance().getDatastore();
+		Datastore ds = DB.DS();
 		
 		// Строим запрос
 		Query<Subscription> query = SubscriptionAdvertsQueryBuilder.buildSearchQuery(ds);
@@ -117,7 +117,7 @@ public class SubscriptionAdvertsSearcher {
 			String message = model.toJSON();
 			
 			// Отправяем сообщение в очередь
-			ActiveMqProvider.getInstance().sendTextMessageToQueue(QueueNameConstants.MQ_SUBSCRIPTION_ADVERTS_NOTIFICATION_BUILDER_QUEUE, message);
+			MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_SUBSCRIPTION_ADVERTS_NOTIFICATION_BUILDER_QUEUE, message);
 			
 		} catch (Exception e) {
 			logger.error("Error whily trying to send message to subscription notification builder", e);

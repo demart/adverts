@@ -1,8 +1,8 @@
 package kz.aphion.adverts.notification.utils;
 
+import kz.aphion.adverts.common.MQ;
 import kz.aphion.adverts.notification.mq.models.NotificationEventMessageCallback;
 import kz.aphion.adverts.notification.mq.models.channel.NotificationChannelMessageCallback;
-import kz.aphion.adverts.notification.providers.ActiveMqProvider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +43,7 @@ public class CallbackUtils {
 		String jsonCallaback = gson.toJson(callback);
 		
 		try {
-			ActiveMqProvider.getInstance().sendTextMessageToQueue(callbackQueue, jsonCallaback);
+			MQ.INSTANCE.sendTextMessageToQueue(callbackQueue, jsonCallaback);
 			logger.debug("Callback was sent. event.id {}, channel.id {}, status {}.", eventId, callback.channelId, callback.status);
 		} catch (Exception ex) {
 			logger.error("Error sending callback notification.", ex);

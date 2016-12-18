@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.common.MQ;
 import kz.aphion.adverts.common.models.mq.phones.RegisterPhoneModel;
 import kz.aphion.adverts.persistence.phones.Phone;
 import kz.aphion.adverts.persistence.phones.PhoneChangesHistory;
@@ -11,8 +13,6 @@ import kz.aphion.adverts.persistence.phones.PhoneOwner;
 import kz.aphion.adverts.persistence.phones.PhoneStatus;
 import kz.aphion.adverts.phone.models.PhoneApplicationCheckModel;
 import kz.aphion.adverts.phone.mq.QueueNameConstants;
-import kz.aphion.adverts.phone.providers.ActiveMqProvider;
-import kz.aphion.adverts.phone.providers.MongoDbProvider;
 
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.mapping.Mapper;
@@ -76,20 +76,20 @@ public class RegistrationPhoneProcessor {
 		String message = new GsonBuilder().setPrettyPrinting().create().toJson(checkModel);
 		
 		try {
-			ActiveMqProvider.getInstance().sendTextMessageToQueue(QueueNameConstants.MQ_CHECK_VIBER_QUEUE, message);
+			MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_CHECK_VIBER_QUEUE, message);
 		} catch (Exception ex) {
 			logger.error("Error during sending phone to check Viber application existance");
 		}
 		
 		try {
-			ActiveMqProvider.getInstance().sendTextMessageToQueue(QueueNameConstants.MQ_CHECK_TELEGRAM_QUEUE, message);
+			MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_CHECK_TELEGRAM_QUEUE, message);
 		} catch (Exception ex) {
 			logger.error("Error during sending phone to check Telegram application existance");
 		}
 		
 		
 		try {
-			ActiveMqProvider.getInstance().sendTextMessageToQueue(QueueNameConstants.MQ_CHECK_WHATSAPP_QUEUE, message);
+			MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_CHECK_WHATSAPP_QUEUE, message);
 		} catch (Exception ex) {
 			logger.error("Error during sending phone to check Whatsapp application existance");
 		}		
@@ -158,7 +158,7 @@ public class RegistrationPhoneProcessor {
 		if (existingPhoneEntity.owner == null)
 			existingPhoneEntity.owner = PhoneOwner.UNDEFINED;
 		
-		Datastore ds = MongoDbProvider.getInstance().getDatastore();
+		Datastore ds = DB.DS();
 		Query updateQuery = ds.createQuery(Phone.class).field(Mapper.ID_KEY).equal(existingPhoneEntity.id);
 		
 		UpdateOperations<?> ops = ds.createUpdateOperations(Phone.class)
@@ -203,7 +203,7 @@ public class RegistrationPhoneProcessor {
 		phoneEntity.updated = phoneEntity.created;
 		phoneEntity.lastUpdate = phoneEntity.created;
 
-		MongoDbProvider.getInstance().getDatastore().save(phoneEntity);
+		DB.DS().save(phoneEntity);
 		
 		return phoneEntity;
 	}
@@ -216,7 +216,7 @@ public class RegistrationPhoneProcessor {
 	 * @throws Exception
 	 */
 	private Phone getPhoneEntity(String phone) throws Exception {
-		Datastore ds = MongoDbProvider.getInstance().getDatastore();
+		Datastore ds = DB.DS();
 		Query q = ds.createQuery(Phone.class);
 		q.field("number").equal(phone);
 		
