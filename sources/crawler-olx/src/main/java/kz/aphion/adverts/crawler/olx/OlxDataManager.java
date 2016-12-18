@@ -6,6 +6,7 @@ import java.util.List;
 import kz.aphion.adverts.crawler.core.MongoDBProvider;
 import kz.aphion.adverts.crawler.olx.persistence.OlxRegion;
 import kz.aphion.adverts.persistence.Region;
+import kz.aphion.adverts.persistence.RegionType;
 
 import org.mongodb.morphia.query.Query;
 import org.slf4j.Logger;
@@ -26,7 +27,8 @@ public class OlxDataManager {
 	 * @param id
 	 * @return
 	 */
-	public static OlxRegion getOlxRegion(String regionName) {
+	@Deprecated
+	private static OlxRegion getOlxRegion(String regionName) {
 		//regionName = regionName.toLowerCase();
 		/*
 		 List<OlxRegionEntity> results = (List<OlxRegionEntity>)JPA.em().createQuery("from OlxRegionEntity where name = :name")
@@ -58,6 +60,26 @@ public class OlxDataManager {
 			return null;
 		}
 	}
+	
+	public static OlxRegion getOlxRegionByType(RegionType regionType, String districtId) {
+		try {
+			Query<OlxRegion> q = MongoDBProvider.getInstance().getDatastore().createQuery(OlxRegion.class);
+			q.field("key").equal(Long.parseLong(districtId));
+			q.field("type").equal(regionType);
+			q.limit(1);
+			List<OlxRegion> results = q.asList();
+			if (results.size() > 0) {
+				return results.get(0);
+			} else {
+				logger.warn("Requested region with id [{}] and type [{}]  not found.", districtId, regionType);
+				return null;
+			}
+		} catch (Exception e) {
+			logger.error("Error", e);
+			return null;
+		}
+	}
+	
 	
 	/**
 	 * Метод возвращает объект Region по указанному ID в объявлении на крыше

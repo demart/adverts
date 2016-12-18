@@ -1,6 +1,5 @@
 package kz.aphion.adverts.crawler.olx.jobs;
 
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -8,22 +7,17 @@ import java.util.Map;
 import javax.jms.JMSException;
 
 import kz.aphion.adverts.common.models.mq.phones.RegisterPhoneModel;
-import kz.aphion.adverts.crawler.core.CrawlerHttpClient;
 import kz.aphion.adverts.crawler.core.DataManager;
 import kz.aphion.adverts.crawler.core.MongoDBProvider;
 import kz.aphion.adverts.crawler.core.annotations.CrawlerJob;
 import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
 import kz.aphion.adverts.crawler.core.jobs.CrawlerProcessJob;
-import kz.aphion.adverts.crawler.core.models.ProxyServerModel;
-import kz.aphion.adverts.crawler.core.models.UserAgentModel;
 import kz.aphion.adverts.crawler.olx.OlxJsonToMapParser;
 import kz.aphion.adverts.crawler.olx.OlxRealtyComparator;
-import kz.aphion.adverts.crawler.olx.QueryBuilder;
+import kz.aphion.adverts.crawler.olx.UrlBuilder;
 import kz.aphion.adverts.crawler.olx.mappers.OlxAdvertMapper;
 import kz.aphion.adverts.persistence.SourceSystemType;
 import kz.aphion.adverts.persistence.crawler.CrawlerSourceSystemTypeEnum;
-import kz.aphion.adverts.persistence.crawler.ProxyServerTypeEnum;
-import kz.aphion.adverts.persistence.crawler.UserAgentTypeEnum;
 import kz.aphion.adverts.persistence.phones.PhoneOwner;
 import kz.aphion.adverts.persistence.phones.PhoneSource;
 import kz.aphion.adverts.persistence.phones.PhoneSourceCategory;
@@ -51,7 +45,7 @@ import com.google.gson.GsonBuilder;
 public class OlxRealtyCrawlerJob extends CrawlerProcessJob  {
 
 	private static Logger logger = LoggerFactory.getLogger(OlxRealtyCrawlerJob.class);
-
+	
 	@Override
 	public void doJob() throws Exception {
 		super.doJob();
@@ -90,10 +84,9 @@ public class OlxRealtyCrawlerJob extends CrawlerProcessJob  {
 		// Подключение к Монго
 		Datastore ds = MongoDBProvider.getInstance().getDatastore();
 		
-		// Подготавливаем query для запроса
-		QueryBuilder queryBuilder = new QueryBuilder();
-		queryBuilder.prepareFilters(crawlerModel);
-		
+		// Инициализиурем UrlBuilder
+		UrlBuilder.getInstance().init(this.crawlerModel);
+					
 		// Время старта выгрузки
 		Calendar startProcessingTime = null;
 		
@@ -115,10 +108,10 @@ public class OlxRealtyCrawlerJob extends CrawlerProcessJob  {
 		do {
 			foundNewAdverts = false;
 			page = page + 1;
-			String targetUrl = queryBuilder.buildQueryUrl(page);  
+			String targetUrl = UrlBuilder.getInstance().getQueryBuilder().buildQueryUrl(page);  
 			
 			// Выгружаем контент с источника
-			String jsonContent = callServerAndGetJsonData(targetUrl);
+			String jsonContent = UrlBuilder.getInstance().callServerAndGetJsonData(targetUrl);
 			
 			// Время запуска процесса для отсеивания обработки
 			if (page == 1) {
@@ -139,6 +132,9 @@ public class OlxRealtyCrawlerJob extends CrawlerProcessJob  {
 				return;
 			}
 			
+			// Передать
+			// 1. QueryBuilder
+			// 2. 
 			// Корвертируем объекты
 			List<Realty> adverts = OlxAdvertMapper.extractAndConvertAdverts(jsonResponseMap);
 			if (adverts == null) {
@@ -189,7 +185,7 @@ public class OlxRealtyCrawlerJob extends CrawlerProcessJob  {
 							 // ПОКА ПОД ВОПРОСОМ ТАК КАК МНОГО СООБЩЕНИЙ ПОЙДЕТ В ОЧЕРЕДЬ ТЕЛЕФОНОВ
 							 sendPhoneNumberRegistrationMessage(realty);
 							 
-							 logger.info("Advert [{}] with id [{}] was moved to archive, with id [%s] added.", realty.source.externalAdvertId, existingRealty.id, realty.id);
+							 logger.info("Advert [{}] with id [{}] was moved to archive, with id [{}] added.", realty.source.externalAdvertId, existingRealty.id, realty.id);
 							 
 							 /*
 							 GsonBuilder builder = new GsonBuilder();
@@ -349,6 +345,7 @@ public class OlxRealtyCrawlerJob extends CrawlerProcessJob  {
 	 * @throws CrawlerException
 	 * @throws IOException
 	 */
+	/*
 	private String callServerAndGetJsonData(String targetUrl) throws CrawlerException, IOException, Exception {
 		// TODO: Увеличить счетчики использования User-Agent и Proxy Servers
 		UserAgentModel uam = null;
@@ -380,6 +377,7 @@ public class OlxRealtyCrawlerJob extends CrawlerProcessJob  {
 			}
 		}
 	}
+	*/
 	
 	
 	/**

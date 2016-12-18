@@ -48,6 +48,13 @@ public class FlatRentDataMapper {
 		realty.location = new RealtyLocation();
 		realty.publisher = new RealtyPublisher();
 		
+		// Это нужно для того чтобы понять до какого уровня у нас есть данные
+		// Например до района или только до города
+		// На данный момент OLX схема районов выглядит совсем странно, поэтому пока до города
+		String regionId = null;
+		String cityId = null;
+		String districtId = null;
+		
 		for (Entry<String,Object> entry : advert.entrySet()) {
 			switch (entry.getKey()) {
 				case "id":
@@ -161,7 +168,9 @@ public class FlatRentDataMapper {
 					// Do nothing
 					// city_label": "Астана",
 					// TODO EXTRACT REGION BY NAME
-					CommonMapperUtils.convertRegion(realty, entry);
+					
+					// commented because now we have regionId, cityId, districtId field
+					//CommonMapperUtils.convertRegion(realty, entry);
 					break;
 					
 				case "person":
@@ -190,8 +199,10 @@ public class FlatRentDataMapper {
 				case "list_label":
 					// Do nothing
 					// "list_label": "26 000 000 тг.",
-					String priceLabel = (String)entry.getValue();
-					realty.price = CommonMapperUtils.convertPrice(priceLabel);
+					
+					// Commented because appeared new numeric field below
+					//String priceLabel = (String)entry.getValue();
+					//realty.price = CommonMapperUtils.convertPrice(priceLabel);
 					break;
 				case "list_label_ad":
 					// Do nothing
@@ -279,11 +290,76 @@ public class FlatRentDataMapper {
 					// Do nothing
 					// promotion_section": 0,
 					break;
+					
+				// ====================
+				// 09.12.2016 NEW FIELDS
+				// ====================
+					
+				case "price_type":
+					// DO NOTHING
+					// value: price
+					break;
+					
+				case "price_numeric":
+					// DO NOTHING
+					// value: 8472500
+					// Moved transforming price here
+					String priceLabel = (String)entry.getValue();
+					realty.price = Long.valueOf(priceLabel);
+					break;
+				
+				case "region_id":
+					// value: 87
+					String regionIdVal = (String)entry.getValue();
+					regionId = regionIdVal;
+					break;
+					
+				case "city_id":
+					// value: 87
+					String cityIdVal = (String)entry.getValue();
+					cityId = cityIdVal;
+					break;
+				
+				case "district_id":
+					// value: 13
+					String districtIdVal = (String)entry.getValue();
+					districtId = districtIdVal;
+					break;
+					
+				case "campaignSource":
+					// DO NOTHING
+					// value: null
+					break;
+				
+				case "featured":
+					// DO NOTHING
+					// value: []
+					break;
+					
+				case "user_business_logo":
+					// DO NOTHING
+					// value: https://olxkz-ring09.akamaized.net/images_shops_slandokz/149257006_1_94x72.jpg
+					break;
+					
+				case "social_network_account_type":
+					// DO nothing
+					// value: facebook
+					break;
+					
+				case "user_photo":
+					// Do nothing
+					// value: https://olxkz-ring11.akamaized.net/images_users_profile_olxkz/161249099_1_1200x1200.jpg
+					break;
+					
 				default:
 					logger.error("ATTENTION! Found new advert key: " + entry.getKey() + " with value: " + entry.getValue());
 					break;
 				}		
 			}
+		
+		// Пробуем получить место где публикуется объявление
+		// Максимально до уровня района, минимально до уровня города
+		CommonMapperUtils.convertRegion(realty, regionId, cityId, districtId);
 		
 		return realty;
 	}
@@ -357,17 +433,23 @@ public class FlatRentDataMapper {
 					break;
 				case "Общая площадь":
 					// "50 м²"
-					Float square = Float.parseFloat(value.replaceAll("м²", "").trim());
+					String tatalSquare = value.replaceAll("м²", "").trim();
+					tatalSquare = tatalSquare.replace(" ", "");
+					Float square = Float.parseFloat(tatalSquare);
 					realty.data.square = square;
 					break;
 				case "Жилая площадь":
 					// "50 м²"
-					Float livingSquare = Float.parseFloat(value.replaceAll("м²", "").trim());
+					String livingSquareStr = value.replaceAll("м²", "").trim();
+					livingSquareStr = livingSquareStr.replace(" ", "");
+					Float livingSquare = Float.parseFloat(livingSquareStr);
 					realty.data.squareLiving = livingSquare;
 					break;	
 				case "Площадь кухни":
 					// "50 м²"				
-					Float kitchenSquare = Float.parseFloat(value.replaceAll("м²", "").trim());
+					String kitchenSquareStr = value.replaceAll("м²", "").trim();
+					kitchenSquareStr = kitchenSquareStr.replace(" ", "");
+					Float kitchenSquare = Float.parseFloat(kitchenSquareStr);
 					realty.data.squareKitchen = kitchenSquare;
 					break;					
 				case "Тип":

@@ -1,12 +1,12 @@
 package kz.aphion.adverts.crawler.olx.mappers;
 
 import java.util.Calendar;
-import java.util.Map.Entry;
 
 import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
 import kz.aphion.adverts.crawler.olx.OlxAdvertCategoryType;
 import kz.aphion.adverts.crawler.olx.OlxDataManager;
 import kz.aphion.adverts.crawler.olx.persistence.OlxRegion;
+import kz.aphion.adverts.persistence.RegionType;
 import kz.aphion.adverts.persistence.realty.Realty;
 
 import org.apache.commons.lang.StringUtils;
@@ -41,13 +41,28 @@ public class CommonMapperUtils {
 	 * @param regionEntry Название региона
 	 * @throws CrawlerException 
 	 */
-	public static void convertRegion(Realty realty, Entry<String, Object> regionEntry) throws CrawlerException {
-		String regionName = (String)regionEntry.getValue();
-		OlxRegion olxRegion = OlxDataManager.getOlxRegion(regionName);
-		if (olxRegion == null)
-			throw new CrawlerException("Can't find olx region by name [" + regionName + "]");
+	public static void convertRegion(Realty realty, String regionId, String cityId, String districtId) throws CrawlerException {
+		OlxRegion olxRegion = null;
 		
-		realty.location.externalRegionId = regionName;
+		// Пробуем найти район		
+		if (StringUtils.isNotBlank(districtId))
+			olxRegion = OlxDataManager.getOlxRegionByType(RegionType.DISTRICT, districtId);
+		
+		// Если нет то пробуем найти город
+		if (olxRegion == null && StringUtils.isNotBlank(cityId)) {
+			olxRegion = OlxDataManager.getOlxRegionByType(RegionType.CITY, cityId);
+		}
+		
+		// Если нет то пробуем найти регион
+		if (olxRegion == null && StringUtils.isNotBlank(regionId)) {
+			olxRegion = OlxDataManager.getOlxRegionByType(RegionType.REGION, regionId);
+			logger.error("ATTENTION: OLX Region not found by DistrictID:[{}] or CityID:[{}]!!! Please check dictionary, maybe it must be updated!", districtId, cityId);
+		}
+		
+		if (olxRegion == null)
+			throw new CrawlerException("Can't find olx region by regionId[" + regionId + "] or cityId[" + cityId + "] or districtId[" + districtId + "]");
+		
+		realty.location.externalRegionId = null; // Пока ничего не пишем
 		realty.location.region = OlxDataManager.getRegion(olxRegion.region);
 		realty.location.regions = OlxDataManager.getRegionsTree(olxRegion.region);
 	}
@@ -140,6 +155,9 @@ public class CommonMapperUtils {
 				case "ноя":
 					createdDate.set(Calendar.MONTH, 10);
 					break;
+				case "нояб":
+					createdDate.set(Calendar.MONTH, 10);
+					break;
 				case "дек":
 					createdDate.set(Calendar.MONTH, 11);
 					break;
@@ -149,7 +167,7 @@ public class CommonMapperUtils {
 					// 18 Май
 					// 20 апр.
 					// Так хрен разберешь, причем возвращается только в API, на сайте внутри объявления норм....
-					logger.warn("WARINING, Advert created date [%s] cannot be parsed", dateString);
+					logger.warn("WARINING, Advert created date [{}] cannot be parsed", dateString);
 					throw new CrawlerException("Can't parse created date [" + dateString + "]");
 				}
 			}

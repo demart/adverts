@@ -1,16 +1,14 @@
 package kz.aphion.adverts.crawler.olx.mappers;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
 import kz.aphion.adverts.crawler.olx.OlxJsonToMapParser;
+import kz.aphion.adverts.crawler.olx.UrlBuilder;
 import kz.aphion.adverts.persistence.realty.RealtyPhoto;
 
 import org.slf4j.Logger;
@@ -27,7 +25,7 @@ public class OlxPhotoMapper {
 
 	private static Logger logger = LoggerFactory.getLogger(OlxPhotoMapper.class);
 
-	private static final String configurationUrl = "https://ssl.olx.kz/i2/definitions/startuplight/?json=1";
+	//private static final String configurationUrl = "https://ssl.olx.kz/i2/definitions/startuplight/?json=1";
 	
 	private static String riakPhotoPattern = "";
 	private static String riakBucket = "";
@@ -39,8 +37,9 @@ public class OlxPhotoMapper {
 	/**
 	 * Конвертирует JSON данные в корретный список фото
 	 * @param rawPhotos
+	 * @throws CrawlerException 
 	 */
-	public static List<RealtyPhoto> convertPhotos(Map<String, Object> rawPhotos) {
+	public static List<RealtyPhoto> convertPhotos(Map<String, Object> rawPhotos) throws CrawlerException {
 		List<RealtyPhoto> photos = new ArrayList<RealtyPhoto>();
 		Long riakRing = null;
 		Long riakKey = null;
@@ -88,7 +87,7 @@ public class OlxPhotoMapper {
 	}
 	
 	
-	private static String buildImageUrl(Long riakRing, Long riakKey, Long riakRev, Long slotId, Long width, Long height) {
+	private static String buildImageUrl(Long riakRing, Long riakKey, Long riakRev, Long slotId, Long width, Long height) throws CrawlerException {
 		if (isImageConfigurationLoaded == false) {
 			retrieveConfigurationFromServer();
 		}
@@ -117,14 +116,12 @@ public class OlxPhotoMapper {
 	}
 	
 	
-	private synchronized static void retrieveConfigurationFromServer() {
+	private synchronized static void retrieveConfigurationFromServer() throws CrawlerException {
 		if (isImageConfigurationLoaded)
 			return;
 		
 		//String jsonResponse = WS.url(configurationUrl).get().getString();
 		String jsonResponse = getConfigurationJsonResponse();
-		if (jsonResponse == null)
-			throw new com.google.gson.JsonParseException("Response form OLX URL [" + configurationUrl + "] was null");
 		
 		// Конвертируем полученные ответ с сервера в JSON Map
 		Map<String, Object> jsonResponseMap = OlxJsonToMapParser.convertJson(jsonResponse);
@@ -147,7 +144,13 @@ public class OlxPhotoMapper {
 		isImageConfigurationLoaded = true;
 	}
 	
-	private static String getConfigurationJsonResponse() {
+	private static String getConfigurationJsonResponse() throws CrawlerException {
+		String imageConfigUrl = UrlBuilder.getInstance().getQueryBuilder().buildImageConfigUrl();
+		String jsonResponse = UrlBuilder.getInstance().callServerAndGetJsonData(imageConfigUrl);
+		if (jsonResponse == null)
+			throw new com.google.gson.JsonParseException("Response form OLX URL [" + imageConfigUrl + "] was null");
+		return jsonResponse;
+		/*
 		try {
 			URL obj = new URL(configurationUrl);
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -171,6 +174,7 @@ public class OlxPhotoMapper {
 			logger.error("Error trying to get JSON configuration from OLX server", ex);
 			return null;
 		}
+		*/
 	}
 	
 }

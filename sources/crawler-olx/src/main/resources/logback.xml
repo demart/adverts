@@ -29,7 +29,6 @@
 		</encoder>
 	</appender>
 
-
 	<logger name="org.mongodb.driver.cluster" level="INFO"/>
 	<!-- 
 	<logger name="org.mongodb.driver" level="DEBUG"/>
@@ -38,8 +37,7 @@
 	-->
 	<logger name="org.apache.activemq.transport.AbstractInactivityMonitor" level="INFO"/>
 
-	<logger name="kz.aphion.adverts.crawler" level="DEBUG"/>
-	<logger name="kz.aphion.adverts.crawler.core" level="INFO"/>
+	<logger name="kz.aphion.adverts.crawler" level="INFO"/>
 
 	<root level="INFO">
 		<appender-ref ref="STDOUT" />

@@ -1,15 +1,13 @@
 package kz.aphion.adverts.crawler.olx.mappers;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
 import kz.aphion.adverts.crawler.olx.OlxJsonToMapParser;
+import kz.aphion.adverts.crawler.olx.UrlBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,18 +24,19 @@ public class OlxPhoneMapper {
 
 	private static Logger logger = LoggerFactory.getLogger(OlxPhoneMapper.class);
 
-	private static final String phoneUrl = "https://olx.kz/i2/ajax/ad/getcontact/?type=phone&json=1&id=";
+	//private static final String phoneUrl = "https://olx.kz/i2/ajax/ad/getcontact/?type=phone&json=1&id=";
 	
 	
 	/**
 	 * Метод выполняет запрос к API серверу OLX и извлекает телефоны добавляя их к объявлению
 	 * 
 	 * @param externalAdvertId
+	 * @throws Exception 
+	 * @throws IOException 
 	 */
-	public static List<String> callServerAndGetPhone(String externalAdvertId) {
-		//String url = phoneUrl + externalAdvertId;
-		//String response = WS.url(url).get().getString();
-		String response = getPhoneJsonResponse(externalAdvertId);
+	public static List<String> callServerAndGetPhone(String externalAdvertId) throws CrawlerException {
+		String phoneUrl = UrlBuilder.getInstance().getQueryBuilder().buildPhoneQueryUrl(externalAdvertId);
+		String response = UrlBuilder.getInstance().callServerAndGetJsonData(phoneUrl);
 		
 		logger.debug("Got JSON response with phone number: " + response + " advertId: " + externalAdvertId);
 		
@@ -66,54 +65,6 @@ public class OlxPhoneMapper {
 		
 		return phoneList;
 	}
-	
-	private static String getPhoneJsonResponse(String externalAdvertId) {
-		String desiredUrl = phoneUrl + externalAdvertId;
-		
-		logger.debug("Calling API to get phone number: " + desiredUrl);
-		
-	    URL url = null;
-	    BufferedReader reader = null;
-	    StringBuilder stringBuilder;
-
-	    try {
-	      // create the HttpURLConnection
-	      url = new URL(desiredUrl);
-	      HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-	      
-	      // just want to do an HTTP GET here
-	      connection.setRequestMethod("GET");
-
-	      // give it 15 seconds to respond
-	      connection.setReadTimeout(15*1000);
-	      connection.connect();
-
-	      // read the output from the server
-	      reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-	      stringBuilder = new StringBuilder();
-
-	      String line = null;
-	      while ((line = reader.readLine()) != null) {
-	        stringBuilder.append(line + "\n");
-	      }
-	      return stringBuilder.toString();
-	    } catch (Exception ex) {
-	    	logger.error("Error trying to get JSON of advert to extract phone number from OLX server", ex);
-	    	return null;
-	    } finally {
-	      // close the reader; this can throw an exception too, so
-	      // wrap it in another try/catch block.
-	      if (reader != null) {
-	        try {
-	          reader.close();
-	        } catch (IOException ioe) {
-	          ioe.printStackTrace();
-	        }
-	      }
-	    }
-		
-	}
-	
 	
 	public static String formatPhoneNumber(String phone) {
 		phone = phone.replaceAll("[^\\d]", "");

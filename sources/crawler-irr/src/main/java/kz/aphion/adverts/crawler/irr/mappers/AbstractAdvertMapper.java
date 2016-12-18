@@ -14,6 +14,7 @@ import kz.aphion.adverts.persistence.realty.RealtyAdvertStatus;
 import kz.aphion.adverts.persistence.realty.RealtyLocation;
 import kz.aphion.adverts.persistence.realty.RealtyPhoto;
 import kz.aphion.adverts.persistence.realty.RealtyPublisher;
+import kz.aphion.adverts.persistence.realty.RealtyPublisherType;
 import kz.aphion.adverts.persistence.realty.RealtySource;
 
 import org.slf4j.Logger;
@@ -45,6 +46,8 @@ public abstract class AbstractAdvertMapper<T extends Realty> {
 		realty.location = new RealtyLocation();
 		realty.publisher = new RealtyPublisher();
 		realty.publisher.phones = new ArrayList<String>();
+		
+		realty.publisher.publisherType = RealtyPublisherType.UNDEFINED;
 		
 		//пришлось вынести описание отдельно для сохранения. Так как харастеристики 
 		//у них лежат в блоке "group_custom_fields".

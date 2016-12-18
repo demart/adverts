@@ -49,6 +49,11 @@ public class QueryBuilder {
 	public final String FILTER_PHONE_URL_KEY = "PHONE_URL";	
 	
 	/**
+	 * Ключ для извлечения URL настроек
+	 */
+	public final String FILTER_IMG_CONFIG_URL_KEY = "IMG_CONFIG_URL";
+	
+	/**
 	 * Название параметра для фильрации по категории
 	 */
 	public final String FILTER_PARAMETER_CATEGORY = "&search[category_id]=";
@@ -82,6 +87,7 @@ public class QueryBuilder {
 	
 	private String sourceSystemBaseUrl;
 	private String sourceSystemBasePhoneUrl;
+	private String sourceSystemBaseImgConfigUrl;
 	private String filterParameterCategoryValue;
 	private String filterParameterRegionValue;
 	private String filterParameterCityValue;	
@@ -123,6 +129,9 @@ public class QueryBuilder {
 			}
 			if (FILTER_PHONE_URL_KEY.equalsIgnoreCase(parameter.key)) {
 				sourceSystemBasePhoneUrl  = parameter.value;
+			}
+			if (FILTER_IMG_CONFIG_URL_KEY.equalsIgnoreCase(parameter.key)) {
+				sourceSystemBaseImgConfigUrl = parameter.value;
 			}
 		}
 		
@@ -187,12 +196,6 @@ public class QueryBuilder {
 		b.append(FILTER_PARAMETER_PAGE);
 		b.append(page);
 		
-		// SORTING (IF POSSIBLE)
-		//b.append("&orderBy[data][3][name]=add_date&orderBy[data][3][sort]=desc"); // KRISHA VERSION
-		//b.append("&orderBy[system_data][3][name]=show_till&orderBy[system_data][3][sort]=desc"); // MY VERSION (HACKED)
-		
-		//if (Logger.isDebugEnabled())
-		//	Logger.debug("UrlQueryBuilder: " + b.toString());
 		logger.info("UrlQueryBuilder: " + b.toString());
 		
 		return b.toString();
@@ -212,6 +215,18 @@ public class QueryBuilder {
 		b.append(sourceSystemBasePhoneUrl);
 		b.append(advertId);
 		return b.toString();
+	}
+	
+	/**
+	 * Метод возвразащает URL для получения конфигурации хранения изображений
+	 * @return
+	 * @throws CrawlerException
+	 */
+	public String buildImageConfigUrl() throws CrawlerException {
+		if (!isPrepared)
+			throw new CrawlerException("QueryBuilder didn't prepare URL, please call prepareFilters first");
+		StringBuilder b = new StringBuilder();
+		return sourceSystemBaseImgConfigUrl;
 	}
 	
 	
