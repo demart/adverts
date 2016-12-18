@@ -3,7 +3,7 @@ package kz.aphion.adverts.crawler.krisha;
 import java.util.ArrayList;
 import java.util.List;
 
-import kz.aphion.adverts.crawler.core.MongoDBProvider;
+import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.crawler.krisha.persistence.KrishaRegion;
 import kz.aphion.adverts.crawler.krisha.persistence.KrishaResidentialComplex;
 import kz.aphion.adverts.persistence.Region;
@@ -44,7 +44,7 @@ public class KrishaDataManager {
 		*/
 		
 		try {
-			Query<KrishaRegion> q = MongoDBProvider.getInstance().getDatastore().createQuery(KrishaRegion.class);
+			Query<KrishaRegion> q = DB.DS().createQuery(KrishaRegion.class);
 			q.field("key").equal(regionId);
 			q.limit(1);
 			List<KrishaRegion> results = q.asList();
@@ -139,7 +139,7 @@ public class KrishaDataManager {
 		*/
 		
 		try {
-			Query<KrishaResidentialComplex> q = MongoDBProvider.getInstance().getDatastore().createQuery(KrishaResidentialComplex.class);
+			Query<KrishaResidentialComplex> q = DB.DS().createQuery(KrishaResidentialComplex.class);
 			q.field("key").equal(complex);
 			q.limit(1);
 			List<KrishaResidentialComplex> results = q.asList();
@@ -176,7 +176,7 @@ public class KrishaDataManager {
 		*/
 		
 		try {
-			Query<KrishaResidentialComplex> q = MongoDBProvider.getInstance().getDatastore().createQuery(KrishaResidentialComplex.class);
+			Query<KrishaResidentialComplex> q = DB.DS().createQuery(KrishaResidentialComplex.class);
 			q.field("name").equal(complex);
 			q.field("region.id").equal(regionId);
 			q.limit(1);

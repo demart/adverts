@@ -1,4 +1,4 @@
-package kz.aphion.adverts.crawler.core;
+package kz.aphion.adverts.common;
 
 import javax.jms.Connection;
 import javax.jms.DeliveryMode;
@@ -8,44 +8,25 @@ import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
-import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
-import kz.aphion.adverts.crawler.core.exceptions.CrawlersNotFoundException;
-
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Провайдер предоставляет возможность работы с сервером очередей
- * 
- * @author artem.demidovich
- *
- */
-public class MessageQueueProvider {
+public enum MQ {
 
-	private static Logger logger = LoggerFactory.getLogger(MessageQueueProvider.class);
+	INSTANCE;
 	
-	private MessageQueueProvider(){}
+	private Logger logger = LoggerFactory.getLogger(MQ.class);
 	
-	private static MessageQueueProvider _instance;
+	private MQ(){
+		logger.debug("MQ.INSTANCE object created.");
+	}
 	
 	private static ActiveMQConnectionFactory _connectionFactory;
 	
 	private static Connection _connection;
 	
-	public static MessageQueueProvider getInstance() throws JMSException, CrawlerException{ 
-		if (_instance == null) {
-			_instance = new MessageQueueProvider();
-			try {
-			_instance.init();
-			} catch (Exception e) {
-				_instance = null;
-				throw e;
-			}
-		}
-		return _instance;
-	}
 	
 	/**
 	 * Ключ для того чтобы достать URL подключения к очереди из application.conf
@@ -57,12 +38,12 @@ public class MessageQueueProvider {
 	 * @throws JMSException 
 	 * @throws CrawlerException 
 	 */
-	private void init() throws JMSException, CrawlerException {
+	public void init() throws JMSException {
 		if (_connectionFactory == null) {
 			
 			String connectionUrl = (String)System.getProperties().get(ACTIVE_MQ_URL_PROPERTIES);
 			if (StringUtils.isEmpty(connectionUrl))
-				throw new CrawlersNotFoundException("ActiveMQ conneciton url [" + ACTIVE_MQ_URL_PROPERTIES + "] not found in application config");
+				throw new NullPointerException("ActiveMQ conneciton url [" + ACTIVE_MQ_URL_PROPERTIES + "] not found in application config");
 			logger.info("ActiveMQ connection url: " + connectionUrl);
 			
 			// Create a ConnectionFactory, default url should be "tcp://localhost:61616"

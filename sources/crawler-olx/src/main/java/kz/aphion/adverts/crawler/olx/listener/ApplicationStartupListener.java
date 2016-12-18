@@ -6,9 +6,9 @@ import java.util.List;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.common.MQ;
 import kz.aphion.adverts.crawler.core.CrawlerInitializater;
-import kz.aphion.adverts.crawler.core.MessageQueueProvider;
-import kz.aphion.adverts.crawler.core.MongoDBProvider;
 import kz.aphion.adverts.crawler.core.models.CrawlerGroupInitializationModel;
 import kz.aphion.adverts.crawler.olx.jobs.OlxRealtyCrawlerJob;
 import kz.aphion.adverts.persistence.crawler.CrawlerSourceSystemTypeEnum;
@@ -47,9 +47,9 @@ public class ApplicationStartupListener  implements ServletContextListener  {
 		// Закрываем подключение к MongoDB
 		logger.info("Closing MongoDB connection...");
 		try {
-			MongoDBProvider.getInstance().getDatastore().getMongo().close();
+			DB.DS().getMongo().close();
 			logger.info("MongoDB connection was closed.");
-			MessageQueueProvider.getInstance().getConnection().close();
+			MQ.INSTANCE.getConnection().close();
 			Thread.sleep(1000);
 		} catch (Exception e) {
 			logger.error("Error closing MongoDB connection", e);

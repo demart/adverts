@@ -6,6 +6,8 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.common.MQ;
 import kz.aphion.adverts.crawler.core.exceptions.CrawlerGroupNotFoundException;
 import kz.aphion.adverts.crawler.core.exceptions.CrawlersNotFoundException;
 import kz.aphion.adverts.crawler.core.jobs.CrawlerProcessJob;
@@ -55,10 +57,10 @@ public class CrawlerInitializater {
 		logger.info("Crawlers initialization started");
 		
 		// Инициализация MQ соединения
-		MessageQueueProvider.getInstance();
+		MQ.INSTANCE.init();
 		
 		// Инициализация MongoDB
-		MongoDBProvider.getInstance();
+		DB.INSTANCE.init();
 		
 		
 		for (CrawlerGroupInitializationModel crawlerGroupModel : crawlerGroups) {

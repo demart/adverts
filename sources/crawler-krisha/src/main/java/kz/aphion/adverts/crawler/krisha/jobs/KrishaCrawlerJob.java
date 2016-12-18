@@ -7,12 +7,12 @@ import java.util.Map;
 
 import javax.jms.JMSException;
 
+import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.common.models.mq.phones.RegisterPhoneModel;
 import kz.aphion.adverts.common.models.mq.realties.ProcessRealtyModel;
 import kz.aphion.adverts.common.models.mq.realties.RealtyProcessStatus;
 import kz.aphion.adverts.crawler.core.CrawlerHttpClient;
 import kz.aphion.adverts.crawler.core.DataManager;
-import kz.aphion.adverts.crawler.core.MongoDBProvider;
 import kz.aphion.adverts.crawler.core.annotations.CrawlerJob;
 import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
 import kz.aphion.adverts.crawler.core.exceptions.CrawlersNotFoundException;
@@ -21,15 +21,15 @@ import kz.aphion.adverts.crawler.core.models.CrawlerModel;
 import kz.aphion.adverts.crawler.core.models.CrawlerParameterModel;
 import kz.aphion.adverts.crawler.core.models.ProxyServerModel;
 import kz.aphion.adverts.crawler.core.models.UserAgentModel;
-import kz.aphion.adverts.persistence.crawler.CrawlerSourceSystemTypeEnum;
-import kz.aphion.adverts.persistence.crawler.ProxyServerTypeEnum;
-import kz.aphion.adverts.persistence.crawler.UserAgentTypeEnum;
 import kz.aphion.adverts.crawler.krisha.KrishaAdvertCategoryType;
 import kz.aphion.adverts.crawler.krisha.KrishaJsonToMapParser;
 import kz.aphion.adverts.crawler.krisha.QueryBuilder;
 import kz.aphion.adverts.crawler.krisha.mappers.KrishaAdvertMapper;
 import kz.aphion.adverts.crawler.krisha.mappers.RealtyComparator;
 import kz.aphion.adverts.persistence.SourceSystemType;
+import kz.aphion.adverts.persistence.crawler.CrawlerSourceSystemTypeEnum;
+import kz.aphion.adverts.persistence.crawler.ProxyServerTypeEnum;
+import kz.aphion.adverts.persistence.crawler.UserAgentTypeEnum;
 import kz.aphion.adverts.persistence.phones.PhoneOwner;
 import kz.aphion.adverts.persistence.phones.PhoneSource;
 import kz.aphion.adverts.persistence.phones.PhoneSourceCategory;
@@ -92,7 +92,7 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 		}
 		
 		// Подключение к Монго
-		Datastore ds = MongoDBProvider.getInstance().getDatastore();
+		Datastore ds = DB.DS();
 		
 		// Подготавливаем query для запроса
 		QueryBuilder queryBuilder = new QueryBuilder();

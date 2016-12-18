@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
+import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
 import kz.aphion.adverts.crawler.core.models.CrawlerModel;
 import kz.aphion.adverts.crawler.core.models.ProxyServerModel;
@@ -22,7 +23,6 @@ import kz.aphion.adverts.persistence.crawler.UserAgentTypeEnum;
 
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.query.Query;
-import org.mongodb.morphia.query.UpdateOperations;
 
 /**
  * Менеджер по работе с persistence данными
@@ -40,7 +40,7 @@ public class DataManager {
 	
 				return crawlerGroups;
 		*/
-		Query<CrawlerGroup> q = MongoDBProvider.getInstance().getDatastore().createQuery(CrawlerGroup.class);		 
+		Query<CrawlerGroup> q = DB.DS().createQuery(CrawlerGroup.class);		 
 		q.field("sourceSystemType").equal(type);
 		q.field("status").equal(CrawlerGroupStatusEnum.ACTIVE);
 		 
@@ -49,7 +49,7 @@ public class DataManager {
 	
 	
 	public static List<Crawler> getCrawlersByGroup(CrawlerGroup crawlerGroup) throws Exception {
-		Query<Crawler> q = MongoDBProvider.getInstance().getDatastore().createQuery(Crawler.class);		 
+		Query<Crawler> q = DB.DS().createQuery(Crawler.class);		 
 		q.field("crawlerGroup").equal(crawlerGroup);
 		q.field("status").equal(CrawlerStatusEnum.ACTIVE);
 		 
@@ -75,7 +75,7 @@ public class DataManager {
 		*/
 		
 		
-		Query<UserAgent> q = MongoDBProvider.getInstance().getDatastore().createQuery(UserAgent.class);		 
+		Query<UserAgent> q = DB.DS().createQuery(UserAgent.class);		 
 		q.field("type").equal(type);
 		q.field("status").equal(UserAgentStatusEnum.ACTIVE);
 		
@@ -119,7 +119,7 @@ public class DataManager {
 		}
 		*/
 		
-		Query<ProxyServer> q = MongoDBProvider.getInstance().getDatastore().createQuery(ProxyServer.class);		 
+		Query<ProxyServer> q = DB.DS().createQuery(ProxyServer.class);		 
 		q.field("type").equal(type);
 		q.field("status").equal(ProxyServerStatusEnum.ACTIVE);
 		
@@ -161,14 +161,14 @@ public class DataManager {
 		.executeUpdate();
 		*/
 		
-		Query<Crawler> q = MongoDBProvider.getInstance().getDatastore().createQuery(Crawler.class);		 
+		Query<Crawler> q = DB.DS().createQuery(Crawler.class);		 
 		q.field("id").equal(new ObjectId(model.id));
 		List<Crawler> crawlers = q.asList();
 		
 		if (crawlers.size() > 0) {
 			Crawler crwl = crawlers.get(0);
 			crwl.lastSourceSystemScannedTime = lastSourceScannedTime;
-			MongoDBProvider.getInstance().getDatastore().merge(crwl);
+			DB.DS().merge(crwl);
 		} else {
 			// TODO Show WARN message
 		}

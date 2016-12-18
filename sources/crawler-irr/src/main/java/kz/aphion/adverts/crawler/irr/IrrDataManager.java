@@ -3,7 +3,7 @@ package kz.aphion.adverts.crawler.irr;
 import java.util.ArrayList;
 import java.util.List;
 
-import kz.aphion.adverts.crawler.core.MongoDBProvider;
+import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.crawler.irr.persistence.IrrRegion;
 import kz.aphion.adverts.persistence.Region;
 
@@ -41,7 +41,7 @@ public class IrrDataManager {
 		*/
 		
 		try {
-			Query<IrrRegion> q = MongoDBProvider.getInstance().getDatastore().createQuery(IrrRegion.class);
+			Query<IrrRegion> q = DB.DS().createQuery(IrrRegion.class);
 			q.field("key").equal(regionName);
 			q.limit(1);
 			List<IrrRegion> results = q.asList();

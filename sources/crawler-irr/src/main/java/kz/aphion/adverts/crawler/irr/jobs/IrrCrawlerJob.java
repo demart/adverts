@@ -7,10 +7,10 @@ import java.util.Map;
 
 import javax.jms.JMSException;
 
+import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.common.models.mq.phones.RegisterPhoneModel;
 import kz.aphion.adverts.crawler.core.CrawlerHttpClient;
 import kz.aphion.adverts.crawler.core.DataManager;
-import kz.aphion.adverts.crawler.core.MongoDBProvider;
 import kz.aphion.adverts.crawler.core.annotations.CrawlerJob;
 import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
 import kz.aphion.adverts.crawler.core.exceptions.CrawlersNotFoundException;
@@ -79,7 +79,7 @@ public class IrrCrawlerJob extends CrawlerProcessJob {
 
 		
 		// Подключение к Монго
-		Datastore ds = MongoDBProvider.getInstance().getDatastore();
+		Datastore ds = DB.DS();
 		
 		// Подготавливаем query для запроса
 		QueryBuilder queryBuilder = new QueryBuilder();

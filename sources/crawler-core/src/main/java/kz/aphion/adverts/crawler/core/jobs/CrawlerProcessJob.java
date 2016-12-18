@@ -5,8 +5,8 @@ import java.util.concurrent.ExecutorService;
 
 import javax.jms.JMSException;
 
+import kz.aphion.adverts.common.MQ;
 import kz.aphion.adverts.crawler.core.CrawlerInitializater;
-import kz.aphion.adverts.crawler.core.MessageQueueProvider;
 import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
 import kz.aphion.adverts.crawler.core.models.CrawlerModel;
 import kz.aphion.adverts.persistence.crawler.CrawlerSourceSystemTypeEnum;
@@ -48,8 +48,8 @@ public abstract class CrawlerProcessJob<V> implements Callable<V>, Runnable {
 	 * @throws CrawlerException 
 	 * @throws JMSException 
 	 */
-	public MessageQueueProvider getMqProvider() throws JMSException, CrawlerException {
-		return MessageQueueProvider.getInstance();
+	public MQ getMqProvider() throws JMSException, CrawlerException {
+		return MQ.INSTANCE;
 	}
 	
 	

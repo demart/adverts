@@ -3,7 +3,7 @@ package kz.aphion.adverts.crawler.olx;
 import java.util.ArrayList;
 import java.util.List;
 
-import kz.aphion.adverts.crawler.core.MongoDBProvider;
+import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.crawler.olx.persistence.OlxRegion;
 import kz.aphion.adverts.persistence.Region;
 import kz.aphion.adverts.persistence.RegionType;
@@ -44,7 +44,7 @@ public class OlxDataManager {
 		}
 		*/
 		try {
-			Query<OlxRegion> q = MongoDBProvider.getInstance().getDatastore().createQuery(OlxRegion.class);
+			Query<OlxRegion> q = DB.DS().createQuery(OlxRegion.class);
 			q.field("name").equal(regionName);
 			q.limit(1);
 			List<OlxRegion> results = q.asList();
@@ -63,7 +63,7 @@ public class OlxDataManager {
 	
 	public static OlxRegion getOlxRegionByType(RegionType regionType, String districtId) {
 		try {
-			Query<OlxRegion> q = MongoDBProvider.getInstance().getDatastore().createQuery(OlxRegion.class);
+			Query<OlxRegion> q = DB.DS().createQuery(OlxRegion.class);
 			q.field("key").equal(Long.parseLong(districtId));
 			q.field("type").equal(regionType);
 			q.limit(1);

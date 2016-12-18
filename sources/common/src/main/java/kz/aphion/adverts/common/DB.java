@@ -1,4 +1,4 @@
-package kz.aphion.adverts.crawler.core;
+package kz.aphion.adverts.common;
 
 import org.apache.commons.lang.StringUtils;
 import org.mongodb.morphia.Datastore;
@@ -14,51 +14,41 @@ import com.mongodb.MongoClient;
  * @author artem.demidovich
  *
  */
-public class MongoDBProvider {
-
-	private static Logger logger = LoggerFactory.getLogger(MongoDBProvider.class);
-		
-	private MongoDBProvider(){}
+public enum DB {
 	
-	private static MongoDBProvider _instance;
+	INSTANCE;
+	
+	private Logger logger = LoggerFactory.getLogger(DB.class);
+		
+	private DB() {
+		logger.debug("DB.INSTANCE object created.");
+	}
 	
 	private static Morphia _morphia;
 	private static Datastore _datastore;
 	
-	public static MongoDBProvider getInstance() throws Exception { 
-		if (_instance == null) {
-			_instance = new MongoDBProvider();
-			try {
-			_instance.init();
-			} catch (Exception e) {
-				_instance = null;
-				throw e;
-			}
-		}
-		return _instance;
+	public Datastore getValue() {
+		return _datastore;
 	}
 	
-
 	/**
 	 * Ключ для того чтобы достать хост для подключения к монго из application.conf
 	 */
-	public static final String MONGO_DBNAME_PROPERTY = "mongodb.dbname"; 
+	private static final String MONGO_DBNAME_PROPERTY = "mongodb.dbname"; 
 	
 	/**
 	 * Ключ для того чтобы достать хост для подключения к монго из application.conf
 	 */
-	public static final String MONGO_HOST_PROPERTY = "mongodb.connection.host"; 
+	private static final String MONGO_HOST_PROPERTY = "mongodb.connection.host"; 
 
 	/**
 	 * Ключ для того чтобы достать порт для подключения к монго из application.conf
 	 */
-	public static final String MONGO_PORT_PROPERTY = "mongodb.connection.port"; 
-		
-	
-	
-	public void init() throws Exception {
+	private static final String MONGO_PORT_PROPERTY = "mongodb.connection.port"; 
+
+
+	public void init() {
 		_morphia = new Morphia();
-		
 		_morphia.mapPackage("kz.aphion.adverts");
 
 		String dbName = getApplicationConfigParameter(MONGO_DBNAME_PROPERTY);
@@ -69,19 +59,26 @@ public class MongoDBProvider {
 		// create the Datastore connecting to the default port on the local host
 		_datastore = _morphia.createDatastore(new MongoClient(host,port), dbName);
 		_datastore.ensureIndexes();
-
 	}
 	
-	private String getApplicationConfigParameter(String paramName) throws Exception {
+	
+	private String getApplicationConfigParameter(String paramName) {
 		String paramValue = (String)System.getProperties().get(paramName);
 		if (StringUtils.isEmpty(paramValue))
-			throw new Exception("MongoDb connection parameter [" + paramName + "] not found in application config");
+			throw new NullPointerException("MongoDb connection parameter [" + paramName + "] not found in application config");
 		logger.info("MongoDb connection parameter ["+ paramName +"]: " + paramValue);
 		return paramValue;
 	}
 	
-	public Datastore getDatastore() {
+	public Datastore getDS() {
+		if (_datastore == null) {
+			init();
+		}
 		return _datastore;
+	}
+	
+	public static Datastore DS() {
+		return DB.INSTANCE.getDS();
 	}
 	
 }

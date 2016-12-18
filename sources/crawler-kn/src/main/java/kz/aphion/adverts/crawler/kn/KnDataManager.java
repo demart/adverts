@@ -3,7 +3,7 @@ package kz.aphion.adverts.crawler.kn;
 import java.util.ArrayList;
 import java.util.List;
 
-import kz.aphion.adverts.crawler.core.MongoDBProvider;
+import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.crawler.kn.persistence.KnRegion;
 import kz.aphion.adverts.crawler.kn.persistence.KnResidentialComplex;
 import kz.aphion.adverts.persistence.Region;
@@ -42,7 +42,7 @@ public class KnDataManager {
 		*/
 		
 		try {
-			Query<KnRegion> q = MongoDBProvider.getInstance().getDatastore().createQuery(KnRegion.class);
+			Query<KnRegion> q = DB.DS().createQuery(KnRegion.class);
 			q.field("name").equal(regionName);
 			q.limit(1);
 			List<KnRegion> results = q.asList();
@@ -130,7 +130,7 @@ public class KnDataManager {
 				.setParameter("key", complexName)
 				.getResultList();
 		*/
-		Query<KnResidentialComplex> q = MongoDBProvider.getInstance().getDatastore().createQuery(KnResidentialComplex.class);
+		Query<KnResidentialComplex> q = DB.DS().createQuery(KnResidentialComplex.class);
 		q.field("name").equal(complexName);
 		List<KnResidentialComplex> results = q.asList(); 
 		
