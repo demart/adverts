@@ -28,7 +28,7 @@ public enum QueueNameConstants {
 	
 
 	// ===========================================================
-	// ========== QUEUE NAMES FOR CRAWLERS AND ANALYSER ==========
+	// ================= QUEUE NAMES FOR REALTY ==================
 	// ===========================================================	
 
 	/**
@@ -54,28 +54,26 @@ public enum QueueNameConstants {
 	 * Название очереди откуда надо читать сообщения для Live Search
 	 */
 	ADVERTS_REALTY_SUBSCRIPTION_LIVE_QUEUE("adverts.realty.subscriptions.live"),
+
 	
+	// ===========================================================
+	// ============== QUEUE NAMES FOR SUBSCRIPTION ===============
+	// ===========================================================	
 	
 	/**
 	 * Очередь подготовки сообщений для отправки в систему уведомлений уведомлений
 	 */
-	MQ_SUBSCRIPTION_ADVERTS_NOTIFICATION_BUILDER_QUEUE("adverts.subscriptions.notifications.builder"),
+	ADVERTS_SUBSCRIPTION_NOTIFICATION_BUILDER_QUEUE("adverts.subscriptions.notifications.builder"),
 		
 	/**
 	 * Очередь для приема отметок и статусов обработки от системы уведомлений.  
 	 */
-	MQ_SUBSCRIPTION_NOTIFICATION_CALLBACK_QUEUE("adverts.subscriptions.notifications.callback"),
+	ADVERTS_SUBSCRIPTION_NOTIFICATION_CALLBACK_QUEUE("adverts.subscriptions.notifications.callback"),
 	
-	/**
-	 * Очередь куда нужно отправлять задачи для модуля уведомления
-	 */
-	MQ_NOTIFICATION_QUEUE("adverts.notifications"),
-	
-	
-	
-	
-	
-	
+
+	// ===========================================================
+	// ============== QUEUE NAMES FOR NOTIFICATION ===============
+	// ===========================================================	
 	
 	/**
 	 * Очередь куда нужно отправлять задачи для модуля уведомления
@@ -111,6 +109,8 @@ public enum QueueNameConstants {
 	 * Очередь для отправки SMS
 	 */
 	NOTIFICATION_SMS_QUEUE("adverts.notifications.sms");
+	
+	
 	
 	private final String queueName;
 	

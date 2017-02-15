@@ -9,11 +9,11 @@ import javax.jms.JMSException;
 
 import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.common.MQ;
+import kz.aphion.adverts.common.mq.QueueNameConstants;
 import kz.aphion.adverts.persistence.subscription.Subscription;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvert;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvertStatus;
 import kz.aphion.adverts.persistence.subscription.notification.SubscriptionNotificationType;
-import kz.aphion.adverts.subscription.mq.QueueNameConstants;
 import kz.aphion.adverts.subscription.mq.RealtyAnalyserToSubscriptionProcessModel;
 import kz.aphion.adverts.subscription.mq.SubscriptionNotificationBuilderModel;
 import kz.aphion.adverts.subscription.mq.SubscriptionProcessStatus;
@@ -250,7 +250,7 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 				Gson gson = new GsonBuilder().setPrettyPrinting().create();
 				String message = gson.toJson(model);
 				
-				MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_SUBSCRIPTION_ADVERTS_NOTIFICATION_BUILDER_QUEUE, message);
+				MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.ADVERTS_SUBSCRIPTION_NOTIFICATION_BUILDER_QUEUE.getValue(), message);
 				logger.debug("Message with immediate status was sent to notification system.");
 				
 			}

@@ -8,7 +8,7 @@ import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.common.MQ;
 import kz.aphion.adverts.persistence.subscription.Subscription;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvert;
-import kz.aphion.adverts.subscription.mq.QueueNameConstants;
+import kz.aphion.adverts.common.mq.QueueNameConstants;
 import kz.aphion.adverts.subscription.mq.SubscriptionNotificationBuilderModel;
 
 import org.mongodb.morphia.Datastore;
@@ -117,7 +117,7 @@ public class SubscriptionAdvertsSearcher {
 			String message = model.toJSON();
 			
 			// Отправяем сообщение в очередь
-			MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_SUBSCRIPTION_ADVERTS_NOTIFICATION_BUILDER_QUEUE, message);
+			MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.ADVERTS_SUBSCRIPTION_NOTIFICATION_BUILDER_QUEUE.getValue(), message);
 			
 		} catch (Exception e) {
 			logger.error("Error whily trying to send message to subscription notification builder", e);
