@@ -9,6 +9,7 @@ import javax.jms.MessageListener;
 import javax.jms.Session;
 
 import kz.aphion.adverts.common.MQ;
+import kz.aphion.adverts.common.mq.QueueNameConstants;
 import kz.aphion.adverts.subscription.live.listeners.RealtyAdvertSubscriptionListener;
 
 import org.slf4j.Logger;
@@ -30,8 +31,8 @@ public class MqConsumerInitializator {
 		Session session =  MQ.INSTANCE.getSession();
 				
 		// Запускаем Listener по обработке объявлений о недвижимости
-		logger.info("Initializing registration consumer for queue [%s]", QueueNameConstants.MQ_REALTY_ADVERTS_SUBSCRIPTION_LIVE_QUEUE);
-		MessageConsumer registrationConsumer = session.createConsumer(session.createTopic(QueueNameConstants.MQ_REALTY_ADVERTS_SUBSCRIPTION_LIVE_QUEUE));
+		logger.info("Initializing registration consumer for queue [{}]", QueueNameConstants.ADVERTS_REALTY_SUBSCRIPTION_LIVE_QUEUE.getValue());
+		MessageConsumer registrationConsumer = session.createConsumer(session.createTopic(QueueNameConstants.ADVERTS_REALTY_SUBSCRIPTION_LIVE_QUEUE.getValue()));
 		mqMessageConsumers.add(registrationConsumer);
 		RealtyAdvertSubscriptionListener realtyAdvertListener = new RealtyAdvertSubscriptionListener();
 		mqListeners.add(realtyAdvertListener);

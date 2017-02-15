@@ -7,7 +7,6 @@ import kz.aphion.adverts.subscription.live.query.realty.FlatRentSubscriptionQuer
 import kz.aphion.adverts.subscription.live.query.realty.FlatSellSubscriptionQuery;
 
 import org.apache.commons.lang.NotImplementedException;
-import org.apache.commons.lang.NullArgumentException;
 
 public class SubscriptionConnectionFactory {
 
