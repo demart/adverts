@@ -9,6 +9,7 @@ import javax.jms.MessageListener;
 import javax.jms.Session;
 
 import kz.aphion.adverts.common.MQ;
+import kz.aphion.adverts.common.mq.QueueNameConstants;
 import kz.aphion.adverts.notification.listeners.NotificationChannelCallbackListener;
 import kz.aphion.adverts.notification.listeners.NotificationEventListener;
 
@@ -30,13 +31,13 @@ public class MqConsumerInitializator {
 	public static void initListeners() throws JMSException, Exception {
 		Session session =  MQ.INSTANCE.getSession();
 				
-		registerQueueConsumer(session, QueueNameConstants.MQ_NOTIFICATION_QUEUE, new NotificationEventListener());
-		registerQueueConsumer(session, QueueNameConstants.MQ_NOTIFICATION_CALLBACK_QUEUE, new NotificationChannelCallbackListener());
+		registerQueueConsumer(session, QueueNameConstants.NOTIFICATION_QUEUE.getValue(), new NotificationEventListener());
+		registerQueueConsumer(session, QueueNameConstants.NOTIFICATION_CALLBACK_QUEUE.getValue(), new NotificationChannelCallbackListener());
 
 	}
 	
 	private static void registerQueueConsumer(Session session, String queueName, MessageListener listener) throws JMSException {
-		logger.info("Initializing registration consumer for queue [%s]", queueName);
+		logger.info("Initializing registration consumer for queue [{}]", queueName);
 		MessageConsumer registrationConsumer = session.createConsumer(session.createQueue(queueName));
 		mqMessageConsumers.add(registrationConsumer);
 		mqListeners.add(listener);

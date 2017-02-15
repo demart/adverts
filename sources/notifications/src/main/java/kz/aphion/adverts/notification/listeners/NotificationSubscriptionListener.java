@@ -41,7 +41,7 @@ public class NotificationSubscriptionListener implements MessageListener  {
         } catch (Exception e) {
         	logger.error("Error during processing NotificationSubscriptionListener check request message", e);
         	try {
-        		logger.error("JSON was received:\n%s", ((TextMessage)message).getText());
+        		logger.error("JSON was received:\n{}", ((TextMessage)message).getText());
 			} catch (JMSException e1) {
 				logger.error("Error reading jms message text", e1);
 			}

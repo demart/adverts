@@ -7,7 +7,7 @@ import javax.jms.JMSException;
 
 import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.common.MQ;
-import kz.aphion.adverts.notification.mq.QueueNameConstants;
+import kz.aphion.adverts.common.mq.QueueNameConstants;
 import kz.aphion.adverts.notification.mq.models.NotificationChannel;
 import kz.aphion.adverts.notification.mq.models.NotificationEventMessage;
 import kz.aphion.adverts.notification.mq.models.NotificationParameter;
@@ -76,7 +76,7 @@ public class NotificationEventProcessor {
 					case ANDROID:
 					case IOS:
 					case WINDOWS_PHONE:	
-						MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_NOTIFICATION_PUSH_QUEUE, jsonMessage);
+						MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.NOTIFICATION_PUSH_QUEUE.getValue(), jsonMessage);
 						addProcessedStatus(channel);
 						break;
 					
@@ -84,17 +84,17 @@ public class NotificationEventProcessor {
 					case FIREFOX:
 					case OPERA:
 					case SAFARI:
-						MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_NOTIFICATION_BROWSER_QUEUE, jsonMessage);
+						MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.NOTIFICATION_BROWSER_QUEUE.getValue(), jsonMessage);
 						addProcessedStatus(channel);
 						break;
 						
 					case EMAIL:
-						MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_NOTIFICATION_EMAIL_QUEUE, jsonMessage);
+						MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.NOTIFICATION_EMAIL_QUEUE.getValue(), jsonMessage);
 						addProcessedStatus(channel);
 						break;
 						
 					case SMS:
-						MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_NOTIFICATION_SMS_QUEUE, jsonMessage);
+						MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.NOTIFICATION_SMS_QUEUE.getValue(), jsonMessage);
 						addProcessedStatus(channel);
 						break;
 						
