@@ -8,6 +8,7 @@ import javax.jms.JMSException;
 
 import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.common.models.mq.phones.RegisterPhoneModel;
+import kz.aphion.adverts.common.mq.QueueNameConstants;
 import kz.aphion.adverts.crawler.core.CrawlerHttpClient;
 import kz.aphion.adverts.crawler.core.DataManager;
 import kz.aphion.adverts.crawler.core.annotations.CrawlerJob;
@@ -317,7 +318,7 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 			String message = new GsonBuilder().setPrettyPrinting().create().toJson(model);
 			
 		
-			getMqProvider().sendTextMessageToQueue("adverts.phones.registration", message);
+			getMqProvider().sendTextMessageToQueue(QueueNameConstants.PHONE_REGISTRATION_QUEUE.getValue(), message);
 		} catch (JMSException | CrawlerException e) {
 			logger.error("Error seding message to Phone registration queue", e);
 		}

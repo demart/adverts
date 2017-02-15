@@ -9,9 +9,9 @@ import javax.jms.MessageListener;
 import javax.jms.Session;
 
 import kz.aphion.adverts.common.MQ;
+import kz.aphion.adverts.common.mq.QueueNameConstants;
 import kz.aphion.adverts.phone.listener.AppExistanceCheckListener;
 import kz.aphion.adverts.phone.listener.RegistrationPhoneQueueListener;
-import kz.aphion.adverts.phone.mq.QueueNameConstants;
 import kz.aphion.adverts.phone.processors.CheckTelegramExistanceProcessor;
 import kz.aphion.adverts.phone.processors.CheckViberExistanceProcessor;
 import kz.aphion.adverts.phone.processors.CheckWhatsAppExistanceProcessor;
@@ -34,10 +34,10 @@ public class MqConsumerInitializator {
 	public static void initListeners() throws JMSException, Exception {
 		Session session =  MQ.INSTANCE.getSession();
 
-		registerQueueConsumer(session, QueueNameConstants.MQ_REGISTRATION_QUEUE, new RegistrationPhoneQueueListener());
-		registerQueueConsumer(session, QueueNameConstants.MQ_CHECK_TELEGRAM_QUEUE, new AppExistanceCheckListener<CheckTelegramExistanceProcessor>(CheckTelegramExistanceProcessor.class));
-		registerQueueConsumer(session, QueueNameConstants.MQ_CHECK_VIBER_QUEUE, new AppExistanceCheckListener<CheckViberExistanceProcessor>(CheckViberExistanceProcessor.class));
-		registerQueueConsumer(session, QueueNameConstants.MQ_CHECK_WHATSAPP_QUEUE, new AppExistanceCheckListener<CheckWhatsAppExistanceProcessor>(CheckWhatsAppExistanceProcessor.class));
+		registerQueueConsumer(session, QueueNameConstants.PHONE_REGISTRATION_QUEUE.getValue(), new RegistrationPhoneQueueListener());
+		registerQueueConsumer(session, QueueNameConstants.PHONE_CHECK_TELEGRAM_QUEUE.getValue(), new AppExistanceCheckListener<CheckTelegramExistanceProcessor>(CheckTelegramExistanceProcessor.class));
+		registerQueueConsumer(session, QueueNameConstants.PHONE_CHECK_VIBER_QUEUE.getValue(), new AppExistanceCheckListener<CheckViberExistanceProcessor>(CheckViberExistanceProcessor.class));
+		registerQueueConsumer(session, QueueNameConstants.PHONE_CHECK_WHATSAPP_QUEUE.getValue(), new AppExistanceCheckListener<CheckWhatsAppExistanceProcessor>(CheckWhatsAppExistanceProcessor.class));
 	}
 	
 	private static void registerQueueConsumer(Session session, String queueName, MessageListener listener) throws JMSException {

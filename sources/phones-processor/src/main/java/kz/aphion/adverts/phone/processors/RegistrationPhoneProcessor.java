@@ -7,12 +7,12 @@ import java.util.List;
 import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.common.MQ;
 import kz.aphion.adverts.common.models.mq.phones.RegisterPhoneModel;
+import kz.aphion.adverts.common.mq.QueueNameConstants;
 import kz.aphion.adverts.persistence.phones.Phone;
 import kz.aphion.adverts.persistence.phones.PhoneChangesHistory;
 import kz.aphion.adverts.persistence.phones.PhoneOwner;
 import kz.aphion.adverts.persistence.phones.PhoneStatus;
 import kz.aphion.adverts.phone.models.PhoneApplicationCheckModel;
-import kz.aphion.adverts.phone.mq.QueueNameConstants;
 
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.mapping.Mapper;
@@ -76,20 +76,20 @@ public class RegistrationPhoneProcessor {
 		String message = new GsonBuilder().setPrettyPrinting().create().toJson(checkModel);
 		
 		try {
-			MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_CHECK_VIBER_QUEUE, message);
+			MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.PHONE_CHECK_VIBER_QUEUE.getValue(), message);
 		} catch (Exception ex) {
 			logger.error("Error during sending phone to check Viber application existance");
 		}
 		
 		try {
-			MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_CHECK_TELEGRAM_QUEUE, message);
+			MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.PHONE_CHECK_TELEGRAM_QUEUE.getValue(), message);
 		} catch (Exception ex) {
 			logger.error("Error during sending phone to check Telegram application existance");
 		}
 		
 		
 		try {
-			MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_CHECK_WHATSAPP_QUEUE, message);
+			MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.PHONE_CHECK_WHATSAPP_QUEUE.getValue(), message);
 		} catch (Exception ex) {
 			logger.error("Error during sending phone to check Whatsapp application existance");
 		}		
