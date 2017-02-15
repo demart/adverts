@@ -2,11 +2,9 @@ package kz.aphion.adverts.common.mq;
 
 public enum QueueNameConstants {
 
-	/**
-	 * Очередь для отправки новых объявлений в обработку анализатору
-	 * ЗДЕСЬ ДЛЯ ТОГО ЧТОБЫ НЕ ЗАБЫТЬ ЕЁ НАЗВАНИЕ
-	 */
-	ADVERTS_ANALYSE_REALTY_QUEUE("adverts.crawler.realty"),
+	// ===========================================================
+	// ====== QUEUE NAMES FOR PHONES AND RELATED PROJECTS ========
+	// ===========================================================	
 	
 	/**
 	 * Очередь для отправки новых телефонов на обработку
@@ -28,23 +26,35 @@ public enum QueueNameConstants {
 	 */
 	PHONE_CHECK_WHATSAPP_QUEUE("adverts.phones.check.whatsapp"),
 	
-	
+
+	// ===========================================================
+	// ========== QUEUE NAMES FOR CRAWLERS AND ANALYSER ==========
+	// ===========================================================	
+
+	/**
+	 * Очередь для отправки новых объявлений в обработку анализатору
+	 * ЗДЕСЬ ДЛЯ ТОГО ЧТОБЫ НЕ ЗАБЫТЬ ЕЁ НАЗВАНИЕ
+	 */
+	ADVERTS_REALTY_ANALYSE_QUEUE("adverts.crawler.realty"),
 	
 	/**
 	 * Название очереди куда писать исходящие сообщения после обработки модулем analyse
 	 * На данным момент это очередь модуля подписок. 
 	 */
 	ADVERTS_REALTY_SUBSCRIPTION_QUEUE("adverts.realty.subscriptions"),
-	
+
+	/**
+	 * TEST TEST TEST
+	 * Название очереди куда писать исходящие сообщения после обработки модулем analyse
+	 * На данным момент это очередь модуля подписок. 
+	 */
+	ADVERTS_REALTY_SUBSCRIPTION_QUEUE_TEST("adverts.realty.subscriptions.test"),
+
 	/**
 	 * Название очереди откуда надо читать сообщения для Live Search
 	 */
 	ADVERTS_REALTY_SUBSCRIPTION_LIVE_QUEUE("adverts.realty.subscriptions.live"),
 	
-	/**
-	 * Название очереди куда читать сообщения от анализатора 
-	 */
-	ADVERTS_REALTY_SUBSCRIPTION_QUEUE_TEST("adverts.realty.subscriptions.test"),
 	
 	/**
 	 * Очередь подготовки сообщений для отправки в систему уведомлений уведомлений
@@ -60,12 +70,6 @@ public enum QueueNameConstants {
 	 * Очередь куда нужно отправлять задачи для модуля уведомления
 	 */
 	MQ_NOTIFICATION_QUEUE("adverts.notifications"),
-	
-	/**
-	 * Название очереди откуда надо читать сообщения для Live Search
-	 */
-	MQ_REALTY_ADVERTS_SUBSCRIPTION_LIVE_QUEUE("adverts.realty.subscriptions.live"),
-	
 	
 	
 	
