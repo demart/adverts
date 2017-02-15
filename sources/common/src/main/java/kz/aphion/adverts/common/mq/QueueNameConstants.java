@@ -86,9 +86,12 @@ public enum QueueNameConstants {
 	NOTIFICATION_CALLBACK_QUEUE("adverts.notifications.callback"),
 	
 	/**
+	 * ???????
+	 * ??????? Возможно не используется, а заменена на BUILDER QUEUE
+	 * ???????
 	 * Название очереди куда сообщения для немедленной рассылки с помощью модуля notification
 	 */
-	ADVERTS_IMMEDIATE_NOTIFICATION_QUEUE("adverts.notifications.immediate"),
+	NOTIFICATION_IMMEDIATE_QUEUE("adverts.notifications.immediate"),
 	
 	/**
 	 * Очередь для отправки EMAIL

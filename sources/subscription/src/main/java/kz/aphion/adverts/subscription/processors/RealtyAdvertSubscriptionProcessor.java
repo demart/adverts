@@ -245,7 +245,7 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 				model.subscriptionId = subscription.id.toString();
 				model.subscriptionAdvertIds = Arrays.asList(advert.id.toString());
 				model.eventTime = Calendar.getInstance();
-				//model.status = status; // прочитаем его из ьазы
+				//model.status = status; // прочитаем его из базы
 				
 				Gson gson = new GsonBuilder().setPrettyPrinting().create();
 				String message = gson.toJson(model);

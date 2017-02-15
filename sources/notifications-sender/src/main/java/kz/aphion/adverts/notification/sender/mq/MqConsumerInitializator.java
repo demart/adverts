@@ -9,6 +9,7 @@ import javax.jms.MessageListener;
 import javax.jms.Session;
 
 import kz.aphion.adverts.common.MQ;
+import kz.aphion.adverts.common.mq.QueueNameConstants;
 import kz.aphion.adverts.notification.sender.listeners.BrowserPushSenderListener;
 import kz.aphion.adverts.notification.sender.listeners.EmailSenderListener;
 import kz.aphion.adverts.notification.sender.listeners.PushSenderListener;
@@ -32,15 +33,15 @@ public class MqConsumerInitializator {
 	public static void initListeners() throws JMSException, Exception {
 		Session session =  MQ.INSTANCE.getSession();
 
-		registerQueueConsumer(session, QueueNameConstants.MQ_NOTIFICATION_BROWSER_QUEUE, new BrowserPushSenderListener());
-		registerQueueConsumer(session, QueueNameConstants.MQ_NOTIFICATION_EMAIL_QUEUE, new EmailSenderListener());
-		registerQueueConsumer(session, QueueNameConstants.MQ_NOTIFICATION_PUSH_QUEUE, new PushSenderListener());
-		registerQueueConsumer(session, QueueNameConstants.MQ_NOTIFICATION_SMS_QUEUE, new SmsSenderListener());		
+		registerQueueConsumer(session, QueueNameConstants.NOTIFICATION_BROWSER_QUEUE.getValue(), new BrowserPushSenderListener());
+		registerQueueConsumer(session, QueueNameConstants.NOTIFICATION_EMAIL_QUEUE.getValue(), new EmailSenderListener());
+		registerQueueConsumer(session, QueueNameConstants.NOTIFICATION_PUSH_QUEUE.getValue(), new PushSenderListener());
+		registerQueueConsumer(session, QueueNameConstants.NOTIFICATION_SMS_QUEUE.getValue(), new SmsSenderListener());		
 	}
 	
 	
 	private static void registerQueueConsumer(Session session, String queueName, MessageListener listener) throws JMSException {
-		logger.info("Initializing registration consumer for queue [%s]", queueName);
+		logger.info("Initializing registration consumer for queue [{}]", queueName);
 		MessageConsumer registrationConsumer = session.createConsumer(session.createQueue(queueName));
 		mqMessageConsumers.add(registrationConsumer);
 		mqListeners.add(listener);

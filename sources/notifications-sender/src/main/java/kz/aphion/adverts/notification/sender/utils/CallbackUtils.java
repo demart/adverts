@@ -3,7 +3,7 @@ package kz.aphion.adverts.notification.sender.utils;
 import java.util.Calendar;
 
 import kz.aphion.adverts.common.MQ;
-import kz.aphion.adverts.notification.sender.mq.QueueNameConstants;
+import kz.aphion.adverts.common.mq.QueueNameConstants;
 import kz.aphion.adverts.notification.sender.mq.models.NotificationChannelMessage;
 import kz.aphion.adverts.notification.sender.mq.models.NotificationChannelMessageCallback;
 import kz.aphion.adverts.notification.sender.mq.models.NotificationStatus;
@@ -47,7 +47,7 @@ public class CallbackUtils {
 		String jsonCallaback = gson.toJson(callback);
 		
 		try {
-			MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.MQ_NOTIFICATION_CALLBACK_QUEUE, jsonCallaback);
+			MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.NOTIFICATION_CALLBACK_QUEUE.getValue(), jsonCallaback);
 			logger.debug("Callback was sent. notification.id {}, channel.id {}, status {}.", callback.notificationId, callback.channelId, callback.status);
 		} catch (Exception ex) {
 			logger.error("Error sending callback notification.", ex);
