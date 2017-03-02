@@ -27,7 +27,6 @@ public class ApplicationStartupListener implements ServletContextListener  {
 			DB.INSTANCE.init();
 			logger.info("MongoDB connection is opened.");
 		
-			
 			// Инициализируем подключение к ActiveMQ
 			logger.info("Initializing connection to ActiveMQ...");
 			MQ.INSTANCE.init();
@@ -74,7 +73,5 @@ public class ApplicationStartupListener implements ServletContextListener  {
 		
 		logger.info("Subscription application stopped.");
 	}
-
-
 
 }

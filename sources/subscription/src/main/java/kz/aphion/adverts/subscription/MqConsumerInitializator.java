@@ -34,6 +34,8 @@ public class MqConsumerInitializator {
 		registerQueueConsumer(session, QueueNameConstants.ADVERTS_REALTY_SUBSCRIPTION_QUEUE.getValue(), new RealtyAdvertSubscriptionListener());
 		registerQueueConsumer(session, QueueNameConstants.ADVERTS_SUBSCRIPTION_NOTIFICATION_BUILDER_QUEUE.getValue(), new SubscriptionNotificationBuilderListener());
 
+		// Запускаем очереди
+		MQ.INSTANCE.getConnection().start();
 	}
 	
 	private static void registerQueueConsumer(Session session, String queueName, MessageListener listener) throws JMSException {

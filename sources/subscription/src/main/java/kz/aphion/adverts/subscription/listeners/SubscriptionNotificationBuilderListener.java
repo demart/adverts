@@ -6,7 +6,7 @@ import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 import kz.aphion.adverts.subscription.processors.AdvertSubscriptionProcessor;
-import kz.aphion.adverts.subscription.processors.RealtyAdvertSubscriptionProcessor;
+import kz.aphion.adverts.subscription.processors.SubscriptionAdvertNotificaitonBuilderProcessor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,21 +29,21 @@ public class SubscriptionNotificationBuilderListener implements MessageListener 
         	if (message instanceof TextMessage) {
                 TextMessage textMessage = (TextMessage) message;
                 String text = textMessage.getText();
-                //logger.info("Received new message");
+                logger.trace("Received new message:\n{}", text);
                 
-                AdvertSubscriptionProcessor processor = new RealtyAdvertSubscriptionProcessor();
+                AdvertSubscriptionProcessor processor = new SubscriptionAdvertNotificaitonBuilderProcessor();
                 processor.processMessage(text);
 
-                //logger.info("Processing completed");
+                logger.trace("Processing completed");
             } else {
-            	logger.warn("Received: message #" + message);
+            	logger.warn("Received: message # " + message);
             }
         } catch (JMSException e) {
         	logger.error("JMS ERROR", e);
         } catch (Exception e) {
         	logger.error("Error during processing RealtyAdvertSubscriptionListener check request message", e);
         	try {
-        		logger.error("JSON was received:\n%s", ((TextMessage)message).getText());
+        		logger.error("JSON was received:\n{}", ((TextMessage)message).getText());
 			} catch (JMSException e1) {
 				logger.error("Error reading jms message text", e1);
 			}

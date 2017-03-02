@@ -58,13 +58,14 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 		// 1. Если объявление новое
 		//	 	-> Необходимо найти все активные подписки
 		//			Возможно дополнительно проверить лимимы и другие вещи связанные с подписками пользователя
-		//		-> проходим по каждой подписки
+		//		-> проходим по каждой подписке
 		//			-> добавляем объявление в верх (или потом отсортируем)
 		//			-> помечаем как не прочитанное
 		//			-> помечаем как не отправленное для уведомления		
 		//			-> читаем настройки уведомлений
 		//			-> если включен режим немедленного уведолмения отправляем в очередь
 		//			-> 
+		//
 		// 2. Если объялание улучшилось
 		//		-> Необходимо найти все активные подписки
 		//			Возможно дополнительно проверить лимимы и другие вещи связанные с подписками пользователя
@@ -76,6 +77,7 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 		//			-> читаем настройки уведомлений		
 		//			-> если включен режим немедленного уведолмения отправляем в очередь		
 		//		-> Находим старое объявление и помечаем как замененное (хотя это можено сделать потом)
+		//
 		// 3. Если объялание ухудшилось		
 		//		-> Необходимо найти все активные подписки
 		//		Возможно дополнительно проверить лимимы и другие вещи связанные с подписками пользователя
@@ -89,6 +91,11 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 		//		-> Находим старое объявление и помечаем как замененное (хотя это можено сделать потом)
 		
 		switch(model.status) {
+			case SAME:
+				logger.error("SAME advert comes to subscription module, should be checked and implemented.");
+				// SubscriptionProcessStatus.NEW ???
+				processAdvert(model, SubscriptionAdvertStatus.NORMAL, SubscriptionProcessStatus.NEW);
+				break;
 			case NEW:
 				processAdvert(model, SubscriptionAdvertStatus.NEW, SubscriptionProcessStatus.NEW);
 				break;
@@ -118,7 +125,7 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 			logger.debug("Subscriptions not found for advertId {} ...", model.advertId);
 		} else {
 			for (Subscription subscription : subscriptions) {
-				logger.debug("Processing subscription with id: " + subscription.id);
+				logger.debug("Processing subscription with id: {}", subscription.id);
 				
 				//Статус объявления в подписке
 				SubscriptionAdvertStatus advertStatus = SubscriptionAdvertStatus.NEW;
@@ -141,16 +148,16 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 				}
 
 				SubscriptionAdvert advert = createSubscriptionAdvertAndAddToSubscription(subscription, searcher, advertStatus);
-				
+
 				// Обновляем данные
 				ds.save(advert);
 				ds.merge(subscription);
-				
+
 				// Отправляем только если успешно всё обработали и сохранили
 				sendImmediateNotificationMessageIfRequired(subscription, advert, processStatus);
-					
+
 				logger.debug("Subscriptions id [" + subscription.id + "] successfully merged with new advert result object");
-				
+
 			}
 		}		
 		
@@ -168,34 +175,34 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 	 */
 	private boolean findAndReplaceExistingAdverts(Datastore ds, List<SubscriptionAdvert> adverts, String oldAdvertId, String advertId) {
 		boolean foundExistingAdvert = false;
-		
+
 		for (SubscriptionAdvert subscriptionAdvert : adverts) {
 			if (subscriptionAdvert.advert.id.toString().equals(oldAdvertId)) {
-				
+
 				// Если есть в подписке старое объявление, то его нужно заменить новым
 				subscriptionAdvert.status = SubscriptionAdvertStatus.REPLACED;
 				subscriptionAdvert.updated = Calendar.getInstance();
 				ds.merge(subscriptionAdvert);
-				
+
 				foundExistingAdvert = true;
-				
+
 				logger.debug("Found SubscriptionAdvert with id: {} and marked as REPLACED", subscriptionAdvert.id);
 			}
-			
+
 			if (subscriptionAdvert.advert.id.toString().equals(advertId)) {
-				
+
 				// Если по каким то причинам объявление с таким же ID уже есть в подписке
 				// то это форс мажор, и необходимо его пометить и поругаться в логах
 				subscriptionAdvert.status = SubscriptionAdvertStatus.REPLACED;
 				subscriptionAdvert.updated = Calendar.getInstance();
 				ds.merge(subscriptionAdvert);
-				
+
 				foundExistingAdvert = true;
-				
+
 				logger.warn("Found DUPLICATE SubscriptionAdvert with id: {} and marked as REPLACED. Please check why it happened.", subscriptionAdvert.id);
 			}
 		}
-		
+
 		return foundExistingAdvert;
 	}
 	
@@ -231,7 +238,7 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 	 * а также id записей в БД
 	 * @param subscription
 	 * @param advert
-	 * @param status
+	 * @param status Пока не используется, так как не понятно как это будет сделано...
 	 * @throws Exception Ошибки при отправке сообщения
 	 * @throws JMSException ошибки при отправке сообщения
 	 */
