@@ -10,6 +10,12 @@ package kz.aphion.adverts.subscription.live.mq;
 public enum AnalyserProcessStatus {
 
 	/**
+	 * Не изменился объект, например объявление обновили,
+	 * но основные критерии так и остались на прежднем уровне (цена и т.д.)
+	 */
+	SAME,
+	
+	/**
 	 * Новое объявление.
 	 */
 	NEW,

@@ -37,7 +37,6 @@ public class MqConsumerInitializator {
 		RealtyAdvertSubscriptionListener realtyAdvertListener = new RealtyAdvertSubscriptionListener();
 		mqListeners.add(realtyAdvertListener);
 		registrationConsumer.setMessageListener(realtyAdvertListener);
-
 	}
 	
 	

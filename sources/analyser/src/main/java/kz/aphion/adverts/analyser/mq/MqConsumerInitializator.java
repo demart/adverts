@@ -1,4 +1,4 @@
-package kz.aphion.adverts.analyser;
+package kz.aphion.adverts.analyser.mq;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ public class MqConsumerInitializator {
 		Session session =  MQ.INSTANCE.getSession();
 				
 		// Запускаем Listener по обработке объявлений о недвижимости
-		logger.info("Initializing registration consumer for queue [%s]", QueueNameConstants.ADVERTS_REALTY_ANALYSE_QUEUE.getValue());
+		logger.info("Initializing registration consumer for queue [{}]", QueueNameConstants.ADVERTS_REALTY_ANALYSE_QUEUE.getValue());
 		MessageConsumer registrationConsumer = session.createConsumer(session.createQueue(QueueNameConstants.ADVERTS_REALTY_ANALYSE_QUEUE.getValue()));
 		mqMessageConsumers.add(registrationConsumer);
 		RealtyAdvertListener realtyAdvertListener = new RealtyAdvertListener();

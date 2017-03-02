@@ -47,7 +47,7 @@ public class FlatDataMapperUtils {
 			String regionId = (String)advert.get("map.geo_id");
 			KrishaRegion krishaRegion = KrishaDataManager.getKrishaRegion(regionId);
 			if (krishaRegion != null) {
-				complexEntity = KrishaDataManager.getResidentalComplex(externalComplexId, krishaRegion.region.id);
+				complexEntity = KrishaDataManager.getResidentalComplex(externalComplexId, krishaRegion.region);
 				
 				if (complexEntity == null) {
 					logger.error("KrishaResidentalComplex with name [{}] and region.id [{}] not found", externalComplexId, krishaRegion.region.id);

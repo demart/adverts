@@ -3,7 +3,7 @@ package kz.aphion.adverts.analyser.listeners;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import kz.aphion.adverts.analyser.MqConsumerInitializator;
+import kz.aphion.adverts.analyser.mq.MqConsumerInitializator;
 import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.common.MQ;
 
@@ -53,7 +53,10 @@ public class ApplicationStartupListener implements ServletContextListener  {
 			logger.info("Activating MQ Listeners...");
 			MqConsumerInitializator.initListeners();
 			logger.info("MQ Listeners activated.");
-		
+			
+			// Run processing
+			MQ.INSTANCE.getConnection().start();
+			
 		} catch (Throwable e) {
 			logger.error("FATAL error while starting analyser project", e);
 		}

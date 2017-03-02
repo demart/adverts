@@ -25,7 +25,7 @@ public class RealtyAdvertListener implements MessageListener  {
 	@Override
 	public void onMessage(Message message) {
 		try {
-			Thread.currentThread().setName("RealtyAdvertListener");
+			Thread.currentThread().setName("REALTY-ANALYSER");
         	if (message instanceof TextMessage) {
                 TextMessage textMessage = (TextMessage) message;
                 String text = textMessage.getText();
@@ -43,7 +43,7 @@ public class RealtyAdvertListener implements MessageListener  {
         } catch (Exception e) {
         	logger.error("Error during processing RealtyAdvertListener check request message", e);
         	try {
-        		logger.error("JSON was received:\n%s", ((TextMessage)message).getText());
+        		logger.error("JSON was received:\n{}", ((TextMessage)message).getText());
 			} catch (JMSException e1) {
 				logger.error("Error reading jms message text", e1);
 			}

@@ -128,6 +128,12 @@ public class CommonMapperUtils {
 				case "фев":
 					createdDate.set(Calendar.MONTH, 1);
 					break;
+				case "февр":
+					createdDate.set(Calendar.MONTH, 1);
+					break;
+				case "февр.":
+					createdDate.set(Calendar.MONTH, 1);
+					break;
 				case "мар":
 					createdDate.set(Calendar.MONTH, 2);
 					break;

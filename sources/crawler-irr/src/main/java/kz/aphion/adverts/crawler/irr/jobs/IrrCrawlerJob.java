@@ -9,6 +9,8 @@ import javax.jms.JMSException;
 
 import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.common.models.mq.phones.RegisterPhoneModel;
+import kz.aphion.adverts.common.models.mq.realties.ProcessRealtyModel;
+import kz.aphion.adverts.common.models.mq.realties.RealtyProcessStatus;
 import kz.aphion.adverts.common.mq.QueueNameConstants;
 import kz.aphion.adverts.crawler.core.CrawlerHttpClient;
 import kz.aphion.adverts.crawler.core.DataManager;
@@ -192,6 +194,9 @@ public class IrrCrawlerJob extends CrawlerProcessJob {
 								 // Сохраняем новую версию
 								 ds.save(realty);
 								 
+								// Отправляем сообщени в очередь обработки объявления
+								 sendMessageForProcessing(realty, true, existingRealty);
+								 
 								 // Отправляем сообщение в очередь обработки телефонов
 								 sendPhoneNumberRegistrationMessage(realty);
 								 
@@ -210,13 +215,14 @@ public class IrrCrawlerJob extends CrawlerProcessJob {
 							 ds.save(realty);
 							 
 							 // Отправляем сообщение в очередь обработки телефонов
-							 sendPhoneNumberRegistrationMessage(realty);
+							 //sendPhoneNumberRegistrationMessage(realty);
 							 
-							 // Отправляем сообщени в очердеь обработки объявления
-							 // 
+							 // Отправляем сообщени в очередь обработки объявления
+							 sendMessageForProcessing(realty, false, null);
+							 
 							 
 							 // Отправляем сообщение в очередь обработки телефонов
-						///	 sendPhoneNumberRegistrationMessage(realty);
+							 sendPhoneNumberRegistrationMessage(realty);
 						 }
 						 
 						 // Нашли новые объявления (даже если они уже есть в БД,
@@ -258,6 +264,34 @@ public class IrrCrawlerJob extends CrawlerProcessJob {
 		 
 		 return q.asList();
 	}
+	
+	
+	/**
+	 * Отправляет необходимую информацию для регистрации телефона в объявлении
+	 * 
+	 * @param realty
+	 */
+	private void sendMessageForProcessing(Realty newRealty, boolean wasUpdated, Realty oldRealty) {
+		try {
+			ProcessRealtyModel model = new ProcessRealtyModel();
+			
+			model.advertId = newRealty.id.toString();
+			model.status = wasUpdated == false ? RealtyProcessStatus.NEW : RealtyProcessStatus.UPDATED; 
+			model.oldAdvertId = wasUpdated == false ? null : oldRealty.id.toString();
+			model.eventTime = Calendar.getInstance();			
+			
+			model.type = newRealty.type;
+			model.operation = newRealty.operation;
+			
+			String message = new GsonBuilder().setPrettyPrinting().create().toJson(model);
+		
+			getMqProvider().sendTextMessageToQueue(this.crawlerModel.destinationQueueName, message);
+			
+			logger.debug("Message was successfully sent to " + this.crawlerModel.destinationQueueName + " for further processing.");
+		} catch (JMSException | CrawlerException e) {
+			logger.error("Error seding message to " + this.crawlerModel.destinationQueueName + " queue", e);
+		}
+	}		
 	
 	/**
 	 * Отправляет необходимую информацию для регистрации телефона в объявлении

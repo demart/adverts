@@ -10,6 +10,12 @@ package kz.aphion.adverts.analyser.mq;
 public enum AnalyserProcessStatus {
 
 	/**
+	 * Не изменился объект, например объявление обновили,
+	 * но основные критерии так и остались на прежднем уровне (цена и т.д.)
+	 */
+	SAME,
+	
+	/**
 	 * Новое объявление.
 	 */
 	NEW,
@@ -25,5 +31,7 @@ public enum AnalyserProcessStatus {
 	 * oldAdvertId должно быть заполнено при указании этого статуса
 	 */
 	WORSTE,
+	
+	
 	
 }

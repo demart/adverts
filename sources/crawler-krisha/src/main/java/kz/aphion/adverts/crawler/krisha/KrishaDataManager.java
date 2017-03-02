@@ -160,7 +160,7 @@ public class KrishaDataManager {
 	 * @param complex
 	 * @return
 	 */
-	public static KrishaResidentialComplex getResidentalComplex(String complex, ObjectId regionId) {
+	public static KrishaResidentialComplex getResidentalComplex(String complex, Region region) {
 		/*List<KrishaResidentalComplexEntity> results = (List<KrishaResidentalComplexEntity>)JPA.em()
 				.createQuery("from KrishaResidentalComplexEntity where name = :key and region.id = :regionId")
 				.setMaxResults(1)
@@ -178,7 +178,7 @@ public class KrishaDataManager {
 		try {
 			Query<KrishaResidentialComplex> q = DB.DS().createQuery(KrishaResidentialComplex.class);
 			q.field("name").equal(complex);
-			q.field("region.id").equal(regionId);
+			q.field("region").equal(region);
 			q.limit(1);
 			List<KrishaResidentialComplex> results = q.asList();
 			if (results.size() > 0) {
