@@ -3,6 +3,8 @@ package kz.aphion.adverts.subscription.mq;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.google.gson.Gson;
 
 /**
@@ -73,5 +75,15 @@ public class SubscriptionNotificationBuilderModel {
 		Gson gson = new Gson();
 		String model = gson.toJson(this);
 		return model;
+	}
+
+	public void check() throws Exception {
+		if (StringUtils.isBlank(this.subscriptionId))
+			throw new Exception("SubscriptionId is missing, model is incorrect");
+
+		if (subscriptionAdvertIds == null)
+			throw new Exception("SubscriptionAdverts is null, nothing to notify");
+		if (subscriptionAdvertIds.size() < 1)
+			throw new Exception("SubscriptionAdverts is empty, nothing to notify");
 	}
 }

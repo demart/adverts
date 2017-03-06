@@ -33,7 +33,7 @@ public class NotificationEventListener implements MessageListener  {
 
                 logger.trace("Processing completed");
             } else {
-            	logger.warn("Received: message #" + message);
+            	logger.warn("Received: message # " + message);
             }
         } catch (JMSException e) {
         	logger.error("JMS ERROR", e);
