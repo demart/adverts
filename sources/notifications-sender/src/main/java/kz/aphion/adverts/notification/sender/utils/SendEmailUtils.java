@@ -61,7 +61,8 @@ public class SendEmailUtils {
 		msg.setSentDate(new Date());
 		
 		msg.setSubject(subject, "UTF-8");
-		msg.setText(body, "UTF-8");
+		//msg.setText(body, "UTF-8");
+		msg.setContent(body, "text/html; charset=utf-8");
 		
 		return msg;
 	}

@@ -11,7 +11,7 @@ public enum UserType {
 	/**
 	 * Обыкновенный пользователь
 	 */
-	NORMAL,
+	USER,
 	
 	/**
 	 * Риэлтор

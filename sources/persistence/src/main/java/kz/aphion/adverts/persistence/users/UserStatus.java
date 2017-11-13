@@ -24,6 +24,11 @@ public enum UserStatus {
 	BLOCKED,
 	
 	/**
+	 * Временно приостановлен, не знаю пока почему
+	 */
+	SUSPENDED,
+	
+	/**
 	 * Удален
 	 */
 	DELETED,

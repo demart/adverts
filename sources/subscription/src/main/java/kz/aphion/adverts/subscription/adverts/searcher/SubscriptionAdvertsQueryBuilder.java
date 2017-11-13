@@ -47,6 +47,9 @@ public class SubscriptionAdvertsQueryBuilder {
 		
 		// Только активные подписки
 		q.and(q.criteria("status").equal(SubscriptionStatus.ACTIVE));
+		//q.and(q.criteria("startedAt").lessThanOrEq(Calendar.getInstance()));
+		//q.and(q.criteria("expiresAt").greaterThanOrEq(Calendar.getInstance()));
+				
 		q.and(q.criteria("startedAt").lessThanOrEq(Calendar.getInstance().getTime()));
 		q.and(q.criteria("expiresAt").greaterThanOrEq(Calendar.getInstance().getTime()));
 		
@@ -86,6 +89,7 @@ public class SubscriptionAdvertsQueryBuilder {
 				q.and(
 					q.criteria("notification.scheduledType").equal(SubscriptionNotificationScheduledType.TIME),
 					q.criteria("notification.nextSchedulerScanTime").lessThanOrEq(Calendar.getInstance().getTime())
+					//q.criteria("notification.nextSchedulerScanTime").lessThanOrEq(Calendar.getInstance())
 				),
 				
 				// Если указан режим по уведомлять по кол-ву записей
@@ -99,6 +103,7 @@ public class SubscriptionAdvertsQueryBuilder {
 					q.criteria("notification.scheduledType").equal(SubscriptionNotificationScheduledType.TIME_AND_RECORDS),
 					q.or(
 						q.criteria("notification.nextSchedulerScanTime").lessThanOrEq(Calendar.getInstance().getTime()),
+						//q.criteria("notification.nextSchedulerScanTime").lessThanOrEq(Calendar.getInstance()),
 						q.criteria("notification.isMinimumAmountAchieved").equal(true)
 					)
 				)

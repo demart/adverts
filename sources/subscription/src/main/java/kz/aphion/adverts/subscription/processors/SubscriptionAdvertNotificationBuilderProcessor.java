@@ -18,7 +18,7 @@ import kz.aphion.adverts.persistence.subscription.SubscriptionStatus;
 import kz.aphion.adverts.persistence.subscription.notification.SubscriptionNotificationChannelType;
 import kz.aphion.adverts.persistence.users.UserDevice;
 import kz.aphion.adverts.persistence.users.UserDeviceStatus;
-import kz.aphion.adverts.subscription.builder.NotificationEventBuilder;
+import kz.aphion.adverts.subscription.builder.notification.NotificationEventBuilder;
 import kz.aphion.adverts.subscription.mq.SubscriptionNotificationBuilderModel;
 
 import org.bson.types.ObjectId;
@@ -34,9 +34,9 @@ import org.slf4j.LoggerFactory;
  * Created at Aug 18, 2016
  */
 
-public class SubscriptionAdvertNotificaitonBuilderProcessor implements AdvertSubscriptionProcessor {
+public class SubscriptionAdvertNotificationBuilderProcessor implements AdvertSubscriptionProcessor {
 
-	private static Logger logger = LoggerFactory.getLogger(SubscriptionAdvertNotificaitonBuilderProcessor.class);
+	private static Logger logger = LoggerFactory.getLogger(SubscriptionAdvertNotificationBuilderProcessor.class);
 	
 	@Override
 	public void processMessage(String message) throws JMSException, Exception {
@@ -138,7 +138,7 @@ public class SubscriptionAdvertNotificaitonBuilderProcessor implements AdvertSub
 		
 		
 		// Вызвать маркетинговый модуль для получения рекламного контента
-		// TODO
+		// TODO Вызвать маркетинговый модуль
 		
 		// Шаблонизация уведомления под выбранный канал
 		NotificationEventBuilder notificationBuilder = new NotificationEventBuilder();

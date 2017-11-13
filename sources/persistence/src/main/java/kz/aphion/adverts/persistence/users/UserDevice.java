@@ -8,6 +8,7 @@ import kz.aphion.adverts.persistence.CalendarConverter;
 import org.mongodb.morphia.annotations.Converters;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Property;
+import org.mongodb.morphia.annotations.Reference;
 
 /**
  * Устройства или каналы через которые работает пользователь.
@@ -17,7 +18,7 @@ import org.mongodb.morphia.annotations.Property;
  * Created at Aug 16, 2016
  */
 
-@Entity("users")
+@Entity("adverts.users.devices")
 @Converters(CalendarConverter.class)
 public class UserDevice extends BaseEntity {
 	
@@ -26,6 +27,7 @@ public class UserDevice extends BaseEntity {
 	 * Так как есть анонимные пользователи по котором нет никакой информации кроме
 	 * абстрактного девайса
 	 */
+	@Reference
 	public User user;
 	
 	/**

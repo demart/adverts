@@ -34,6 +34,8 @@ public class MqConsumerInitializator {
 		registerQueueConsumer(session, QueueNameConstants.NOTIFICATION_QUEUE.getValue(), new NotificationEventListener());
 		registerQueueConsumer(session, QueueNameConstants.NOTIFICATION_CALLBACK_QUEUE.getValue(), new NotificationChannelCallbackListener());
 
+		// Запускаем очереди
+		MQ.INSTANCE.getConnection().start();
 	}
 	
 	private static void registerQueueConsumer(Session session, String queueName, MessageListener listener) throws JMSException {

@@ -1,7 +1,7 @@
 package kz.aphion.adverts.persistence.users;
 
 /**
- * Компания 
+ * Компания // TODO Закончить описание объекта
  * 
  * @author artem.demidovich
  *

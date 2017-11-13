@@ -19,7 +19,7 @@ import org.mongodb.morphia.annotations.Reference;
  * @author artem.demidovich
  *
  */
-@Entity("users")
+@Entity("adverts.users")
 @Converters(CalendarConverter.class)
 public class User extends BaseEntity {
 

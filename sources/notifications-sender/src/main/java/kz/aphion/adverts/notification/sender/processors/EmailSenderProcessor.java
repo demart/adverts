@@ -7,6 +7,7 @@ import javax.jms.JMSException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import kz.aphion.adverts.notification.sender.caches.EmailCache;
 import kz.aphion.adverts.notification.sender.mq.models.NotificationChannelMessage;
 import kz.aphion.adverts.notification.sender.mq.models.NotificationStatus;
 import kz.aphion.adverts.notification.sender.utils.CallbackUtils;
@@ -77,6 +78,16 @@ public class EmailSenderProcessor implements NotificationSenderProcessor {
 			return;
 		}
 		
+		// Check is time ready for send message to the addressee
+		if (!EmailCache.isEmailReadyForSend(notificationMessage.addreseeId)) {
+			logger.warn("Attempt to send email message to the addressee {} too often, more than configured in email cache", notificationMessage.addreseeId);
+			// return email to the queue
+			logger.warn("Message {} will be skipped, please replace it with returning message to the queue", notificationMessage.addreseeId);
+			CallbackUtils.sendCallbackNotification(notificationMessage, NotificationStatus.FAILED);
+			return;
+		}
+		
+		
 		// Create session to send emails
 		Session session = SendEmailUtils.createSession(emailSMTPHost, emailSMTPPort, emailServerSecuredConnection, emailSMTPFromEmail, emailSMTPEmailPassword);
 		if (session == null) {
@@ -94,6 +105,9 @@ public class EmailSenderProcessor implements NotificationSenderProcessor {
 			
 			MimeMessage emailMessage = SendEmailUtils.getEmailMessage(emailSMTPFromEmail, targetEmail, content, subject, session);
 			Transport.send(emailMessage);
+			
+			EmailCache.emailSuccessfullySent(targetEmail);
+			
 			logger.debug("Email to {} was successfully sent", targetEmail);
 			
 			CallbackUtils.sendCallbackNotification(notificationMessage, NotificationStatus.SENT);

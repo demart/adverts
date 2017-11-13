@@ -134,15 +134,15 @@
 
 		<!-- Scheduler -->
 		<dependency>
-		      <groupId>org.quartz-scheduler</groupId>
-		      <artifactId>quartz</artifactId>
-		      <version>2.2.1</version>
-		  </dependency>
-		  <dependency>
-		      <groupId>org.quartz-scheduler</groupId>
-		      <artifactId>quartz-jobs</artifactId>
-		      <version>2.2.1</version>
-		  </dependency> 
+		    <groupId>org.quartz-scheduler</groupId>
+		    <artifactId>quartz</artifactId>
+		    <version>2.2.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.quartz-scheduler</groupId>
+		    <artifactId>quartz-jobs</artifactId>
+		    <version>2.2.1</version>
+		</dependency> 
 
 		<!--
 		Attention: Be sure nothing pulls in an old dependency with groupId
@@ -152,7 +152,7 @@
 		<dependency>
 		  <groupId>org.freemarker</groupId>
 		  <artifactId>freemarker</artifactId>
-		  <version>2.3.25-incubating</version>
+		  <version>2.3.26-incubating</version>
 		</dependency>
 
 	</dependencies>

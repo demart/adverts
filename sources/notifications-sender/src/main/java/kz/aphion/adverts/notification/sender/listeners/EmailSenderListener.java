@@ -26,7 +26,7 @@ public class EmailSenderListener  implements MessageListener  {
                 
                 NotificationSenderProcessor processor = new EmailSenderProcessor();
                 processor.processMessage(text);
-
+                
                 logger.trace("Processing completed");
             } else {
             	logger.warn("Received: message #" + message);
@@ -36,7 +36,7 @@ public class EmailSenderListener  implements MessageListener  {
         } catch (Exception e) {
         	logger.error("Error during processing EmailSenderListener check request message", e);
         	try {
-        		logger.error("JSON was received:\n%s", ((TextMessage)message).getText());
+        		logger.error("JSON was received:\n{}", ((TextMessage)message).getText());
 			} catch (JMSException e1) {
 				logger.error("Error reading jms message text", e1);
 			}

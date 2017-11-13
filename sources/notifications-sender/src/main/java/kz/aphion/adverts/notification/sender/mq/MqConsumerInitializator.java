@@ -36,7 +36,10 @@ public class MqConsumerInitializator {
 		registerQueueConsumer(session, QueueNameConstants.NOTIFICATION_BROWSER_QUEUE.getValue(), new BrowserPushSenderListener());
 		registerQueueConsumer(session, QueueNameConstants.NOTIFICATION_EMAIL_QUEUE.getValue(), new EmailSenderListener());
 		registerQueueConsumer(session, QueueNameConstants.NOTIFICATION_PUSH_QUEUE.getValue(), new PushSenderListener());
-		registerQueueConsumer(session, QueueNameConstants.NOTIFICATION_SMS_QUEUE.getValue(), new SmsSenderListener());		
+		registerQueueConsumer(session, QueueNameConstants.NOTIFICATION_SMS_QUEUE.getValue(), new SmsSenderListener());
+		
+		// Запускаем очереди
+		MQ.INSTANCE.getConnection().start();
 	}
 	
 	

@@ -23,6 +23,8 @@ public enum UserRegistrationChannel {
 	
 	SPOTIFY,
 	
+	INSTAGRAM,
+	
 	//etc etc etc
 	
 }
