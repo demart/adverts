@@ -38,7 +38,7 @@ public class NotificationChannelCallbackListener implements MessageListener  {
         } catch (JMSException e) {
         	logger.error("JMS ERROR", e);
         } catch (Exception e) {
-        	logger.error("Error during processing RealtyAdvertSubscriptionListener check request message", e);
+        	logger.error("Error during processing NotificationChannelCallbackListener check request message", e);
         	try {
         		logger.error("JSON was received:\n{}", ((TextMessage)message).getText());
 			} catch (JMSException e1) {

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import kz.aphion.adverts.notification.mq.models.NotificationChannel;
 import kz.aphion.adverts.notification.mq.models.NotificationChannelType;
@@ -52,6 +53,7 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 		
 		NotificationChannel email = new NotificationChannel();
 		
+		email.uid = UUID.randomUUID().toString();
 		email.type = NotificationChannelType.EMAIL;
 		email.addreseeId = subscription.user.email;
 		

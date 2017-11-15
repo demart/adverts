@@ -2,6 +2,7 @@ package kz.aphion.adverts.notification.processors;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.UUID;
 
 import javax.jms.JMSException;
 
@@ -35,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public class NotificationEventProcessor {
 	
-	private static Logger logger = LoggerFactory.getLogger(NotificationSubscriptionProcessor.class);
+	private static Logger logger = LoggerFactory.getLogger(NotificationEventProcessor.class);
 	
 	/**
 	 * Метод является входной точкой для обработки запроса
@@ -200,7 +201,7 @@ public class NotificationEventProcessor {
 		for (NotificationChannel channel : notificationEvent.channels) {
 			kz.aphion.adverts.persistence.notification.NotificationChannel nch = new kz.aphion.adverts.persistence.notification.NotificationChannel();
 			
-			nch.uid = channel.uid; //UUID.randomUUID().toString();
+			nch.uid = StringUtils.isBlank(channel.uid) ? UUID.randomUUID().toString() : channel.uid;
 			nch.type = NotificationChannelType.valueOf(channel.type.toString());
 			nch.addresseeId = channel.addreseeId;
 			nch.title = channel.title;

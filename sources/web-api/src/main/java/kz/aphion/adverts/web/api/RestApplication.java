@@ -8,6 +8,7 @@ import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
 import kz.aphion.adverts.web.api.controllers.AdvertSearchController;
+import kz.aphion.adverts.web.api.controllers.UserAccountController;
 
 /**
  * Base Application class for REST API
@@ -23,7 +24,8 @@ public class RestApplication extends Application {
 	public Set<Class<?>> getClasses() {
 		return new HashSet<Class<?>>(
 				Arrays.asList(
-					AdvertSearchController.class
+					AdvertSearchController.class,
+					UserAccountController.class
 				)
 		);
 	}
