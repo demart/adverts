@@ -3,6 +3,8 @@ package kz.aphion.adverts.web.api.listeners;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.common.MQ;
 import kz.aphion.adverts.web.api.providers.MongoDbProvider;
 
 import org.slf4j.Logger;
@@ -17,11 +19,15 @@ public class ApplicationStartupListener implements ServletContextListener  {
 		logger.info("Starting web-api application...");
 		
 		try {
-			
 			// Инициализируем подключение к Mongo
 			logger.info("Initializing connection to MongoDB...");
-			MongoDbProvider.getInstance();
+			DB.INSTANCE.init();
 			logger.info("MongoDB connection is opened.");
+			
+			// Инициализируем подключение к ActiveMQ
+			logger.info("Initializing connection to ActiveMQ...");
+			MQ.INSTANCE.init();
+			logger.info("ActiveMQ connection is opened.");
 		
 		} catch (Throwable e) {
 			logger.error("FATAL error while starting web-api project", e);

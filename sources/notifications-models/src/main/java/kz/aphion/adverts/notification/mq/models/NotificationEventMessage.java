@@ -57,6 +57,17 @@ public class NotificationEventMessage {
 	 */
 	public List<NotificationParameter> parameters;
 	
+	/**
+	 * Сериализует объект в JSON
+	 * @return
+	 */
+	public String toJson() {
+		Gson gson = new Gson();
+		String jsonModel = gson.toJson(this);
+		
+		return jsonModel;
+	}
+	
 	
 	/**
 	 * Разбирает JSON объект в модель для последующей обработки
@@ -88,10 +99,4 @@ public class NotificationEventMessage {
 		
 		return jsonModel;
 	}
-	
-	
-	public String toJson() {
-		return toJson(this);
-	}
-	
 }

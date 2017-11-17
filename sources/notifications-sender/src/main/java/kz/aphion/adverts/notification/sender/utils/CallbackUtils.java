@@ -4,9 +4,9 @@ import java.util.Calendar;
 
 import kz.aphion.adverts.common.MQ;
 import kz.aphion.adverts.common.mq.QueueNameConstants;
-import kz.aphion.adverts.notification.sender.mq.models.NotificationChannelMessage;
-import kz.aphion.adverts.notification.sender.mq.models.NotificationChannelMessageCallback;
-import kz.aphion.adverts.notification.sender.mq.models.NotificationStatus;
+import kz.aphion.adverts.notification.mq.models.NotificationStatus;
+import kz.aphion.adverts.notification.mq.models.channel.NotificationChannelMessage;
+import kz.aphion.adverts.notification.mq.models.channel.NotificationChannelMessageCallback;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

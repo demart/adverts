@@ -11,32 +11,14 @@
 	</parent>
 
 	<groupId>kz.aphion.adverts</groupId>
-	<artifactId>adverts-notification</artifactId>
-	<packaging>war</packaging>
+	<artifactId>adverts-notification-models</artifactId>
+	<packaging>jar</packaging>
 
-	<name>Adverts :: Notification</name>
+	<name>Adverts :: Notificaion Models</name>
 	<version>1.0.0</version>
 
     <dependencies>
-    	
-       <dependency>
-    		<groupId>kz.aphion.adverts</groupId>
-			<artifactId>adverts-persistence</artifactId>
-			<version>1.0.0</version>
-		</dependency>
 		<dependency>
-    		<groupId>kz.aphion.adverts</groupId>
-			<artifactId>adverts-common</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-        <dependency>
-    		<groupId>kz.aphion.adverts</groupId>
-			<artifactId>adverts-notification-models</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-        
-
-        <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>2.3</version>
@@ -55,14 +37,7 @@
 		    <scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
+    	<dependency>
 		    <groupId>org.slf4j</groupId>
 		    <artifactId>slf4j-api</artifactId>
 		    <version>1.7.21</version>
@@ -74,53 +49,13 @@
 		  <version>1.1.7</version>
 		  <!-- <scope>provided</scope> -->
 		</dependency>
-		
-		<dependency>
+
+    	<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.7</version>
 			<scope>provided</scope>
 		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-broker</artifactId>
-			<version>5.13.2</version>
-			<!-- <scope>provided</scope> -->
-		</dependency>
-		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-client</artifactId>
-			<version>5.13.2</version>
-			<!-- <scope>provided</scope> -->
-		</dependency>
-		<dependency>
-	        <groupId>org.mongodb.morphia</groupId>
-	        <artifactId>morphia</artifactId>
-	        <version>1.3.0-SNAPSHOT</version>
-	        <!-- <scope>provided</scope> -->
-	    </dependency>
-	    
-		<dependency>
-			<groupId>javax.jms</groupId>
-			<artifactId>javax.jms-api</artifactId>
-			<version>2.0</version>
-			<!-- <scope>provided</scope> -->
-		</dependency>
-		<dependency>
-			<groupId>org.fusesource.hawtbuf</groupId>
-			<artifactId>hawtbuf</artifactId>
-			<version>1.11</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.geronimo.specs</groupId>
-			<artifactId>geronimo-j2ee-management_1.1_spec</artifactId>
-			<version>1.0.1</version>
-			<scope>provided</scope>
-		</dependency>
-
-
 	</dependencies>
 
 	<build>
@@ -154,29 +89,6 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.6</version>
 			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1.1</version>
-				<configuration>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-				</configuration>
-
-			</plugin>
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<url>http://localhost:8090/manager/text</url>
-					<server>TomcatServer</server>
-					<path>/adverts-notifications</path>
-					<username>tomcat</username>
-					<password>tomcat</password>
-				</configuration>
-			</plugin>
-
 		</plugins>
 		<resources>
 			<resource>

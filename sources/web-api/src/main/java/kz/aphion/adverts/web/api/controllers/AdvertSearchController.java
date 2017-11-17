@@ -34,9 +34,7 @@ public class AdvertSearchController {
 	@Path("")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response searchAdverts(
-			
-			@Context UriInfo uriInfo) {
+	public Response searchAdverts(@Context UriInfo uriInfo) {
 		logger.info("search adverts was invoked...");
 		
 		Response response = service.searchAdverts(uriInfo);
@@ -49,8 +47,7 @@ public class AdvertSearchController {
 	@Path("count")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response advertsCount(
-			@Context UriInfo uriInfo) {
+	public Response advertsCount(@Context UriInfo uriInfo) {
 		logger.info("search adverts count was invoked...");
 		
 		Response response = service.advertsCount(uriInfo);

@@ -34,6 +34,11 @@
 			<artifactId>adverts-common</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		<dependency>
+    		<groupId>kz.aphion.adverts</groupId>
+			<artifactId>adverts-notification-models</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 
         <dependency>
             <groupId>commons-lang</groupId>

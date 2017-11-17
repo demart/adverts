@@ -1,19 +1,16 @@
 package kz.aphion.adverts.notification.sender.processors;
 
+import javax.jms.JMSException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
-import javax.jms.JMSException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import kz.aphion.adverts.notification.mq.models.NotificationStatus;
+import kz.aphion.adverts.notification.mq.models.channel.NotificationChannelMessage;
 import kz.aphion.adverts.notification.sender.caches.EmailCache;
-import kz.aphion.adverts.notification.sender.mq.models.NotificationChannelMessage;
-import kz.aphion.adverts.notification.sender.mq.models.NotificationStatus;
 import kz.aphion.adverts.notification.sender.utils.CallbackUtils;
-
-
-
 import kz.aphion.adverts.notification.sender.utils.SendEmailUtils;
 
 import org.slf4j.Logger;

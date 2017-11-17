@@ -2,8 +2,8 @@ package kz.aphion.adverts.notification.sender.processors;
 
 import javax.jms.JMSException;
 
-import kz.aphion.adverts.notification.sender.mq.models.NotificationChannelMessage;
-import kz.aphion.adverts.notification.sender.mq.models.NotificationStatus;
+import kz.aphion.adverts.notification.mq.models.NotificationStatus;
+import kz.aphion.adverts.notification.mq.models.channel.NotificationChannelMessage;
 import kz.aphion.adverts.notification.sender.utils.CallbackUtils;
 
 import org.slf4j.Logger;

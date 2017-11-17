@@ -24,6 +24,16 @@
 			<artifactId>adverts-persistence</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+        <dependency>
+    		<groupId>kz.aphion.adverts</groupId>
+			<artifactId>adverts-common</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+        <dependency>
+    		<groupId>kz.aphion.adverts</groupId>
+			<artifactId>adverts-notification-models</artifactId>
+			<version>1.0.0</version>
+		</dependency>
         
 
         <dependency>
@@ -179,6 +189,24 @@
 			<groupId>org.glassfish.jersey.media</groupId>
 			<artifactId>jersey-media-json-jackson</artifactId>
 			<version>2.23</version>
+		</dependency>
+		
+		<!-- EMAIL Libs -->
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.5.5</version>
+		</dependency>
+		
+		<!--
+		Attention: Be sure nothing pulls in an old dependency with groupId
+		"freemarker" (without the "org."), because then you will end up with
+		two freemarker.jar-s and unpredictable behavior!
+		-->
+		<dependency>
+		  <groupId>org.freemarker</groupId>
+		  <artifactId>freemarker</artifactId>
+		  <version>2.3.26-incubating</version>
 		</dependency>
 
 

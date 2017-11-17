@@ -99,4 +99,10 @@ public class User extends BaseEntity {
 	 */
 	@Property
 	public UserStatus status;
+	
+	/**
+	 * Список токенов авторизации пользователя
+	 */
+	@Reference
+	public List<UserAccessToken> accessTokens;
 }
