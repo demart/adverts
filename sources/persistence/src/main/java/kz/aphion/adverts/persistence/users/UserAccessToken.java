@@ -68,8 +68,8 @@ public class UserAccessToken extends BaseEntity  {
 	 */
 	public boolean isExpired() {
 		if (Calendar.getInstance().compareTo(expiresAt) > 0) {
-			return false;
+			return true;
 		}
-		return true;
+		return false;
 	}
 }

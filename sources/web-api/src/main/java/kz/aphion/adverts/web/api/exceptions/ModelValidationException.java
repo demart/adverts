@@ -1,21 +1,26 @@
 package kz.aphion.adverts.web.api.exceptions;
 
 /**
- * Исключение для случаев когда не получили необходимый параметр
+ * Исключение для всех ошибок валидации модели данных. 
+ * В основном данных которые поступают на сервер с клиента.
  * @author artem.demidovich
  *
- * Created at Aug 14, 2016
+ * Created at Nov 20, 2017
  */
-public class MissingRequiredParameterException extends WebAPIException {
-	
-	private static final long serialVersionUID = -1245006028651724309L;
+public class ModelValidationException extends WebAPIException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6136096143477296577L;
+
+	
 	/**
      * Constructs a new exception with {@code null} as its detail message.
      * The cause is not initialized, and may subsequently be initialized by a
      * call to {@link #initCause}.
      */
-    public MissingRequiredParameterException() {
+    public ModelValidationException() {
         super();
     }
 
@@ -27,7 +32,7 @@ public class MissingRequiredParameterException extends WebAPIException {
      * @param   message   the detail message. The detail message is saved for
      *          later retrieval by the {@link #getMessage()} method.
      */
-    public MissingRequiredParameterException(String message) {
+    public ModelValidationException(String message) {
         super(message);
     }
 
@@ -45,9 +50,7 @@ public class MissingRequiredParameterException extends WebAPIException {
      *         unknown.)
      * @since  1.4
      */
-    public MissingRequiredParameterException(String message, Throwable cause) {
+    public ModelValidationException(String message, Throwable cause) {
         super(message, cause);
     }
-	
-	
 }

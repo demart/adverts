@@ -34,4 +34,15 @@ public enum NotificationEventSource {
 	 */
 	MARKTING,
 	
+	
+	/**
+	 * WEB-API с бизнес фукнциями, например управление User Account или управления подписками и т.д.
+	 */
+	WEBAPI,
+	
+	/**
+	 * На всякий случай, если нету подходящего
+	 */
+	OTHER,
+	
 }

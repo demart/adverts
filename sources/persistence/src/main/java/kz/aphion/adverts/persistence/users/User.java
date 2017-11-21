@@ -6,6 +6,8 @@ import java.util.List;
 import kz.aphion.adverts.persistence.BaseEntity;
 import kz.aphion.adverts.persistence.CalendarConverter;
 import kz.aphion.adverts.persistence.subscription.Subscription;
+import kz.aphion.adverts.persistence.users.request.EmailVerificationRequest;
+import kz.aphion.adverts.persistence.users.request.ResetPasswordRequest;
 
 import org.mongodb.morphia.annotations.Converters;
 import org.mongodb.morphia.annotations.Entity;
@@ -41,11 +43,18 @@ public class User extends BaseEntity {
 	@Property
 	public String accessToken;
 	
+	
 	/**
-	 * Логин пользователя
+	 * Почтовый адрес пользователя, он же логин в системе
 	 */
 	@Property
-	public String login;
+	public String email;
+
+	/**
+	 * Список токенов для проверки email
+	 */
+	@Reference
+	public List<EmailVerificationRequest> emailVerificationRequests;	
 	
 	/**
 	 * Пароль пользователя (MD5)
@@ -54,10 +63,11 @@ public class User extends BaseEntity {
 	public String password;
 	
 	/**
-	 * Почтовый адрес пользователя
+	 * Список токенов авторизации пользователя
 	 */
-	@Property
-	public String email;
+	@Reference
+	public List<ResetPasswordRequest> resetPasswordRequests;
+
 	
 	/**
 	 * Информация о контактном телефоне
@@ -92,7 +102,7 @@ public class User extends BaseEntity {
 	 * Время последней активности.
 	 */
 	@Property
-	public Calendar lastAcitivyTime;
+	public Calendar lastActivityTime;
 	
 	/**
 	 * Статус пользователя
@@ -100,9 +110,4 @@ public class User extends BaseEntity {
 	@Property
 	public UserStatus status;
 	
-	/**
-	 * Список токенов авторизации пользователя
-	 */
-	@Reference
-	public List<UserAccessToken> accessTokens;
 }

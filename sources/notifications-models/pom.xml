@@ -14,7 +14,7 @@
 	<artifactId>adverts-notification-models</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Adverts :: Notificaion Models</name>
+	<name>Adverts :: Notification Models</name>
 	<version>1.0.0</version>
 
     <dependencies>

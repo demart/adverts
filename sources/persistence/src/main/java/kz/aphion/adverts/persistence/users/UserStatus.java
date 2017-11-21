@@ -9,9 +9,9 @@ package kz.aphion.adverts.persistence.users;
 public enum UserStatus {
 
 	/**
-	 * Зарегистрирован
+	 * Действующий
 	 */
-	REGISTERED,
+	ACTIVE,
 	
 	/**
 	 * Необходимо подтвердить email
