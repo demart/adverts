@@ -9,6 +9,7 @@ import javax.ws.rs.core.Application;
 
 import kz.aphion.adverts.web.api.controllers.AdvertSearchController;
 import kz.aphion.adverts.web.api.controllers.UserAccountController;
+import kz.aphion.adverts.web.api.controllers.UserProfileController;
 import kz.aphion.adverts.web.api.security.SecuredMethodFilter;
 
 /**
@@ -25,9 +26,16 @@ public class RestApplication extends Application {
 	public Set<Class<?>> getClasses() {
 		return new HashSet<Class<?>>(
 				Arrays.asList(
+						// Filters & Annotations
 						SecuredMethodFilter.class, // Filter to protect secured methods
-						AdvertSearchController.class,
-						UserAccountController.class
+						
+						// User Management
+						UserAccountController.class,
+						UserProfileController.class,
+						
+						// Advert Search
+						AdvertSearchController.class
+						
 				)
 		);
 	}
