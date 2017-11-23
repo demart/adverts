@@ -32,10 +32,8 @@ public class UserProfileService extends BaseSecuredService {
 
 	
 	public ResponseWrapper getUserProfile() throws AccessDeniedException, ModelValidationException {
-		User user = getUser();
-		if (user == null)
-			throw new AccessDeniedException("User is not authorized");
-		
+		User user = getUserOrThrowException();
+
 		UserProfileModel model = UserProfileModel.convertToModel(user);
 		
 		return ResponseWrapper.with(Status.OK, model, "Operation successfully completed");

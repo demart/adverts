@@ -249,10 +249,8 @@ public class UserAccountService extends BaseSecuredService {
 	
 	
 	public ResponseWrapper changePassword(ChangePasswordRequestModel model) throws WrongPasswordException, DataValidationException, AccessDeniedException {
-		User user = getUser();
-		if (user == null) // No idea how it may happen
-			throw new AccessDeniedException("User is not authorized");
-		
+		User user = getUserOrThrowException();
+
 		if (StringUtils.isBlank(model.oldPassword)) {
 			// If it is new password after reset password operation
 			if (StringUtils.isBlank(user.password)) {
