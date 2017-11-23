@@ -38,9 +38,8 @@ public class UserProfileController  extends BaseSecuredController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@SecuredMethod
 	public Response getUserProfile() {
-		logger.debug("UPC0001D: getUserProfile: invoked with the email: [{}]", getUserEmail());
-		
 		try {
+			logger.debug("UPC0001D: getUserProfile: invoked with the email: [{}]", getUserEmail());
 			
 			ResponseWrapper result = service.getUserProfile();
 			logger.debug("UPC0002D: getUserProfile: succesefully completed. User.email [{}]", getUserEmail());
@@ -53,6 +52,9 @@ public class UserProfileController  extends BaseSecuredController {
 		} catch (ModelValidationException e) {
 			logger.debug("UPC0004D: getUserProfile: Model validation exception: [{}], User.email [{}]", e.getMessage(), getUserEmail());
 			return ResponseWrapper.with(Status.BAD_REQUEST, false, e.getMessage()).buildResponse();
+		} catch (Throwable e) {
+			logger.error("UPC0005D: getUserProfile: Exception: " + e.getMessage() + " User.email " + getUserEmail(), e);
+			throw e;
 		}
 	}
 

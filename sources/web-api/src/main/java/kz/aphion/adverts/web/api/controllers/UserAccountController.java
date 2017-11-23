@@ -70,22 +70,27 @@ public class UserAccountController extends BaseSecuredController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)  
 	public Response isEmailAvailable(@QueryParam("email") String email) {
-		logger.debug("UAC0001D: isEmailAvailable: invoked with the email: [{}]", email);
-		
-		if (StringUtils.isBlank(email)) {
-			logger.debug("UAC0002D: isEmailAvailable: email [{}] is null or empty.", email);
-			return ResponseWrapper.with(Status.BAD_REQUEST, "email is null or empty").buildResponse();
-		}
-		
-		if (!EmailUtils.isValidEmailAddress(email)) {
-			logger.debug("UAC0003D: isEmailAvailable: email [{}] is incorrect.", email);
-			return ResponseWrapper.with(Status.BAD_REQUEST, "email is incorrect").buildResponse();
-		}
-
-		ResponseWrapper wrapper = service.isLoginAvailable(email);		
-		logger.debug("UAC0004D: isEmailAvailable: email [{}] is available [{}]", email, wrapper.data);
-		
-		return wrapper.buildResponse();
+		try {
+			logger.debug("UAC0001D: isEmailAvailable: invoked with the email: [{}]", email);
+			
+			if (StringUtils.isBlank(email)) {
+				logger.debug("UAC0002D: isEmailAvailable: email [{}] is null or empty.", email);
+				return ResponseWrapper.with(Status.BAD_REQUEST, "email is null or empty").buildResponse();
+			}
+			
+			if (!EmailUtils.isValidEmailAddress(email)) {
+				logger.debug("UAC0003D: isEmailAvailable: email [{}] is incorrect.", email);
+				return ResponseWrapper.with(Status.BAD_REQUEST, "email is incorrect").buildResponse();
+			}
+	
+			ResponseWrapper wrapper = service.isLoginAvailable(email);		
+			logger.debug("UAC0004D: isEmailAvailable: email [{}] is available [{}]", email, wrapper.data);
+			
+			return wrapper.buildResponse();
+		} catch (Throwable e) {
+			logger.error("UAC0005E: isEmailAvailable: Exception: " + e.getMessage() + " User.email " + email, e);
+			throw e;
+		} 
 	}	
 	
 	@POST  
@@ -93,9 +98,9 @@ public class UserAccountController extends BaseSecuredController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createUserAccount(CreateUserAccountModel model) {
-		logger.debug("UAC0010: createUserAccount: invoked. User.email [{}]", model != null ? model.email : "anonymous");
-		
 		try {
+			logger.debug("UAC0010: createUserAccount: invoked. User.email [{}]", model != null ? model.email : "anonymous");
+			
 			CreateUserAccountModel.validate(model);
 			
 			ResponseWrapper result = service.createAccount(model);
@@ -120,6 +125,9 @@ public class UserAccountController extends BaseSecuredController {
 			// Sent Status = OK, because we created account, email can be verified later			
 			logger.error("UAC0015E: createUserAccount: Internal JMS exception: [{}], User.email [{}]", e.getMessage(), model != null ? model.email : "anonymous", e);
 			return ResponseWrapper.with(Status.OK, true, "User account created, but email verification message has not been sent").buildResponse();
+		} catch (Throwable e) {
+			logger.error("UAC0016E: createUserAccount: Exception: " + e.getMessage() + " User.email " + model != null ? model.email : "anonymous", e);
+			throw e;
 		} 
 	}
 	
@@ -128,9 +136,9 @@ public class UserAccountController extends BaseSecuredController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response sendEmailVerificationRequest(EmailVerificationModel model) {
-		logger.debug("UAC0020D: sendEmailVerificationRequest: invoked. User.email [{}]", model != null ? model.email : "anonymous");
-
 		try {
+			logger.debug("UAC0020D: sendEmailVerificationRequest: invoked. User.email [{}]", model != null ? model.email : "anonymous");
+
 			EmailVerificationModel.validate(model);
 			
 			ResponseWrapper result = service.sendEmailVerificationRequest(model);
@@ -153,7 +161,10 @@ public class UserAccountController extends BaseSecuredController {
 		} catch (JMSException e) {			
 			logger.error("UAC0026E: sendEmailVerificationRequest: Internal JMS exception: [{}], User.email [{}]", e.getMessage(), model.email, e);
 			return ResponseWrapper.with(Status.INTERNAL_SERVER_ERROR, false, "Email verification message has not been sent").buildResponse();
-		}
+		} catch (Throwable e) {
+			logger.error("UAC0027E: sendEmailVerificationRequest: Exception: " + e.getMessage() + " User.email " + model != null ? model.email : "anonymous", e);
+			throw e;
+		} 
 	}
 	
 	@POST  
@@ -161,9 +172,9 @@ public class UserAccountController extends BaseSecuredController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response verifyEmail(EmailVerificationModel model) {
-		logger.debug("UAC0030D: verifyEmail: invoked. User.email [{}]", model != null ? model.email : "anonymous");
-		
 		try {
+			logger.debug("UAC0030D: verifyEmail: invoked. User.email [{}]", model != null ? model.email : "anonymous");
+			
 			EmailVerificationModel.validate(model);
 			model.validateToken();
 			
@@ -187,8 +198,10 @@ public class UserAccountController extends BaseSecuredController {
 		} catch (DataValidationException e) {
 			logger.error("UAC0036E: verifyEmail: Data validation exception: [{}], User.email [{}]", e.getMessage(), model.email);
 			return ResponseWrapper.with(Status.INTERNAL_SERVER_ERROR, false, e.getMessage()).buildResponse();
+		} catch (Throwable e) {
+			logger.error("UAC0037E: verifyEmail: Exception: " + e.getMessage() + " User.email " + model != null ? model.email : "anonymous", e);
+			throw e;
 		} 
-		
 	}
 
 	
@@ -197,9 +210,9 @@ public class UserAccountController extends BaseSecuredController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response resetPassword(ResetPasswordModel model) {
-		logger.debug("UAC0040D: resetPassword: invoked. User.email [{}]", model != null ? model.email : "anonymous");
-		
 		try {
+			logger.debug("UAC0040D: resetPassword: invoked. User.email [{}]", model != null ? model.email : "anonymous");
+			
 			ResetPasswordModel.validate(model);
 			
 			ResponseWrapper result = service.resetPassword(model);
@@ -222,6 +235,9 @@ public class UserAccountController extends BaseSecuredController {
 		} catch (JMSException e) {			
 			logger.error("UAC0046E: resetPassword: Internal JMS exception: [{}], User.email [{}]", e.getMessage(), model.email, e);
 			return ResponseWrapper.with(Status.INTERNAL_SERVER_ERROR, false, "Email verification message has not been sent").buildResponse();
+		} catch (Throwable e) {
+			logger.error("UAC0047E: resetPassword: Exception: " + e.getMessage() + " User.email " + model != null ? model.email : "anonymous", e);
+			throw e;
 		} 
 	}
 	
@@ -237,9 +253,9 @@ public class UserAccountController extends BaseSecuredController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response confirmResetPassword(ResetPasswordModel model) {
-		logger.debug("UAC0050D: confirmResetPassword: invoked. User.email [{}]", model != null ? model.email : "anonymous");
-		
 		try {
+			logger.debug("UAC0050D: confirmResetPassword: invoked. User.email [{}]", model != null ? model.email : "anonymous");
+			
 			ResetPasswordModel.validate(model);
 			model.validateToken();
 			
@@ -263,6 +279,9 @@ public class UserAccountController extends BaseSecuredController {
 		} catch (DataValidationException e) {
 			logger.error("UAC0056E: confirmResetPassword: Data validation exception: [{}], User.email [{}]", e.getMessage(), model.email);
 			return ResponseWrapper.with(Status.INTERNAL_SERVER_ERROR, false, e.getMessage()).buildResponse();
+		} catch (Throwable e) {
+			logger.error("UAC0057E: confirmResetPassword: Exception: " + e.getMessage() + " User.email " + model != null ? model.email : "anonymous", e);
+			throw e;
 		} 
 	}
 	
@@ -278,10 +297,9 @@ public class UserAccountController extends BaseSecuredController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response login(AuthenticationModel model) {
-		logger.debug("UAC0060D: login: invoked for User.email [{}]", model != null ? model.email : "anonymous");
-		
 		try {
-
+			logger.debug("UAC0060D: login: invoked for User.email [{}]", model != null ? model.email : "anonymous");
+			
 			AuthenticationModel.validate(model);
 			ResponseWrapper result = service.login(model);
 			logger.debug("UAC0061D: login: successfully comleted. User.email [{}]", model.email);
@@ -299,7 +317,10 @@ public class UserAccountController extends BaseSecuredController {
 		} catch (AccessDeniedException e) {
 			logger.warn("UAC0065W: login: Access Denied: [{}], User.email [{}]", e.getMessage(), model != null ? model.email : "anonymous");
 			return ResponseWrapper.with(Status.FORBIDDEN, false, e.getMessage()).buildResponse();
-		} 	
+		} catch (Throwable e) {
+			logger.error("UAC0066E: login: Exception: " + e.getMessage() + " User.email " + model != null ? model.email : "anonymous", e);
+			throw e;
+		} 
 	}
 
 	/**
@@ -312,12 +333,18 @@ public class UserAccountController extends BaseSecuredController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@SecuredMethod
 	public Response logout() {
-		logger.debug("UAC0070D: logout: invoked for User.email [{}]", getUser().email);
+		try {
+			logger.debug("UAC0070D: logout: invoked for User.email [{}]", getUser().email);
 		
-		ResponseWrapper result = service.logout();
-		
-		logger.debug("UAC0071D: logout: for User.email [{}] successfully completed.", getUser().email);
-		return result.buildResponse();
+			ResponseWrapper result = service.logout();
+			
+			logger.debug("UAC0071D: logout: for User.email [{}] successfully completed.", getUser().email);
+			return result.buildResponse();
+			
+		} catch (Throwable e) {
+			logger.error("UAC0072E: login: Exception: " + e.getMessage() + " User.email " + getUserEmail(), e);
+			throw e;
+		} 
 	}
 	
 
@@ -337,13 +364,13 @@ public class UserAccountController extends BaseSecuredController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@SecuredMethod(allowedUserStatus={UserStatus.ACTIVE})
 	public Response changePassword(ChangePasswordRequestModel model) {
-		logger.debug("UAC0080D: changePassword: invoked for User.email [{}]", getUser().email);
-		
 		try {
+			logger.debug("UAC0080D: changePassword: invoked for User.email [{}]", getUser().email);
 			
 			ChangePasswordRequestModel.validate(model);
 			ResponseWrapper result = service.changePassword(model);
 			logger.debug("UAC0081D: changePassword: for email [{}], completed ", getUser().email);
+			
 			return result.buildResponse();
 			
 		} catch (WrongPasswordException e) {
@@ -358,6 +385,9 @@ public class UserAccountController extends BaseSecuredController {
 		} catch (AccessDeniedException e) {
 			logger.debug("UAC0085E: changePassword: Unauthorized exception: [{}], User.email [{}]", e.getMessage(), getUser().email);
 			return ResponseWrapper.with(Status.FORBIDDEN, false, e.getMessage()).buildResponse();
+		} catch (Throwable e) {
+			logger.error("UAC0086E: changePassword: Exception: " + e.getMessage() + " User.email " + getUserEmail(), e);
+			throw e;
 		}
 	}
 

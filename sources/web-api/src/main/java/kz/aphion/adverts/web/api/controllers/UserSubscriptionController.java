@@ -48,9 +48,9 @@ public class UserSubscriptionController  extends BaseSecuredController {
 	@Consumes(MediaType.APPLICATION_JSON) 
 	@SecuredMethod
 	public Response getUserSubscriptions(UserSubscriptionsRequestModel model) {
-		logger.debug("USC0001D: getUserSubscriptions: invoked with the email: [{}]", getUserEmail());
-
 		try {
+			logger.debug("USC0001D: getUserSubscriptions: invoked with the email: [{}]", getUserEmail());
+
 			UserSubscriptionsRequestModel.validate(model);
 			
 			ResponseWrapper result = service.getUserSubscriptions(model);
@@ -65,10 +65,6 @@ public class UserSubscriptionController  extends BaseSecuredController {
 			logger.error("USC0004E: getUserSubscriptions: Exception: " + e.getMessage() + " User.email " + getUserEmail(), e);
 			throw e;
 		} 
-		/*catch (ModelValidationException e) {
-			logger.debug("UPC0004D: getUserProfile: Model validation exception: [{}], User.email [{}]", e.getMessage(), getUserEmail());
-			return ResponseWrapper.with(Status.BAD_REQUEST, false, e.getMessage()).buildResponse();
-		}*/
 	}
 	
 
