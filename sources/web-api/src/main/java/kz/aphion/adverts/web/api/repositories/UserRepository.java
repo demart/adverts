@@ -11,7 +11,7 @@ import kz.aphion.adverts.persistence.users.UserStatus;
 import kz.aphion.adverts.persistence.users.UserType;
 import kz.aphion.adverts.web.api.exceptions.DataValidationException;
 import kz.aphion.adverts.web.api.exceptions.EmailAlreadyUsedException;
-import kz.aphion.adverts.web.api.exceptions.UserNotFoundException;
+import kz.aphion.adverts.web.api.exceptions.RecordNotFoundException;
 import kz.aphion.adverts.web.api.exceptions.WrongPasswordException;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -37,13 +37,13 @@ public class UserRepository {
 	 * @param email
 	 * @return запись пользователя
 	 * @throws DataValidationException Если по какой-то причине оказалось две записи с одним email
-	 * @throws UserNotFoundException Если пользователь не найден
+	 * @throws RecordNotFoundException Если пользователь не найден
 	 */
-	public User getUser(String email) throws DataValidationException, UserNotFoundException  {
+	public User getUser(String email) throws DataValidationException, RecordNotFoundException  {
 		List<User> users = DB.DS().createQuery(User.class).field("email").equalIgnoreCase(email).asList();
 		
 		if (users == null || users.size() == 0) {
-			throw new UserNotFoundException("User not found");
+			throw new RecordNotFoundException("User not found");
 		}
 		
 		if (users.size() > 1) {

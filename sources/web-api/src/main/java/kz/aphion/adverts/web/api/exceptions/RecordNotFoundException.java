@@ -1,6 +1,6 @@
 package kz.aphion.adverts.web.api.exceptions;
 
-public class UserNotFoundException extends WebAPIException {
+public class RecordNotFoundException extends WebAPIException {
 
 	/**
 	 * 
@@ -12,7 +12,7 @@ public class UserNotFoundException extends WebAPIException {
      * The cause is not initialized, and may subsequently be initialized by a
      * call to {@link #initCause}.
      */
-    public UserNotFoundException() {
+    public RecordNotFoundException() {
         super();
     }
 
@@ -24,7 +24,7 @@ public class UserNotFoundException extends WebAPIException {
      * @param   message   the detail message. The detail message is saved for
      *          later retrieval by the {@link #getMessage()} method.
      */
-    public UserNotFoundException(String message) {
+    public RecordNotFoundException(String message) {
         super(message);
     }
 
@@ -42,7 +42,7 @@ public class UserNotFoundException extends WebAPIException {
      *         unknown.)
      * @since  1.4
      */
-    public UserNotFoundException(String message, Throwable cause) {
+    public RecordNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
 }

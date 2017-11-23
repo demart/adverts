@@ -8,6 +8,7 @@ import kz.aphion.adverts.persistence.subscription.Subscription;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvertType;
 import kz.aphion.adverts.persistence.subscription.SubscriptionStatus;
 import kz.aphion.adverts.web.api.models.subscriptions.criteria.SubscriptionCriteriaModel;
+import kz.aphion.adverts.web.api.repositories.SubscriptionRepository;
 
 /**
  * Модель подписки пользователя
@@ -53,12 +54,12 @@ public class SubscriptionModel {
 	/**
 	 * Сколько всего объявлений в подписке
 	 */
-	public int countTotalAdverts;
+	public long countTotalAdverts;
 	
 	/**
 	 * Сколько новых объявлений в подписке
 	 */
-	public int countUnseenAdverts;
+	public long countUnseenAdverts;
 	
 	
 	/**
@@ -69,15 +70,16 @@ public class SubscriptionModel {
 	/**
 	 * Конвертирует список подписок в модели данных
 	 * @param subscriptions
+	 * @param repository репозиторий, ай яй яй как плохо, но пока пусть будет так
 	 * @return
 	 */
-	public static List<SubscriptionModel> convertToModels(List<Subscription> subscriptions) {
+	public static List<SubscriptionModel> convertToModels(List<Subscription> subscriptions, SubscriptionRepository repository) {
 		if (subscriptions == null)
 			return null;
 		
 		List<SubscriptionModel> models = new ArrayList<SubscriptionModel>();
 		for (Subscription subscription : subscriptions) {
-			SubscriptionModel model = SubscriptionModel.convertToModel(subscription); 
+			SubscriptionModel model = SubscriptionModel.convertToModel(subscription, repository); 
 			if (model != null)
 				models.add(model);
 		}
@@ -85,15 +87,15 @@ public class SubscriptionModel {
 		return models;
 	}
 	
-	public static SubscriptionModel convertToModel(Subscription subscription) {
+	public static SubscriptionModel convertToModel(Subscription subscription, SubscriptionRepository repository) {
 		 if (subscription == null)
 			 return null;
 		 
 		 SubscriptionModel model = new SubscriptionModel();
 		 
 		 model.advertType = subscription.advertType;
-		 model.countTotalAdverts = 0;
-		 model.countUnseenAdverts = 0;
+		 model.countTotalAdverts = repository.getSubscriptionAdvertsTotalCount(subscription);
+		 model.countUnseenAdverts = repository.getSubscriptionAdvertsUnseenCount(subscription);
 		 model.criteria = SubscriptionCriteriaModel.convertToModel(subscription.criteria);
 		 model.expiresAt = subscription.expiresAt;
 		 model.id = subscription.id.toHexString();

@@ -64,7 +64,7 @@ public class Subscription extends BaseEntity {
 	public SubscriptionCriteria criteria;
 	
 	/**
-	 * Содержиться список всех найденных подходящих результатов
+	 * Содержится список всех найденных подходящих результатов
 	 */
 	@Reference
 	public List<SubscriptionAdvert> adverts;

@@ -25,7 +25,7 @@ import kz.aphion.adverts.web.api.exceptions.EmailAlreadyUsedException;
 import kz.aphion.adverts.web.api.exceptions.ModelValidationException;
 import kz.aphion.adverts.web.api.exceptions.TokenNotFoundException;
 import kz.aphion.adverts.web.api.exceptions.TokenVerificationException;
-import kz.aphion.adverts.web.api.exceptions.UserNotFoundException;
+import kz.aphion.adverts.web.api.exceptions.RecordNotFoundException;
 import kz.aphion.adverts.web.api.exceptions.WrongPasswordException;
 import kz.aphion.adverts.web.api.models.ResponseWrapper;
 import kz.aphion.adverts.web.api.models.users.AuthenticationModel;
@@ -89,7 +89,7 @@ public class UserAccountService extends BaseSecuredService {
 	}
 	
 	
-	public ResponseWrapper sendEmailVerificationRequest(EmailVerificationModel model) throws DataValidationException, IOException, TemplateException, JMSException, UserNotFoundException, ModelValidationException {
+	public ResponseWrapper sendEmailVerificationRequest(EmailVerificationModel model) throws DataValidationException, IOException, TemplateException, JMSException, RecordNotFoundException, ModelValidationException {
 		
 		// Достаем учетную запись пользователя
 		User user = repository.getUser(model.email);
@@ -111,7 +111,7 @@ public class UserAccountService extends BaseSecuredService {
 	}
 	
 	
-	public ResponseWrapper verifyEmail(EmailVerificationModel model) throws DataValidationException, TokenVerificationException, UserNotFoundException, TokenNotFoundException {
+	public ResponseWrapper verifyEmail(EmailVerificationModel model) throws DataValidationException, TokenVerificationException, RecordNotFoundException, TokenNotFoundException {
 		
 		// Get user record
 		User user = repository.getUser(model.email);
@@ -134,7 +134,7 @@ public class UserAccountService extends BaseSecuredService {
 	
 	
 	
-	public ResponseWrapper resetPassword(ResetPasswordModel model) throws DataValidationException, IOException, TemplateException, JMSException, UserNotFoundException {
+	public ResponseWrapper resetPassword(ResetPasswordModel model) throws DataValidationException, IOException, TemplateException, JMSException, RecordNotFoundException {
 		// Get the user
 		User user = repository.getUser(model.email);
 		
@@ -150,7 +150,7 @@ public class UserAccountService extends BaseSecuredService {
 	}
 	
 	
-	public ResponseWrapper confirmResetPassword(ResetPasswordModel model) throws DataValidationException, TokenVerificationException, UserNotFoundException, TokenNotFoundException {
+	public ResponseWrapper confirmResetPassword(ResetPasswordModel model) throws DataValidationException, TokenVerificationException, RecordNotFoundException, TokenNotFoundException {
 
 		// Get the user
 		User user = repository.getUser(model.email);
@@ -194,9 +194,9 @@ public class UserAccountService extends BaseSecuredService {
 	 * @return
 	 * @throws DataValidationException системная ошибка в случае если нашлось больше одного пользователя с логин
 	 * @throws AccessDeniedException В случае если не правильные логин/пароль или статус
-	 * @throws UserNotFoundException Если пользователя не нашли в базе
+	 * @throws RecordNotFoundException Если пользователя не нашли в базе
 	 */
-	public ResponseWrapper login(AuthenticationModel model) throws DataValidationException, AccessDeniedException, UserNotFoundException {
+	public ResponseWrapper login(AuthenticationModel model) throws DataValidationException, AccessDeniedException, RecordNotFoundException {
 		// retrieve user
 		User user = repository.getUser(model.email);
 		

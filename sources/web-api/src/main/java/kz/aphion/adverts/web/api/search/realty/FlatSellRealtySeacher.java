@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.persistence.realty.RealtyPublisherType;
 import kz.aphion.adverts.persistence.realty.data.flat.FlatSellRealty;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBalconyGlazingType;
@@ -25,7 +26,6 @@ import kz.aphion.adverts.persistence.realty.data.flat.types.FlatRentPeriodType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatSecurityType;
 import kz.aphion.adverts.persistence.realty.types.MortgageStatus;
 import kz.aphion.adverts.web.api.exceptions.IncorrectParameterValueException;
-import kz.aphion.adverts.web.api.providers.MongoDbProvider;
 import kz.aphion.adverts.web.api.query.SearchAdvertQuery;
 import kz.aphion.adverts.web.api.search.AdvertSearch;
 
@@ -75,7 +75,7 @@ public class FlatSellRealtySeacher implements AdvertSearch {
 
 	
 	private Query<FlatSellRealty> builQuery(HashMap<String, List<String>> parameters) throws Exception {
-		Datastore ds = MongoDbProvider.getInstance().getDatastore();
+		Datastore ds = DB.DS();
 		
 		Query<FlatSellRealty> q = ds.createQuery(FlatSellRealty.class);
 		

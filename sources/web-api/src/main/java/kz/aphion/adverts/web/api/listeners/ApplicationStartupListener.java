@@ -1,11 +1,11 @@
 package kz.aphion.adverts.web.api.listeners;
 
+import javax.jms.JMSException;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.common.MQ;
-import kz.aphion.adverts.web.api.providers.MongoDbProvider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,12 +38,21 @@ public class ApplicationStartupListener implements ServletContextListener  {
 	public void contextDestroyed(ServletContextEvent arg0) {
 		logger.info("Shutting down web-api application...");
 		
-		// Завершаем работу потоков чтения сообщений из очередей		
-
+		// Завершаем работу потоков чтения сообщений из очередей
+		logger.info("Closing JMS connection...");
+		try {
+			MQ.INSTANCE.getConnection().stop();
+			MQ.INSTANCE.getConnection().close();
+			logger.info("JMS connection was closed.");
+		} catch (JMSException e) {
+			logger.error("Error closing JMS connection", e);
+		}
+		
 		// Закрываем подключение к MongoDB
 		logger.info("Closing MongoDB connection...");
 		try {
-			MongoDbProvider.getInstance().getDatastore().getMongo().close();
+			//DB.DS().getMongo().fsync(false);
+			DB.DS().getMongo().close();
 			logger.info("MongoDB connection was closed.");
 		} catch (Exception e) {
 			logger.error("Error closing MongoDB connection", e);

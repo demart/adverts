@@ -6,7 +6,7 @@ package kz.aphion.adverts.web.api.models.subscriptions.requests;
  *
  * Created at Nov 22, 2017
  */
-public class UserSubscriptionsRequestModel {
+public class SubscriptionsRequestModel {
 
 	
 	/**
@@ -36,7 +36,7 @@ public class UserSubscriptionsRequestModel {
 	 * Валидация модели
 	 * @param model
 	 */
-	public static void validate(UserSubscriptionsRequestModel model) {
+	public static void validate(SubscriptionsRequestModel model) {
 		// TODO
 		
 	}

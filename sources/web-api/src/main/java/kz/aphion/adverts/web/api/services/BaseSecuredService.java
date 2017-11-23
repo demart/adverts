@@ -8,7 +8,6 @@ import javax.ws.rs.core.SecurityContext;
 import kz.aphion.adverts.persistence.users.User;
 import kz.aphion.adverts.persistence.users.UserAccessToken;
 import kz.aphion.adverts.web.api.exceptions.AccessDeniedException;
-import kz.aphion.adverts.web.api.exceptions.UserNotFoundException;
 import kz.aphion.adverts.web.api.security.UserPrincipal;
 
 public class BaseSecuredService {

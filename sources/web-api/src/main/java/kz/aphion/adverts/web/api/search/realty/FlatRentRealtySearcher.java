@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.persistence.realty.RealtyPublisherType;
 import kz.aphion.adverts.persistence.realty.data.flat.FlatRentRealty;
 import kz.aphion.adverts.web.api.exceptions.IncorrectParameterValueException;
-import kz.aphion.adverts.web.api.providers.MongoDbProvider;
 import kz.aphion.adverts.web.api.query.SearchAdvertQuery;
 import kz.aphion.adverts.web.api.search.AdvertSearch;
 
@@ -54,7 +54,7 @@ public class FlatRentRealtySearcher implements AdvertSearch {
 
 	
 	private Query<FlatRentRealty> builQuery(HashMap<String, List<String>> parameters) throws Exception {
-		Datastore ds = MongoDbProvider.getInstance().getDatastore();
+		Datastore ds = DB.DS();
 		
 		Query<FlatRentRealty> q = ds.createQuery(FlatRentRealty.class);
 		

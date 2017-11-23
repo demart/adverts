@@ -23,7 +23,7 @@ import kz.aphion.adverts.web.api.exceptions.EmailAlreadyUsedException;
 import kz.aphion.adverts.web.api.exceptions.ModelValidationException;
 import kz.aphion.adverts.web.api.exceptions.TokenNotFoundException;
 import kz.aphion.adverts.web.api.exceptions.TokenVerificationException;
-import kz.aphion.adverts.web.api.exceptions.UserNotFoundException;
+import kz.aphion.adverts.web.api.exceptions.RecordNotFoundException;
 import kz.aphion.adverts.web.api.exceptions.WrongPasswordException;
 import kz.aphion.adverts.web.api.models.ResponseWrapper;
 import kz.aphion.adverts.web.api.models.users.AuthenticationModel;
@@ -149,7 +149,7 @@ public class UserAccountController extends BaseSecuredController {
 		} catch (ModelValidationException e) {
 			logger.debug("UAC0022D: sendEmailVerificationRequest: Model validation exception: [{}], User.email [{}]", e.getMessage(), model != null ? model.email : "anonymous");
 			return ResponseWrapper.with(Status.BAD_REQUEST, false, e.getMessage()).buildResponse();
-		} catch (UserNotFoundException e) {
+		} catch (RecordNotFoundException e) {
 			logger.debug("UAC0023D: sendEmailVerificationRequest: User validation exception: [{}], User.email [{}]", e.getMessage(), model != null ? model.email : "anonymous");
 			return ResponseWrapper.with(Status.BAD_REQUEST, false, e.getMessage()).buildResponse();
 		} catch (DataValidationException e) {
@@ -192,7 +192,7 @@ public class UserAccountController extends BaseSecuredController {
 		} catch (TokenVerificationException e) {
 			logger.debug("UAC0034D: verifyEmail: Token validation exception: [{}], User.email [{}]", e.getMessage(), model.email);
 			return ResponseWrapper.with(Status.BAD_REQUEST, false, e.getMessage()).buildResponse();
-		} catch (UserNotFoundException e) {
+		} catch (RecordNotFoundException e) {
 			logger.debug("UAC0035D: verifyEmail: User validation exception: [{}], User.email [{}]", e.getMessage(), model.email);
 			return ResponseWrapper.with(Status.BAD_REQUEST, false, e.getMessage()).buildResponse();
 		} catch (DataValidationException e) {
@@ -223,7 +223,7 @@ public class UserAccountController extends BaseSecuredController {
 		} catch (ModelValidationException e) {
 			logger.debug("UAC0042D: resetPassword: Model validation exception: [{}], User.email [{}]", e.getMessage(), model != null ? model.email : "anonymous");
 			return ResponseWrapper.with(Status.BAD_REQUEST, false, e.getMessage()).buildResponse();
-		} catch (UserNotFoundException e) {
+		} catch (RecordNotFoundException e) {
 			logger.debug("UAC0043D: resetPassword: User validation exception: [{}], User.email [{}]", e.getMessage(), model != null ? model.email : "anonymous");
 			return ResponseWrapper.with(Status.BAD_REQUEST, false, e.getMessage()).buildResponse();
 		} catch (DataValidationException e) {
@@ -273,7 +273,7 @@ public class UserAccountController extends BaseSecuredController {
 		} catch (TokenVerificationException e) {
 			logger.debug("UAC0054D: confirmResetPassword: Token validation exception: [{}], User.email [{}]", e.getMessage(), model.email);
 			return ResponseWrapper.with(Status.BAD_REQUEST, false, e.getMessage()).buildResponse();
-		} catch (UserNotFoundException e) {
+		} catch (RecordNotFoundException e) {
 			logger.debug("UAC0055D: confirmResetPassword: User validation exception: [{}], User.email [{}]", e.getMessage(), model.email);
 			return ResponseWrapper.with(Status.BAD_REQUEST, false, e.getMessage()).buildResponse();
 		} catch (DataValidationException e) {
@@ -308,7 +308,7 @@ public class UserAccountController extends BaseSecuredController {
 		} catch (ModelValidationException e) {
 			logger.debug("UAC0062D: login: Model validation exception: [{}], User.email [{}]", e.getMessage(), model != null ? model.email : "anonymous");
 			return ResponseWrapper.with(Status.BAD_REQUEST, false, e.getMessage()).buildResponse();
-		} catch (UserNotFoundException e) {
+		} catch (RecordNotFoundException e) {
 			logger.debug("UAC0063D: login: User validation exception: [{}], User.email [{}]", e.getMessage(), model != null ? model.email : "anonymous");
 			return ResponseWrapper.with(Status.BAD_REQUEST, false, e.getMessage()).buildResponse();
 		} catch (DataValidationException e) {
