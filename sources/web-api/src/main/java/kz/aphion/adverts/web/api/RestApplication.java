@@ -7,10 +7,11 @@ import java.util.Set;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
+import kz.aphion.adverts.web.api.controllers.AdvertController;
 import kz.aphion.adverts.web.api.controllers.AdvertSearchController;
+import kz.aphion.adverts.web.api.controllers.SubscriptionController;
 import kz.aphion.adverts.web.api.controllers.UserAccountController;
 import kz.aphion.adverts.web.api.controllers.UserProfileController;
-import kz.aphion.adverts.web.api.controllers.UserSubscriptionController;
 import kz.aphion.adverts.web.api.security.SecuredMethodFilter;
 
 /**
@@ -35,11 +36,11 @@ public class RestApplication extends Application {
 						UserProfileController.class,
 						
 						// Subscription Management
-						UserSubscriptionController.class,
+						SubscriptionController.class,
 						
 						// Advert Search
-						AdvertSearchController.class
-						
+						AdvertSearchController.class,
+						AdvertController.class
 				)
 		);
 	}

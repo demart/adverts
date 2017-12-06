@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import kz.aphion.adverts.persistence.BaseEntity;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvert;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvertStatus;
 
@@ -19,7 +20,12 @@ public class SubscriptionAdvertModel {
 	/**
 	 * Идентификатор объявления
 	 */
-	public String advertId;
+	public String subscriptionAdvertId;
+	
+	/**
+	 * Объект объявления
+	 */
+	public BaseEntity advert;
 	
 	/**
 	 * Было ли просмотрено объявление пользователем
@@ -56,7 +62,7 @@ public class SubscriptionAdvertModel {
 		
 		List<SubscriptionAdvertModel> models = new ArrayList<SubscriptionAdvertModel>();
 		for (SubscriptionAdvert advert : adverts) {
-			SubscriptionAdvertModel model = conertToModel(advert);
+			SubscriptionAdvertModel model = covertToModel(advert);
 			if (model != null)
 				models.add(model);
 		}
@@ -64,13 +70,14 @@ public class SubscriptionAdvertModel {
 		return models;
 	}
 	
-	public static SubscriptionAdvertModel conertToModel(SubscriptionAdvert advert) {
+	public static SubscriptionAdvertModel covertToModel(SubscriptionAdvert advert) {
 		if (advert == null)
 			return null;
 		
 		SubscriptionAdvertModel model = new SubscriptionAdvertModel();
 		
-		model.advertId = advert.id.toHexString();
+		model.subscriptionAdvertId = advert.id.toHexString();
+		model.advert = advert.advert;
 		model.hasBeenViewed = advert.hasBeenViewed;
 		model.notificationWasSentAt = advert.notificationWasSentAt;
 		model.status = advert.status;

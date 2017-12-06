@@ -1,12 +1,19 @@
 package kz.aphion.adverts.web.api.repositories;
 
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.persistence.subscription.Subscription;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvert;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvertStatus;
+import kz.aphion.adverts.persistence.subscription.SubscriptionAdvertType;
 import kz.aphion.adverts.persistence.subscription.SubscriptionStatus;
+import kz.aphion.adverts.persistence.subscription.notification.SubscriptionNotification;
+import kz.aphion.adverts.persistence.subscription.notification.SubscriptionNotificationChannelType;
+import kz.aphion.adverts.persistence.subscription.notification.SubscriptionNotificationScheduledType;
+import kz.aphion.adverts.persistence.subscription.notification.SubscriptionNotificationType;
 import kz.aphion.adverts.persistence.users.User;
 import kz.aphion.adverts.web.api.exceptions.DataValidationException;
 import kz.aphion.adverts.web.api.exceptions.RecordNotFoundException;
@@ -114,6 +121,44 @@ public class SubscriptionRepository {
 				.field("subscription").equal(subscription)
 				.field("status").notEqual(SubscriptionAdvertStatus.DELETED)
 				.countAll();
+	}
+
+
+	public SubscriptionAdvert getSubscriptionAdvert(String subscriptionAdvertId) throws RecordNotFoundException, DataValidationException {
+		List<SubscriptionAdvert> adverts = DB.DS().createQuery(SubscriptionAdvert.class)
+				.field("_id").equal(new ObjectId(subscriptionAdvertId))
+				.field("status").notEqual(SubscriptionAdvertStatus.DELETED)
+				.asList();
+		
+		if (adverts == null || adverts.size() == 0) {
+			throw new RecordNotFoundException("SubscriptionAdvert not found");
+		}
+		
+		if (adverts.size() > 1) {
+			// TODO Strange 
+			logger.error("USR001E: Error, found more than one subscriptionAdvert.id [{}], which should be unqiue!", subscriptionAdvertId);
+			throw new DataValidationException("Duplicate records found!");
+		}
+		
+		SubscriptionAdvert advert = adverts.get(0);
+		if (advert == null) {
+			logger.error("USRR002E: Error, subscriptionAdvert.id [{}] is null in non null collection!", subscriptionAdvertId);
+			throw new DataValidationException("Subscription not found!");
+		}
+		
+		return advert;
+	}
+	
+	
+	/**
+	 * Сохраняет подписку и заполняет базовые поля Created, Updated, Modifier etc
+	 * @param subscription
+	 */
+	public void saveSubscription(Subscription subscription) {
+		subscription.modifier = subscription.user.email;
+		subscription.created = Calendar.getInstance();
+		subscription.updated = Calendar.getInstance();
+		DB.DS().save(subscription);
 	}
 	
 }

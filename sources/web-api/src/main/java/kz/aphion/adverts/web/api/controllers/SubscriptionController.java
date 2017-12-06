@@ -17,11 +17,14 @@ import kz.aphion.adverts.web.api.exceptions.DataValidationException;
 import kz.aphion.adverts.web.api.exceptions.ModelValidationException;
 import kz.aphion.adverts.web.api.exceptions.RecordNotFoundException;
 import kz.aphion.adverts.web.api.models.ResponseWrapper;
+import kz.aphion.adverts.web.api.models.subscriptions.requests.CreateOrUpdateSubscriptionRequestModel;
 import kz.aphion.adverts.web.api.models.subscriptions.requests.SubscriptionAdvertsRequestModel;
 import kz.aphion.adverts.web.api.models.subscriptions.requests.SubscriptionsRequestModel;
 import kz.aphion.adverts.web.api.security.SecuredMethod;
-import kz.aphion.adverts.web.api.services.UserSubscriptionService;
+import kz.aphion.adverts.web.api.services.SubscriptionService;
 
+import org.apache.commons.lang.StringUtils;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,12 +39,12 @@ import org.slf4j.LoggerFactory;
 @Path("/v1/subscription")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class UserSubscriptionController  extends BaseSecuredController {
+public class SubscriptionController  extends BaseSecuredController {
 
-	private static Logger logger = LoggerFactory.getLogger(UserSubscriptionController.class);
+	private static Logger logger = LoggerFactory.getLogger(SubscriptionController.class);
 
 	@Inject
-	UserSubscriptionService service;
+	SubscriptionService service;
 	
 	/**
 	 * Возвразает список подписок пользователя
@@ -78,8 +81,27 @@ public class UserSubscriptionController  extends BaseSecuredController {
 	@Consumes(MediaType.APPLICATION_JSON) 
 	@SecuredMethod
 	public Response getSubscriptionDetails(@PathParam("id") String subscriptionId) {
-		return null;
-		// 20
+		try {
+			logger.debug("USC0021D: getSubscriptionDetails: invoked with the email: [{}]", getUserEmail());
+
+			ResponseWrapper result = service.getSubscriptionDetails(subscriptionId);
+			logger.debug("USC0022D: getSubscriptionDetails: succesefully completed. User.email [{}]", getUserEmail());
+			
+			return result.buildResponse();
+			
+		} catch (AccessDeniedException e) {
+			logger.debug("USC0023E: getSubscriptionDetails: Unauthorized exception: [{}], User.email [{}]", e.getMessage(), getUserEmail());
+			return ResponseWrapper.with(Status.FORBIDDEN, false, e.getMessage()).buildResponse();
+		} catch (DataValidationException e) {
+			logger.error("UPC0074E: getSubscriptionDetails: Data validation exception: [{}], User.email [{}]", e.getMessage(), getUserEmail());
+			return ResponseWrapper.with(Status.BAD_REQUEST, false, e.getMessage()).buildResponse();
+		} catch (RecordNotFoundException e) {
+			logger.error("UPC0075E: getSubscriptionDetails: Data validation exception: [{}], User.email [{}]", e.getMessage(), getUserEmail());
+			return ResponseWrapper.with(Status.BAD_REQUEST, false, e.getMessage()).buildResponse();
+		} catch (Throwable e) {
+			logger.error("USC0024E: getSubscriptionDetails: Exception: " + e.getMessage() + " User.email " + getUserEmail(), e);
+			throw e;
+		} 
 	}
 		
 	
@@ -88,9 +110,29 @@ public class UserSubscriptionController  extends BaseSecuredController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON) 
 	@SecuredMethod
-	public Response createSubscription() {
-		return null;
-		// 30
+	public Response createSubscription(CreateOrUpdateSubscriptionRequestModel model) {
+		try {
+			logger.debug("USC0031D: createSubscription: invoked with the email: [{}]", getUserEmail());
+	
+			CreateOrUpdateSubscriptionRequestModel.validate(model);
+			
+			ResponseWrapper result = service.createSubscription(model);
+			logger.debug("USC0032D: createSubscription: succesefully completed. User.email [{}]", getUserEmail());
+			
+			return result.buildResponse();
+		} catch (ModelValidationException e) {
+			logger.debug("USC0033D: createSubscription: Model validation exception: [{}], User.email [{}]", e.getMessage(), getUserEmail());
+			return ResponseWrapper.with(Status.BAD_REQUEST, false, e.getMessage()).buildResponse();
+		} catch (AccessDeniedException e) {
+			logger.debug("USC0034D: createSubscription: Unauthorized exception: [{}], User.email [{}]", e.getMessage(), getUserEmail());
+			return ResponseWrapper.with(Status.FORBIDDEN, false, e.getMessage()).buildResponse();
+		} catch (DataValidationException e) {
+			logger.error("UPC0035E: createSubscription: Data validation exception: [{}], User.email [{}]", e.getMessage(), getUserEmail());
+			return ResponseWrapper.with(Status.BAD_REQUEST, false, e.getMessage()).buildResponse();
+		} catch (Throwable e) {
+			logger.error("USC0036E: createSubscription: Exception: " + e.getMessage() + " User.email " + getUserEmail(), e);
+			throw e;
+		} 
 	}
 	
 	@POST  
@@ -160,12 +202,40 @@ public class UserSubscriptionController  extends BaseSecuredController {
 	}
 	
 	@POST  
-	@Path("/advert/details")
+	@Path("/advert/{id}/details")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON) 
 	@SecuredMethod
-	public Response getSubscriptionAdvertDetails() {
-		return null;
+	public Response getSubscriptionAdvertDetails(@PathParam("id") String subscriptionAdvertId) {
+		try {
+			logger.debug("USC0080D: getSubscriptionAdvertDetails: invoked id [{}] with the email: [{}]", subscriptionAdvertId, getUserEmail());
+		
+			if (StringUtils.isBlank(subscriptionAdvertId))
+				throw new ModelValidationException("model.subscriptionAdvertId is null or empty");
+			if (!ObjectId.isValid(subscriptionAdvertId))
+				throw new ModelValidationException("model.subscriptionAdvertId is incorrect");
+			
+			ResponseWrapper result = service.getSubscriptionAdvert(subscriptionAdvertId);
+			logger.debug("USC0081D: getSubscriptionAdvertDetails: succesefully completed. User.email [{}]", getUserEmail());
+			
+			return result.buildResponse();
+			
+		} catch (ModelValidationException e) {
+			logger.debug("UPC0082D: getSubscriptionAdvertDetails: Model validation exception: [{}], User.email [{}]", e.getMessage(), getUserEmail());
+			return ResponseWrapper.with(Status.BAD_REQUEST, false, e.getMessage()).buildResponse();
+		} catch (AccessDeniedException e) {
+			logger.debug("UPC0083D: getSubscriptionAdvertDetails: Unauthorized exception: [{}], User.email [{}]", e.getMessage(), getUserEmail());
+			return ResponseWrapper.with(Status.FORBIDDEN, false, e.getMessage()).buildResponse();
+		} catch (DataValidationException e) {
+			logger.error("UPC0084E: getSubscriptionAdvertDetails: Data validation exception: [{}], User.email [{}]", e.getMessage(), getUserEmail());
+			return ResponseWrapper.with(Status.BAD_REQUEST, false, e.getMessage()).buildResponse();
+		} catch (RecordNotFoundException e) {
+			logger.error("UPC0085E: getSubscriptionAdvertDetails: Data validation exception: [{}], User.email [{}]", e.getMessage(), getUserEmail());
+			return ResponseWrapper.with(Status.BAD_REQUEST, false, e.getMessage()).buildResponse();
+		} catch (Throwable e) {
+			logger.error("UPC0086E: getSubscriptionAdvertDetails: Exception: " + e.getMessage() + " User.email " + getUserEmail(), e);
+			throw e;
+		}
 	}
 	
 	
