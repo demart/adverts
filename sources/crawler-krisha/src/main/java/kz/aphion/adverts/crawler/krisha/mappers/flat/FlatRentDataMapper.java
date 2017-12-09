@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import kz.aphion.adverts.crawler.krisha.mappers.AbstractAdvertMapper;
 import kz.aphion.adverts.crawler.krisha.mappers.CommonMapperUtils;
 import kz.aphion.adverts.persistence.realty.RealtyPublisherCompany;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatRentData;
+import kz.aphion.adverts.persistence.realty.data.flat.FlatRentDataModel;
 import kz.aphion.adverts.persistence.realty.data.flat.FlatRentRealty;
 
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ public class FlatRentDataMapper  extends AbstractAdvertMapper<FlatRentRealty> {
 	@Override
 	public void mapAdvertData(Map<String, Object> advert) {
 
-		realty.data = new FlatRentData();
+		realty.data = new FlatRentDataModel();
 		
 		// Commented because of changing structure of db
 		//realty.data.residentalComplex = new ResidentialComplex();

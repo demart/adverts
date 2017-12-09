@@ -1,10 +1,9 @@
 package kz.aphion.adverts.persistence.subscription.criteria;
 
+import java.util.HashMap;
 import java.util.List;
 
-import kz.aphion.adverts.persistence.BaseEntity;
-import kz.aphion.adverts.persistence.realty.building.ResidentialComplex;
-import kz.aphion.adverts.persistence.subscription.criteria.realty.RealtyLocationSubscriptionCriteria;
+import kz.aphion.adverts.persistence.adverts.AdvertPublisherType;
 
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Property;
@@ -17,7 +16,7 @@ import org.mongodb.morphia.annotations.Property;
  * Created at Aug 11, 2016
  */
 @Embedded
-public abstract class SubscriptionCriteria extends BaseEntity {
+public abstract class SubscriptionCriteria {
 
 	/**
 	 * Цена от
@@ -50,20 +49,24 @@ public abstract class SubscriptionCriteria extends BaseEntity {
 	public Boolean hasPhoto;
 	
 	/**
+	 * Список криетриев по объявлениям
+	 */
+	@Embedded
+	public HashMap<String, Object> data;
+	
+	/**
 	 * Интересующее расположение объектов.
 	 * Если null то учитываются все регионы без разбора
 	 * Если указаны какие-то регионы то учитывается только их присутсвие в объявлениях
 	 * 
 	 */
 	@Embedded
-	public RealtyLocationSubscriptionCriteria location;
+	public SubscriptionCriteriaLocation location;
 	
-
 	/**
-	 * Информация о ЖК которые участвуют в поиске
-	 * Если NULL то не важно какие
+	 * Кто опубликовал объявление (различные виды)
 	 */
-	@Embedded("residentialComplex")
-	public List<ResidentialComplex> residentalComplexs;
-	
+	@Embedded
+	public List<AdvertPublisherType> publisherTypes;
+
 }

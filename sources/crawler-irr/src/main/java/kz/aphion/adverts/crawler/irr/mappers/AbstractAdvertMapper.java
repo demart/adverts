@@ -9,13 +9,13 @@ import java.util.Map.Entry;
 import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
 import kz.aphion.adverts.crawler.irr.IrrAdvertCategoryType;
 import kz.aphion.adverts.persistence.SourceSystemType;
-import kz.aphion.adverts.persistence.realty.Realty;
-import kz.aphion.adverts.persistence.realty.RealtyAdvertStatus;
-import kz.aphion.adverts.persistence.realty.RealtyLocation;
-import kz.aphion.adverts.persistence.realty.RealtyPhoto;
-import kz.aphion.adverts.persistence.realty.RealtyPublisher;
-import kz.aphion.adverts.persistence.realty.RealtyPublisherType;
-import kz.aphion.adverts.persistence.realty.RealtySource;
+import kz.aphion.adverts.persistence.adverts.Advert;
+import kz.aphion.adverts.persistence.adverts.AdvertLocation;
+import kz.aphion.adverts.persistence.adverts.AdvertPhoto;
+import kz.aphion.adverts.persistence.adverts.AdvertPublisher;
+import kz.aphion.adverts.persistence.adverts.AdvertPublisherType;
+import kz.aphion.adverts.persistence.adverts.AdvertSource;
+import kz.aphion.adverts.persistence.adverts.AdvertStatus;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
  * @author artem.demidovich
  *
  */
-public abstract class AbstractAdvertMapper<T extends Realty> {
+public abstract class AbstractAdvertMapper<T extends Advert> {
 
 	private static Logger logger = LoggerFactory.getLogger(AbstractAdvertMapper.class);
 	
@@ -38,16 +38,16 @@ public abstract class AbstractAdvertMapper<T extends Realty> {
 	
 	public T mapAdvertObject(Map<String,Object> advert) throws CrawlerException, ParseException {
 		
-		realty.status = RealtyAdvertStatus.ACTIVE;
+		realty.status = AdvertStatus.ACTIVE;
 		
-		realty.source = new RealtySource();
-		realty.source.sourceType = SourceSystemType.IRR;
+		realty.source = new AdvertSource();
+		realty.source.type = SourceSystemType.IRR;
 		
-		realty.location = new RealtyLocation();
-		realty.publisher = new RealtyPublisher();
+		realty.location = new AdvertLocation();
+		realty.publisher = new AdvertPublisher();
 		realty.publisher.phones = new ArrayList<String>();
 		
-		realty.publisher.publisherType = RealtyPublisherType.UNDEFINED;
+		realty.publisher.type = AdvertPublisherType.UNDEFINED;
 		
 		//пришлось вынести описание отдельно для сохранения. Так как харастеристики 
 		//у них лежат в блоке "group_custom_fields".
@@ -60,7 +60,7 @@ public abstract class AbstractAdvertMapper<T extends Realty> {
 			switch (entry.getKey()) {
 				//Номер объявления
 				case "id":
-					realty.source.externalAdvertId = (String)entry.getValue();
+					realty.source.externalId = (String)entry.getValue();
 					break;
 				
 				//Характеристики объекта	
@@ -83,7 +83,7 @@ public abstract class AbstractAdvertMapper<T extends Realty> {
 					
 				//Url
 				case "url":
-					realty.source.originalAdvertLink = (String)entry.getValue();
+					realty.source.originalLink = (String)entry.getValue();
 					break;
 					
 				//Цена
@@ -163,9 +163,9 @@ public abstract class AbstractAdvertMapper<T extends Realty> {
 				//Фотографии
 				case "images":
 					List<Map<String, Object>> allImages = (List<Map<String, Object>>)entry.getValue();
-					List<RealtyPhoto> photos = new ArrayList<RealtyPhoto>();
+					List<AdvertPhoto> photos = new ArrayList<AdvertPhoto>();
 					for (Map<String, Object> image : allImages) {
-						RealtyPhoto photo = new RealtyPhoto ();
+						AdvertPhoto photo = new AdvertPhoto ();
 						for (Entry<String, Object> img : image.entrySet()) {
 							switch (img.getKey()) {
 								case "orig":

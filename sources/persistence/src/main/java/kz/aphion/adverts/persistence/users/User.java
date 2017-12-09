@@ -1,18 +1,14 @@
 package kz.aphion.adverts.persistence.users;
 
 import java.util.Calendar;
-import java.util.List;
 
 import kz.aphion.adverts.persistence.BaseEntity;
 import kz.aphion.adverts.persistence.CalendarConverter;
-import kz.aphion.adverts.persistence.subscription.Subscription;
-import kz.aphion.adverts.persistence.users.request.EmailVerificationRequest;
-import kz.aphion.adverts.persistence.users.request.ResetPasswordRequest;
 
 import org.mongodb.morphia.annotations.Converters;
 import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.NotSaved;
 import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Reference;
 
 /**
  * 
@@ -43,7 +39,6 @@ public class User extends BaseEntity {
 	@Property
 	public String accessToken;
 	
-	
 	/**
 	 * Почтовый адрес пользователя, он же логин в системе
 	 */
@@ -51,23 +46,10 @@ public class User extends BaseEntity {
 	public String email;
 
 	/**
-	 * Список токенов для проверки email
-	 */
-	@Reference
-	public List<EmailVerificationRequest> emailVerificationRequests;	
-	
-	/**
 	 * Пароль пользователя (MD5)
 	 */
 	@Property
 	public String password;
-	
-	/**
-	 * Список токенов авторизации пользователя
-	 */
-	@Reference
-	public List<ResetPasswordRequest> resetPasswordRequests;
-
 	
 	/**
 	 * Информация о контактном телефоне
@@ -84,19 +66,8 @@ public class User extends BaseEntity {
 	/**
 	 * Компания к которой относиться пользователь
 	 */
+	@NotSaved
 	public Company company;
-	
-	/**
-	 * Список подписок пользователя
-	 */
-	@Reference
-	public List<Subscription> subscriptions;
-
-	/**
-	 * Каналы или устройства пользователя
-	 */
-	@Reference
-	public List<UserDevice> devices;
 	
 	/**
 	 * Время последней активности.

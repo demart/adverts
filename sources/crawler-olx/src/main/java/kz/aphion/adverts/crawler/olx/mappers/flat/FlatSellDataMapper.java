@@ -17,7 +17,7 @@ import kz.aphion.adverts.persistence.realty.RealtyLocation;
 import kz.aphion.adverts.persistence.realty.RealtyPublisher;
 import kz.aphion.adverts.persistence.realty.RealtyPublisherType;
 import kz.aphion.adverts.persistence.realty.RealtySource;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatSellData;
+import kz.aphion.adverts.persistence.realty.data.flat.FlatSellDataModel;
 import kz.aphion.adverts.persistence.realty.data.flat.FlatSellRealty;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBuildingType;
 
@@ -39,7 +39,7 @@ public class FlatSellDataMapper {
 		
 		FlatSellRealty realty = new FlatSellRealty();
 		
-		realty.data = new FlatSellData();
+		realty.data = new FlatSellDataModel();
 		realty.status = RealtyAdvertStatus.ACTIVE;
 		realty.source = new RealtySource();
 		realty.source.sourceType = SourceSystemType.OLX;

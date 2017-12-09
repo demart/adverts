@@ -2,6 +2,7 @@ package kz.aphion.adverts.crawler.kn.mappers.flat;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
@@ -11,20 +12,24 @@ import kz.aphion.adverts.crawler.kn.QueryBuilder;
 import kz.aphion.adverts.crawler.kn.mappers.AbstractAdvertMapper;
 import kz.aphion.adverts.crawler.kn.mappers.CommonMapperUtils;
 import kz.aphion.adverts.crawler.kn.persistence.KnResidentialComplex;
-import kz.aphion.adverts.persistence.realty.RealtyPhoto;
-import kz.aphion.adverts.persistence.realty.RealtyPublisherType;
-import kz.aphion.adverts.persistence.realty.building.ResidentialComplex;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatSellData;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatSellRealty;
-import kz.aphion.adverts.persistence.realty.types.RealtyOperationType;
-import kz.aphion.adverts.persistence.realty.types.RealtyType;
+import kz.aphion.adverts.persistence.CalendarConverter;
+import kz.aphion.adverts.persistence.adverts.Advert;
+import kz.aphion.adverts.persistence.adverts.AdvertOperationType;
+import kz.aphion.adverts.persistence.adverts.AdvertPhoto;
+import kz.aphion.adverts.persistence.adverts.AdvertPublisherCompany;
+import kz.aphion.adverts.persistence.adverts.AdvertPublisherType;
+import kz.aphion.adverts.persistence.adverts.AdvertType;
+import kz.aphion.adverts.persistence.realty.RealtyType;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.mongodb.morphia.mapping.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.mongodb.DBObject;
 
 /**
  * Класс конвертирует объявления о продаже или арнеде квартир
@@ -32,26 +37,27 @@ import org.slf4j.LoggerFactory;
  * @author denis.krylov
  *
  */
-public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
+public class FlatSellDataMapper extends AbstractAdvertMapper<Advert> {
 
 	private static Logger logger = LoggerFactory.getLogger(FlatSellDataMapper.class);
 		
 
-	public FlatSellDataMapper(FlatSellRealty realty) {
+	public FlatSellDataMapper(Advert realty) {
 		super(realty);
 	}
 	
 	@Override
 	public void mapAdvertData (String advert, QueryBuilder queryBuilder, KnAdvertCategoryType advertType) throws ParseException, CrawlerException {
-		realty.data = new FlatSellData();
-		realty.data.residentalComplex = new ResidentialComplex();
+		realty.data = new HashMap<String, Object>();
 		
 		Document adv = Jsoup.parse(advert);
 		
 	    //Уникальный номер объявления
-		realty.source.externalAdvertId  = CommonMapperUtils.convertId(adv.select("span.advert-number").text());
-		realty.type = RealtyType.FLAT;
-		realty.operation = RealtyOperationType.SELL;
+		realty.source.externalId  = CommonMapperUtils.convertId(adv.select("span.advert-number").text());
+		
+		realty.type = AdvertType.REALTY;
+		realty.subType = RealtyType.FLAT.toString();
+		realty.operation = AdvertOperationType.SELL;
 		
 		//Время публикации.
 		//Установим время на 23-59-59, это необходимо для проверки на обновления
@@ -66,35 +72,35 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 			
 			if (tr.select("th").text().equals("Этаж")) {
 				if (FlatDataMapperUtils.convertFloor(tr.select("td").text()) != null)
-					realty.data.flatFloor = FlatDataMapperUtils.convertFloor(tr.select("td").text());
+					realty.data.put("flatFloor", FlatDataMapperUtils.convertFloor(tr.select("td").text()));
 				if (FlatDataMapperUtils.convertHouseFloorCount(tr.select("td").text()) != null)
-					realty.data.houseFloorCount = FlatDataMapperUtils.convertHouseFloorCount(tr.select("td").text());
-	}
+					realty.data.put("houseFloorCount", FlatDataMapperUtils.convertHouseFloorCount(tr.select("td").text()));
+			}
 	
 			if (tr.select("th").text().equals("Количество комнат"))
-				realty.data.rooms = FlatDataMapperUtils.convertLiveRooms(tr.select("td").text());
+				realty.data.put("rooms", FlatDataMapperUtils.convertLiveRooms(tr.select("td").text()));
 			
 			if (tr.select("th").text().equals("Площадь")) {
-				realty.data.square = FlatDataMapperUtils.convertSquare(tr.select("td").text());
+				realty.data.put("square", FlatDataMapperUtils.convertSquare(tr.select("td").text()));
 				
 				if (FlatDataMapperUtils.convertLivingSquare(tr.select("td").text()) != null)
-					realty.data.squareLiving = FlatDataMapperUtils.convertLivingSquare(tr.select("td").text());
+					realty.data.put("squareLiving", FlatDataMapperUtils.convertLivingSquare(tr.select("td").text()));
 				
 				if (FlatDataMapperUtils.convertKitchenSquare(tr.select("td").text()) != null)
-					realty.data.squareKitchen = FlatDataMapperUtils.convertKitchenSquare(tr.select("td").text());
+					realty.data.put("squareKitchen", FlatDataMapperUtils.convertKitchenSquare(tr.select("td").text()));
 				
 				}
 			
 		   	 if (tr.select("th").text().equals("Год постройки"))
-				 realty.data.houseYear = FlatDataMapperUtils.convertHouseYear(tr.select("td").text());
+		   		realty.data.put("houseYear", FlatDataMapperUtils.convertHouseYear(tr.select("td").text()));
 			
 			
     		 if (tr.select("th").text().equals("В залоге"))
-				realty.data.mortgageStatus = FlatDataMapperUtils.getFlatMortgageStatus(tr.select("td").text());
+    			 realty.data.put("mortgageStatus", FlatDataMapperUtils.getFlatMortgageStatus(tr.select("td").text()));
 
 			
 			if (tr.select("th").text().equals("Материал стен"))
-				realty.data.flatBuildingType = FlatDataMapperUtils.getFlatBuildingType(tr.select("td").text());
+				realty.data.put("flatBuildingType", FlatDataMapperUtils.getFlatBuildingType(tr.select("td").text()));
 			
 			
 			if (tr.select("th").text().equals("Название ЖК")) {
@@ -103,7 +109,12 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 					String regionName = CommonMapperUtils.getRegionName(adv.select("div.address").text());
 					KnResidentialComplex complexEntity = KnDataManager.getResidentalComplex(complexName, regionName);
 					if (complexEntity != null) {
-						realty.data.residentalComplex = complexEntity.complex;
+						// Convert to DBObject
+						Mapper mapper = new Mapper();
+						mapper.getConverters().addConverter(CalendarConverter.class);
+						DBObject complexDBO = mapper.toDBObject(complexEntity.complex);
+						logger.info("{}", complexDBO);
+						realty.data.put("residentalComplex", complexDBO);
 					} else {
 						// If not found, what to do
 					}
@@ -119,14 +130,7 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 		
 		//В некоторых объявлениях отсутствует описание, поэтому необходима такая проверка
 		if (adv.select("div.description").size() > 0)
-			realty.data.text = adv.select("div.description").select("p").text();
-		
-		//Работа с телефонами
-		String[] phones = CommonMapperUtils.convertPhonesNumber (adv.select("div.phones").text());
-		realty.publisher.phones = new ArrayList<String>();
-		for (String phone : phones) {
-			realty.publisher.phones.add(phone);
-		}
+			realty.data.put("text", adv.select("div.description").select("p").text());
 		
 		//Работа с фотографиями
 		//Выдергиваем картинки из объявления
@@ -139,50 +143,59 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 			linkImages.add(linkToImage);
 		}
 		
-		List<RealtyPhoto> photos = CommonMapperUtils.convertPhotos(linkImages);
+		List<AdvertPhoto> photos = CommonMapperUtils.convertPhotos(linkImages);
 		if (photos.size() > 0)
 			realty.photos = photos;
 		
 		//Ищем к какому объекту из регионов относится. Варианты: область, город, район
 		realty.location.externalRegionId = CommonMapperUtils.getRegionName(adv.select("div.address").text());
 
-		
 		//Улица и номер дома
 		realty.location.streetName = CommonMapperUtils.getStreetName(adv.select("div.col-content").select("h1").text());
 		if (CommonMapperUtils.getHouseNumber(adv.select("div.col-content").select("h1").text()) != null)
 			realty.location.houseNumber = CommonMapperUtils.getHouseNumber(adv.select("div.col-content").select("h1").text());
-	
+
+		//Работа с телефонами
+		if (adv.select("span.con-pers__phone").size() > 0) {
+			realty.publisher.phones = new ArrayList<String>();
+			for (Element element : adv.select("span.con-pers__phone")) {
+				realty.publisher.phones.add(element.text());
+			}
+		}
+		
 		//Кто продает: частное лицо или компания
-		if (adv.select("div.contact-name").size() > 0) {
-			if (adv.select("div.contact-name").select("strong").text().equals("Частное лицо"))
-				realty.publisher.publisherType = RealtyPublisherType.OWNER;
-			else {
-				if (adv.select("div.company-main-info").size() > 0) {
-					realty.publisher.publisherType = RealtyPublisherType.REALTOR_COMPANY;
-					if (adv.select("div.field").size() > 0)
-						if (adv.select("div.field").get(0).select("a[href]").size() > 0)
-							if (CommonMapperUtils.getRealtorName(adv.select("div.field").get(0).select("a[href]").first().text()) != null)
-								realty.publisher.name = CommonMapperUtils.getRealtorName(adv.select("div.field").get(0).select("a[href]").first().text());
-				
-				}
-				
-				else {
-					realty.publisher.publisherType = RealtyPublisherType.REALTOR;
-					if (adv.select("div.field").size() > 0)
-						if (adv.select("div.field").get(0).select("a[href]").size() > 0)
-							if (CommonMapperUtils.getRealtorName(adv.select("div.field").get(0).select("a[href]").first().text()) != null)
-								realty.publisher.name = CommonMapperUtils.getRealtorName(adv.select("div.field").get(0).select("a[href]").first().text());
-					}
-				}
+		if (adv.select("section.con-info").size() > 0) {
+			// Если частное лицо
+			String agentName = adv.select("h4.con-info__title").text();
+			if ("Частное лицо".equals(agentName)) {
+				realty.publisher.type = AdvertPublisherType.OWNER;
+			}
+			
+			if ("Частный риэлтор".equals(agentName)) {
+				realty.publisher.type = AdvertPublisherType.AGENT;
+				realty.publisher.name = adv.select("a.con-pers__rielt").text();
+			}
+			
+			if (agentName.contains("Риэлтор агентства")) {
+				realty.publisher.type = AdvertPublisherType.AGENT_COMPANY;
+				realty.publisher.name = adv.select("a.con-pers__rielt").text();
+				realty.publisher.company = new AdvertPublisherCompany();
+				realty.publisher.company.name = adv.select("h4.con-info__title").select("a.con-info__link").text();
+			}
+			
+			if (agentName.contains("Агентство недвижимости")) {
+				realty.publisher.type = AdvertPublisherType.AGENT_COMPANY;
+				realty.publisher.name = adv.select("h4.con-info__title").select("a.con-info__link").text();
+				realty.publisher.company = new AdvertPublisherCompany();
+				realty.publisher.company.name = realty.publisher.name;
+			}
+			
+			if (agentName.contains("Девелоперская")) {
+				realty.publisher.type = AdvertPublisherType.COMPANY;
+				realty.publisher.name = adv.select("a.con-pers__rielt").text();
+				realty.publisher.company = new AdvertPublisherCompany();
+				realty.publisher.company.name = adv.select("h4.con-info__title").select("a.con-info__link").text();
+			}
 		}
-		else {
-			realty.publisher.publisherType = RealtyPublisherType.REALTOR_COMPANY;
-			if (adv.select("div.field").size() > 0)
-				if (adv.select("div.field").get(0).select("a[href]").size() > 0)
-					if (CommonMapperUtils.getRealtorName(adv.select("div.field").get(0).select("a[href]").first().text()) != null)
-						realty.publisher.name = CommonMapperUtils.getRealtorName(adv.select("div.field").get(0).select("a[href]").first().text());
-		}
-		
-		
 	}
 }

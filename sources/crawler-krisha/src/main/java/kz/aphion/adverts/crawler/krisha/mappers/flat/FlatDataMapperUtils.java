@@ -10,7 +10,8 @@ import kz.aphion.adverts.crawler.krisha.KrishaDataManager;
 import kz.aphion.adverts.crawler.krisha.mappers.CommonMapperUtils;
 import kz.aphion.adverts.crawler.krisha.persistence.KrishaRegion;
 import kz.aphion.adverts.crawler.krisha.persistence.KrishaResidentialComplex;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatRealtyBaseData;
+import kz.aphion.adverts.persistence.realty.MortgageStatus;
+import kz.aphion.adverts.persistence.realty.data.flat.FlatRealtyBaseDataModel;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBalconyGlazingType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBalconyType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBuildingType;
@@ -27,7 +28,6 @@ import kz.aphion.adverts.persistence.realty.data.flat.types.FlatRenovationType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatRentMiscellaneousType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatRentPeriodType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatSecurityType;
-import kz.aphion.adverts.persistence.realty.types.MortgageStatus;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -37,7 +37,7 @@ public class FlatDataMapperUtils {
 
 	private static Logger logger = LoggerFactory.getLogger(FlatDataMapperUtils.class);
 	
-	public static void mapResidentialComplex(Map<String, Object> advert, FlatRealtyBaseData data, String externalComplexId) {
+	public static void mapResidentialComplex(Map<String, Object> advert, FlatRealtyBaseDataModel data, String externalComplexId) {
 		if (StringUtils.isBlank(externalComplexId))
 			return;
 		

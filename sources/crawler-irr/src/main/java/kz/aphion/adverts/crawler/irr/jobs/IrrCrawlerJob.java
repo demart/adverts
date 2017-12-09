@@ -8,9 +8,9 @@ import java.util.Map;
 import javax.jms.JMSException;
 
 import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.common.models.mq.adverts.ProcessModel;
+import kz.aphion.adverts.common.models.mq.adverts.ProcessStatus;
 import kz.aphion.adverts.common.models.mq.phones.RegisterPhoneModel;
-import kz.aphion.adverts.common.models.mq.realties.ProcessRealtyModel;
-import kz.aphion.adverts.common.models.mq.realties.RealtyProcessStatus;
 import kz.aphion.adverts.common.mq.QueueNameConstants;
 import kz.aphion.adverts.crawler.core.CrawlerHttpClient;
 import kz.aphion.adverts.crawler.core.DataManager;
@@ -28,14 +28,14 @@ import kz.aphion.adverts.crawler.irr.QueryBuilder;
 import kz.aphion.adverts.crawler.irr.mappers.IrrAdvertMapper;
 import kz.aphion.adverts.crawler.irr.mappers.RealtyComparator;
 import kz.aphion.adverts.persistence.SourceSystemType;
+import kz.aphion.adverts.persistence.adverts.Advert;
+import kz.aphion.adverts.persistence.adverts.AdvertStatus;
 import kz.aphion.adverts.persistence.crawler.CrawlerSourceSystemTypeEnum;
 import kz.aphion.adverts.persistence.crawler.ProxyServerTypeEnum;
 import kz.aphion.adverts.persistence.crawler.UserAgentTypeEnum;
 import kz.aphion.adverts.persistence.phones.PhoneOwner;
 import kz.aphion.adverts.persistence.phones.PhoneSource;
 import kz.aphion.adverts.persistence.phones.PhoneSourceCategory;
-import kz.aphion.adverts.persistence.realty.Realty;
-import kz.aphion.adverts.persistence.realty.RealtyAdvertStatus;
 
 import org.apache.commons.lang.StringUtils;
 import org.mongodb.morphia.Datastore;
@@ -148,7 +148,7 @@ public class IrrCrawlerJob extends CrawlerProcessJob {
 			// Получаем тип объявления для разбора
 			IrrAdvertCategoryType advertType = getAdvertType(crawlerModel);
 				
-			List<Realty> adverts = IrrAdvertMapper.extractAndConvertAdverts(advertType, jsonResponseMap, queryBuilder, crawlerModel);
+			List<Advert> adverts = IrrAdvertMapper.extractAndConvertAdverts(advertType, jsonResponseMap, queryBuilder, crawlerModel);
 				
 			if (countOfResponseWithNullAdverts > 3)
 				isFinished = true;
@@ -165,7 +165,7 @@ public class IrrCrawlerJob extends CrawlerProcessJob {
 			// Делаем проверки или дополнительные связи со структурой БД
 			// Проверяем обрабатывали ли объявление		
 			// Выкидываем обработанные объявления
-				for (Realty realty : adverts) {
+				for (Advert realty : adverts) {
 	
 						 List existingAdverts = getExistingAdverts(ds, realty);
 						 
@@ -173,7 +173,7 @@ public class IrrCrawlerJob extends CrawlerProcessJob {
 							 foundExistingAdvertsCount += 1;
 							 
 							 // Так как поидее не должно быть больше одного
-							 Realty existingRealty = (Realty)existingAdverts.get(0);
+							 Advert existingRealty = (Advert)existingAdverts.get(0);
 							 boolean wasUpdated = false;
 							 
 							 //Проверяем на измения объявления
@@ -188,7 +188,7 @@ public class IrrCrawlerJob extends CrawlerProcessJob {
 								 
 								 // Обновляем старую версию
 								 Query updateQuery = ds.createQuery(realty.getClass()).field(Mapper.ID_KEY).equal(existingRealty.id);
-								 UpdateOperations<?> ops = ds.createUpdateOperations(realty.getClass()).set("status", RealtyAdvertStatus.ARCHIVED);
+								 UpdateOperations<?> ops = ds.createUpdateOperations(realty.getClass()).set("status", AdvertStatus.ARCHIVED);
 								 ds.update(updateQuery, ops);
 								 
 								 // Сохраняем новую версию
@@ -200,11 +200,11 @@ public class IrrCrawlerJob extends CrawlerProcessJob {
 								 // Отправляем сообщение в очередь обработки телефонов
 								 sendPhoneNumberRegistrationMessage(realty);
 								 
-								 logger.info("Advert [{}] with id [{}] was moved to archive, with id [{}] added.", realty.source.externalAdvertId, existingRealty.id, realty.id);
+								 logger.info("Advert [{}] with id [{}] was moved to archive, with id [{}] added.", realty.source.externalId, existingRealty.id, realty.id);
 								 
 							 } else {
 								 // Ничего не делаем, так как по умолчанию считаем что объявление не изменилось
-								 logger.info("Advert [" + realty.source.externalAdvertId + "] already exists and up-to-date.");
+								 logger.info("Advert [" + realty.source.externalId + "] already exists and up-to-date.");
 								 foundExistingUpToDateAdvertsCount +=1;
 							 }
 							 
@@ -255,12 +255,12 @@ public class IrrCrawlerJob extends CrawlerProcessJob {
 	 * @param realty
 	 * @return
 	 */
-	private List getExistingAdverts(Datastore ds, Realty realty) {
+	private List getExistingAdverts(Datastore ds, Advert realty) {
 		Query q = ds.createQuery(realty.getClass());
 		 
-		 q.field("status").equal(RealtyAdvertStatus.ACTIVE);
-		 q.field("source.externalAdvertId").equal(realty.source.externalAdvertId);
-		 q.field("source.sourceType").equal(SourceSystemType.IRR);
+		 q.field("status").equal(AdvertStatus.ACTIVE);
+		 q.field("source.externalId").equal(realty.source.externalId);
+		 q.field("source.type").equal(SourceSystemType.IRR);
 		 
 		 return q.asList();
 	}
@@ -271,17 +271,17 @@ public class IrrCrawlerJob extends CrawlerProcessJob {
 	 * 
 	 * @param realty
 	 */
-	private void sendMessageForProcessing(Realty newRealty, boolean wasUpdated, Realty oldRealty) {
+	private void sendMessageForProcessing(Advert newRealty, boolean wasUpdated, Advert oldRealty) {
 		try {
-			ProcessRealtyModel model = new ProcessRealtyModel();
+			ProcessModel model = new ProcessModel();
 			
 			model.advertId = newRealty.id.toString();
-			model.status = wasUpdated == false ? RealtyProcessStatus.NEW : RealtyProcessStatus.UPDATED; 
+			model.status = wasUpdated == false ? ProcessStatus.NEW : ProcessStatus.UPDATED; 
 			model.oldAdvertId = wasUpdated == false ? null : oldRealty.id.toString();
 			model.eventTime = Calendar.getInstance();			
 			
-			model.type = newRealty.type;
-			model.operation = newRealty.operation;
+			//model.type = newRealty.type;
+			//model.operation = newRealty.operation;
 			
 			String message = new GsonBuilder().setPrettyPrinting().create().toJson(model);
 		
@@ -298,7 +298,7 @@ public class IrrCrawlerJob extends CrawlerProcessJob {
 	 * 
 	 * @param realty
 	 */
-	private void sendPhoneNumberRegistrationMessage(Realty realty) {
+	private void sendPhoneNumberRegistrationMessage(Advert realty) {
 		try {
 			RegisterPhoneModel model = new RegisterPhoneModel();
 			model.source = PhoneSource.IRR;
@@ -309,20 +309,20 @@ public class IrrCrawlerJob extends CrawlerProcessJob {
 			model.regions = realty.location.regions;
 			
 			if (realty.publisher == null) {
-				logger.error("Advert Id [{}] with Id[{}] Can't send message to registration phone queue, published is null.", realty.source.externalAdvertId, realty.id);
+				logger.error("Advert Id [{}] with Id[{}] Can't send message to registration phone queue, published is null.", realty.source.externalId, realty.id);
 			}
 			
-			switch (realty.publisher.publisherType) {
-				case DEVELOPER_COMPANY:
+			switch (realty.publisher.type) {
+				case COMPANY:
 					model.owner = PhoneOwner.DEVELOPER_COMPANY;
 					break;
 				case OWNER:
 					model.owner = PhoneOwner.OWNER;
 					break;
-				case REALTOR:
+				case AGENT:
 					model.owner = PhoneOwner.REALTOR;
 					break;
-				case REALTOR_COMPANY:
+				case AGENT_COMPANY:
 					model.owner = PhoneOwner.REALTOR_COMPANY;
 					break;
 				case UNDEFINED:

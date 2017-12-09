@@ -6,7 +6,7 @@ import org.mongodb.morphia.annotations.Reference;
 
 import kz.aphion.adverts.persistence.BaseEntity;
 import kz.aphion.adverts.persistence.Region;
-import kz.aphion.adverts.persistence.realty.building.ResidentialComplex;
+import kz.aphion.adverts.persistence.realty.ResidentialComplex;
 
 
 /**

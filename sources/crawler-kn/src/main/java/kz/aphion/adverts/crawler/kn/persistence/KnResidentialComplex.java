@@ -2,7 +2,7 @@ package kz.aphion.adverts.crawler.kn.persistence;
 
 import kz.aphion.adverts.persistence.BaseEntity;
 import kz.aphion.adverts.persistence.Region;
-import kz.aphion.adverts.persistence.realty.building.ResidentialComplex;
+import kz.aphion.adverts.persistence.realty.ResidentialComplex;
 
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Property;

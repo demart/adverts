@@ -1,10 +1,10 @@
 package kz.aphion.adverts.crawler.olx;
 
 import kz.aphion.adverts.persistence.realty.Realty;
+import kz.aphion.adverts.persistence.realty.RealtyType;
 import kz.aphion.adverts.persistence.realty.data.flat.FlatRentRealty;
 import kz.aphion.adverts.persistence.realty.data.flat.FlatSellRealty;
 import kz.aphion.adverts.persistence.realty.types.RealtyOperationType;
-import kz.aphion.adverts.persistence.realty.types.RealtyType;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;

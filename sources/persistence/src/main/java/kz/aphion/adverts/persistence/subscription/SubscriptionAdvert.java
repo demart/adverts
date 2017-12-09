@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import kz.aphion.adverts.persistence.BaseEntity;
 import kz.aphion.adverts.persistence.CalendarConverter;
+import kz.aphion.adverts.persistence.adverts.Advert;
 
 import org.mongodb.morphia.annotations.Converters;
 import org.mongodb.morphia.annotations.Entity;
@@ -66,6 +67,6 @@ public class SubscriptionAdvert extends BaseEntity {
 	 * Не знаю заработает так или нет
 	 */
 	@Reference
-	public BaseEntity advert;
+	public Advert advert;
 	
 }

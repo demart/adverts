@@ -6,11 +6,11 @@ import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
 import kz.aphion.adverts.crawler.kn.KnAdvertCategoryType;
 import kz.aphion.adverts.crawler.kn.QueryBuilder;
 import kz.aphion.adverts.persistence.SourceSystemType;
-import kz.aphion.adverts.persistence.realty.Realty;
-import kz.aphion.adverts.persistence.realty.RealtyAdvertStatus;
-import kz.aphion.adverts.persistence.realty.RealtyLocation;
-import kz.aphion.adverts.persistence.realty.RealtyPublisher;
-import kz.aphion.adverts.persistence.realty.RealtySource;
+import kz.aphion.adverts.persistence.adverts.Advert;
+import kz.aphion.adverts.persistence.adverts.AdvertLocation;
+import kz.aphion.adverts.persistence.adverts.AdvertPublisher;
+import kz.aphion.adverts.persistence.adverts.AdvertSource;
+import kz.aphion.adverts.persistence.adverts.AdvertStatus;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
  * @author artem.demidovich
  *
  */
-public abstract class AbstractAdvertMapper<T extends Realty> {
+public abstract class AbstractAdvertMapper<T extends Advert> {
 
 	private static Logger logger = LoggerFactory.getLogger(AbstractAdvertMapper.class);
 	
@@ -33,13 +33,13 @@ public abstract class AbstractAdvertMapper<T extends Realty> {
 	
 	public T mapAdvertObject(String advert, QueryBuilder queryBuilder, KnAdvertCategoryType advertType) throws ParseException, CrawlerException {
 		
-		realty.status = RealtyAdvertStatus.ACTIVE;
+		realty.status = AdvertStatus.ACTIVE;
 		
-		realty.source = new RealtySource();
-		realty.source.sourceType = SourceSystemType.KN;
+		realty.source = new AdvertSource();
+		realty.source.type = SourceSystemType.KN;
 		
-		realty.location = new RealtyLocation();
-		realty.publisher = new RealtyPublisher();
+		realty.location = new AdvertLocation();
+		realty.publisher = new AdvertPublisher();
 		
 		
 		mapAdvertData(advert, queryBuilder, advertType);

@@ -1,14 +1,11 @@
 package kz.aphion.adverts.persistence.crawler;
 
-import java.util.List;
+import kz.aphion.adverts.persistence.BaseEntity;
+import kz.aphion.adverts.persistence.CalendarConverter;
 
 import org.mongodb.morphia.annotations.Converters;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Property;
-import org.mongodb.morphia.annotations.Reference;
-
-import kz.aphion.adverts.persistence.BaseEntity;
-import kz.aphion.adverts.persistence.CalendarConverter;
 
 
 /**
@@ -73,10 +70,4 @@ public class CrawlerGroup extends BaseEntity {
 	@Property
 	public Boolean useUserAgents;
 
-	/**
-	 * Список всех Crawler'ов
-	 */
-	//@Reference
-	//public List<CrawlerEntity> crawlers;
-	
 }

@@ -7,7 +7,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
-import kz.aphion.adverts.persistence.realty.RealtyPhoto;
+import kz.aphion.adverts.persistence.adverts.AdvertPhoto;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,11 +68,11 @@ public class CommonMapperUtils {
 	 * @param linkImages
 	 * @return
 	 */
-	public static List<RealtyPhoto> convertPhotos(ArrayList<String> linkImages) {
-		List<RealtyPhoto> photos = new ArrayList<RealtyPhoto>();
+	public static List<AdvertPhoto> convertPhotos(ArrayList<String> linkImages) {
+		List<AdvertPhoto> photos = new ArrayList<AdvertPhoto>();
 			
 		for (int i = 0; i < linkImages.size(); i++) {
-			RealtyPhoto photo = new RealtyPhoto();
+			AdvertPhoto photo = new AdvertPhoto();
 			photo.path = linkImages.get(i);
 			photos.add(photo);
 		}

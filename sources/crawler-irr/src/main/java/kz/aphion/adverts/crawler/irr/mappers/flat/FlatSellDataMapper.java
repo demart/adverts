@@ -1,18 +1,19 @@
 package kz.aphion.adverts.crawler.irr.mappers.flat;
 
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import kz.aphion.adverts.crawler.irr.mappers.AbstractAdvertMapper;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatSellData;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatSellRealty;
+import kz.aphion.adverts.persistence.adverts.Advert;
+import kz.aphion.adverts.persistence.adverts.AdvertOperationType;
+import kz.aphion.adverts.persistence.adverts.AdvertType;
+import kz.aphion.adverts.persistence.realty.RealtyType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBuildingType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatLavatoryType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatPhoneType;
-import kz.aphion.adverts.persistence.realty.types.RealtyOperationType;
-import kz.aphion.adverts.persistence.realty.types.RealtyType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,28 +24,29 @@ import org.slf4j.LoggerFactory;
  * @author denis.krylov
  *
  */
-public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
+public class FlatSellDataMapper extends AbstractAdvertMapper<Advert> {
 
 	private static Logger logger = LoggerFactory.getLogger(FlatSellDataMapper.class);
 
 
-	public FlatSellDataMapper(FlatSellRealty realty) {
+	public FlatSellDataMapper(Advert realty) {
 		super(realty);
 	}
 	
 	@Override
 	public void mapAdvertData(List<Map<String, Object>> customFields, String description) {
 		
-		realty.data = new FlatSellData();
+		realty.data = new HashMap<String, Object>();
 		
-		realty.type = RealtyType.FLAT;
-		realty.operation = RealtyOperationType.SELL;
+		realty.type = AdvertType.REALTY;
+		realty.subType = RealtyType.FLAT.toString();
+		realty.operation = AdvertOperationType.SELL;
 		
 		//приходится передавать отдельно описание.
 		//Так как все характеристики лежат в массиве, а текст отдельно
 		//а характеристи у каждой категории разные, и соотвественно нужны будут разные мапперы на характеристики.
 		if (description != null)
-			realty.data.text = description;
+			realty.data.put("text", description);
 		
 		//на irr.kz параметры делятся по определенным группам, которые лежат в одном массиве параметров "group_custom_fields"
 		//группы представляют собой массивы параметров "custom_fields"
@@ -67,7 +69,7 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 									case "rooms":
 										String rooms = (String)keys.getValue();
 										rooms = rooms.replace(",", ".");
-										realty.data.rooms = Float.parseFloat(rooms);
+										realty.data.put("rooms", Float.parseFloat(rooms));
 										break;
 									
 									//Общая площадь	
@@ -80,7 +82,7 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 										df2.setMaximumFractionDigits(2);
 										square = df2.format(litersOfPetrol2);
 										square = square.replaceAll(",", ".");	
-										realty.data.square = Float.parseFloat(square);
+										realty.data.put("square", Float.parseFloat(square));
 										break;
 									
 									//Жилая площадь
@@ -93,7 +95,7 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 										df3.setMaximumFractionDigits(2);
 										livingSquare = df3.format(litersOfPetrol3);
 										livingSquare = livingSquare.replaceAll(",", ".");
-										realty.data.squareLiving = Float.parseFloat(livingSquare);
+										realty.data.put("squareLiving", Float.parseFloat(livingSquare));
 										break;
 										
 									//Площадь кухни
@@ -106,7 +108,7 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 										df.setMaximumFractionDigits(2);
 										kitchenSquare = df.format(litersOfPetrol);
 										kitchenSquare = kitchenSquare.replaceAll(",", ".");
-										realty.data.squareKitchen = Float.parseFloat(kitchenSquare);
+										realty.data.put("squareKitchen", Float.parseFloat(kitchenSquare));
 										break;
 										
 									//Материал стен
@@ -117,28 +119,28 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 											//	realty.data.flatBuildingType = FlatBuildingType.BLOCK;
 												break;
 											case "брус":
-												realty.data.flatBuildingType = FlatBuildingType.OTHER;
+												realty.data.put("flatBuildingType", FlatBuildingType.OTHER);
 												break;
 											case "деревянный":
 											//	realty.data.flatBuildingType = FlatBuildingType.WOODEN;
 												break;
 											case "железобетон":
-												realty.data.flatBuildingType = FlatBuildingType.OTHER;
+												realty.data.put("flatBuildingType", FlatBuildingType.OTHER);
 												break;
 											case "кирпично-монолитный":
-												realty.data.flatBuildingType = FlatBuildingType.OTHER;
+												realty.data.put("flatBuildingType", FlatBuildingType.OTHER);
 												break;
 											case "кирпичный":
-												realty.data.flatBuildingType = FlatBuildingType.BRICK;
+												realty.data.put("flatBuildingType", FlatBuildingType.BRICK);
 												break;
 											case "монолит":
-												realty.data.flatBuildingType = FlatBuildingType.MONOLITHIC;
+												realty.data.put("flatBuildingType", FlatBuildingType.MONOLITHIC);
 												break;
 											case "панельный":
-												realty.data.flatBuildingType = FlatBuildingType.PANEL;
+												realty.data.put("flatBuildingType", FlatBuildingType.PANEL);
 												break;
 											case "саманный":
-												realty.data.flatBuildingType = FlatBuildingType.OTHER;
+												realty.data.put("flatBuildingType", FlatBuildingType.OTHER);
 												break;
 										}
 										break;
@@ -153,7 +155,7 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 										df1.setMaximumFractionDigits(2);
 										ceilingHeight = df1.format(litersOfPetrol1);
 										ceilingHeight = ceilingHeight.replaceAll(",", ".");
-										realty.data.ceilingHeight = Float.parseFloat(ceilingHeight);
+										realty.data.put("ceilingHeight", Float.parseFloat(ceilingHeight));
 										break;
 										
 									//Санузел
@@ -161,13 +163,13 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 										String toilet = (String)keys.getValue();
 										switch (toilet) {
 										case "совмещённый":
-											realty.data.lavatoryType = FlatLavatoryType.COMBINED;
+											realty.data.put("lavatoryType", FlatLavatoryType.COMBINED);
 											break;
 										case "раздельный":
-											realty.data.lavatoryType = FlatLavatoryType.SEPARETED;
+											realty.data.put("lavatoryType", FlatLavatoryType.SEPARETED);
 											break;
 										case "2 и более":
-											realty.data.lavatoryType = FlatLavatoryType.TWO_AND_MORE;
+											realty.data.put("lavatoryType", FlatLavatoryType.TWO_AND_MORE);
 											break;
 										}
 										break;
@@ -175,40 +177,40 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 									//Этаж
 									case "etage":
 										String etage = (String)keys.getValue();
-										realty.data.flatFloor = Long.parseLong(etage);
+										realty.data.put("flatFloor", Long.parseLong(etage));
 										break;
 																	
 								    //Всего этажей
 									case "etage-all":
 										String etageAll = (String)keys.getValue();
-										realty.data.houseFloorCount = Long.parseLong(etageAll);
+										realty.data.put("houseFloorCount", Long.parseLong(etageAll));
 										break;
 										
 									//Год постройки
 									case "house-year":
 										String houseYear = (String)keys.getValue();
-										realty.data.houseYear = Long.parseLong(houseYear);
+										realty.data.put("houseYear", Long.parseLong(houseYear));
 										break;
 										
 									//Улица
 									case "mapStreet":
 										String street = (String)keys.getValue();
-										realty.location.streetName = street;
+										realty.data.put("streetName", street);
 										break;
 										
 									//Номер дома
 									case "mapHouseNr":
 										String house = (String)keys.getValue();
-										realty.location.houseNumber = house;
+										realty.data.put("houseNumber", house);
 										break;
 										
 									//Телефон
 									case "telephone":
 										Boolean isTelephone = (Boolean)keys.getValue();
 										if (isTelephone)
-											realty.data.phoneType = FlatPhoneType.SEPARETED;
+											realty.data.put("phoneType", FlatPhoneType.SEPARETED);
 										else
-											realty.data.phoneType = FlatPhoneType.NO_PHONE;
+											realty.data.put("phoneType", FlatPhoneType.NO_PHONE);
 										break;
 										
 									//Интернет
@@ -220,6 +222,7 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<FlatSellRealty> {
 									//Балкон
 									case "balcony":
 										Boolean isBalcony = (Boolean)keys.getValue();
+										//TODO придумать как поступить с балконом
 									//	if (isBalcony)
 									//		realty.data.balconyType = FlatBalconyType.BALCONY;
 										break;

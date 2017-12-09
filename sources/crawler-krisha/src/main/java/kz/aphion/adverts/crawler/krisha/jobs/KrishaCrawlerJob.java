@@ -8,9 +8,9 @@ import java.util.Map;
 import javax.jms.JMSException;
 
 import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.common.models.mq.adverts.ProcessModel;
+import kz.aphion.adverts.common.models.mq.adverts.ProcessStatus;
 import kz.aphion.adverts.common.models.mq.phones.RegisterPhoneModel;
-import kz.aphion.adverts.common.models.mq.realties.ProcessRealtyModel;
-import kz.aphion.adverts.common.models.mq.realties.RealtyProcessStatus;
 import kz.aphion.adverts.common.mq.QueueNameConstants;
 import kz.aphion.adverts.crawler.core.CrawlerHttpClient;
 import kz.aphion.adverts.crawler.core.DataManager;
@@ -34,8 +34,6 @@ import kz.aphion.adverts.persistence.crawler.UserAgentTypeEnum;
 import kz.aphion.adverts.persistence.phones.PhoneOwner;
 import kz.aphion.adverts.persistence.phones.PhoneSource;
 import kz.aphion.adverts.persistence.phones.PhoneSourceCategory;
-import kz.aphion.adverts.persistence.realty.Realty;
-import kz.aphion.adverts.persistence.realty.RealtyAdvertStatus;
 
 import org.apache.commons.lang.StringUtils;
 import org.mongodb.morphia.Datastore;
@@ -290,10 +288,10 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 	 */
 	private void sendMessageForProcessing(Realty newRealty, boolean wasUpdated, Realty oldRealty) {
 		try {
-			ProcessRealtyModel model = new ProcessRealtyModel();
+			ProcessModel model = new ProcessModel();
 			
 			model.advertId = newRealty.id.toString();
-			model.status = wasUpdated == false ? RealtyProcessStatus.NEW : RealtyProcessStatus.UPDATED; 
+			model.status = wasUpdated == false ? ProcessStatus.NEW : ProcessStatus.UPDATED; 
 			model.oldAdvertId = wasUpdated == false ? null : oldRealty.id.toString();
 			model.eventTime = Calendar.getInstance();			
 			

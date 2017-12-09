@@ -8,11 +8,11 @@ import java.util.Map.Entry;
 
 import kz.aphion.adverts.crawler.krisha.KrishaAdvertCategoryType;
 import kz.aphion.adverts.persistence.CurrencyType;
+import kz.aphion.adverts.persistence.adverts.MapName;
+import kz.aphion.adverts.persistence.adverts.MapType;
 import kz.aphion.adverts.persistence.realty.Realty;
 import kz.aphion.adverts.persistence.realty.RealtyPhoto;
 import kz.aphion.adverts.persistence.realty.RealtyPublisherType;
-import kz.aphion.adverts.persistence.realty.types.MapName;
-import kz.aphion.adverts.persistence.realty.types.MapType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

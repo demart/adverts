@@ -14,9 +14,7 @@ import kz.aphion.adverts.crawler.kn.jobs.KnCrawlerJob;
 import kz.aphion.adverts.crawler.kn.mappers.flat.FlatRentDataMapper;
 import kz.aphion.adverts.crawler.kn.mappers.flat.FlatSellDataMapper;
 import kz.aphion.adverts.crawler.kn.persistence.KnRegion;
-import kz.aphion.adverts.persistence.realty.Realty;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatRentRealty;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatSellRealty;
+import kz.aphion.adverts.persistence.adverts.Advert;
 
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
@@ -36,9 +34,9 @@ public class KnAdvertMapper {
 
 	private static Logger logger = LoggerFactory.getLogger(KnAdvertMapper.class);
 	
-	public static List<Realty> parseAdvertsFromCurrentPageAndConvert (KnAdvertCategoryType advertType, String content, QueryBuilder queryBuilder, CrawlerModel crawlerModel) throws CrawlerException, ParseException, IOException {
+	public static List<Advert> parseAdvertsFromCurrentPageAndConvert (KnAdvertCategoryType advertType, String content, QueryBuilder queryBuilder, CrawlerModel crawlerModel) throws CrawlerException, ParseException, IOException {
 		//Список объявлений со страницы
-		List<Realty> adverts = new ArrayList<Realty> ();		
+		List<Advert> adverts = new ArrayList<Advert>();		
 		
 		//Текущая страница
 		Document page = Jsoup.parse(content);
@@ -58,11 +56,11 @@ public class KnAdvertMapper {
 	    			//Необходимая проверка из-за рекламного блока на каждой странице
 	    			if (!parsedAdvert.select("a[href]").isEmpty()) {
 	    				String advertUrl = queryBuilder.buildQueryUrlForAdvert(parsedAdvert.select("a[href]").first().attr("href").toString());
-	    				Realty realty = convertRealtyToAdvertEntity(advertType, advertUrl, queryBuilder, crawlerModel);
+	    				Advert realty = convertRealtyToAdvertEntity(advertType, advertUrl, queryBuilder, crawlerModel);
 	    				
 	    				if (realty != null) {
 	    					if (StringUtils.isBlank(realty.location.externalRegionId)) {
-	    						logger.error("FOUND ADVERT [" + realty.source.externalAdvertId + "] WITHOUT REGION!!!");
+	    						logger.error("FOUND ADVERT [" + realty.source.externalId + "] WITHOUT REGION!!!");
 	    					} else {
 	    						KnRegion knRegion = KnDataManager.getKnRegion(realty.location.externalRegionId);
 	    						if (knRegion != null) {
@@ -72,7 +70,7 @@ public class KnAdvertMapper {
 	    						    adverts.add(realty);
 	    						} else {
 	    							// ПЛОХО ЧТО РЕГИОН НЕ НАШЛИ НУЖНО РУГАТЬСЯ
-	    							logger.error("ATTENTION: Advert.Id [" + realty.source.externalAdvertId + "] Can't map kn geo id [" + realty.location.externalRegionId + "] in internal region dictionary.");
+	    							logger.error("ATTENTION: Advert.Id [" + realty.source.externalId + "] Can't map kn geo id [" + realty.location.externalRegionId + "] in internal region dictionary.");
 	    						}
 	    					} 
 	    				}
@@ -90,7 +88,7 @@ public class KnAdvertMapper {
 		return adverts;
 	}
 	
-	private static Realty convertRealtyToAdvertEntity(KnAdvertCategoryType advertType, String advertUrl, QueryBuilder queryBuilder, CrawlerModel crawlerModel) throws ParseException, CrawlerException, IOException, Exception {
+	private static Advert convertRealtyToAdvertEntity(KnAdvertCategoryType advertType, String advertUrl, QueryBuilder queryBuilder, CrawlerModel crawlerModel) throws ParseException, CrawlerException, IOException, Exception {
 		
 		//Получаем страницу объявления
 		//TODO подумать как сделать по-другому
@@ -98,21 +96,21 @@ public class KnAdvertMapper {
 		//String content = CrawlerHttpClient.getContent(advertUrl, null, null, uam.userAgent);
 		String content = KnCrawlerJob.callServerAndGetData(advertUrl, crawlerModel);		
 		
-		Realty realty = null;
+		Advert realty = null;
 		
 		switch (advertType) {
 			case SELL_APARTMENT:
-				FlatSellDataMapper sellFlatMapper = new FlatSellDataMapper(new FlatSellRealty());
+				FlatSellDataMapper sellFlatMapper = new FlatSellDataMapper(new Advert());
 				realty = sellFlatMapper.mapAdvertObject(content, queryBuilder, advertType);
 				break;
 				
 			case RENT_APARTMENT:
-				FlatRentDataMapper rentFlatMapper = new FlatRentDataMapper(new FlatRentRealty());
+				FlatRentDataMapper rentFlatMapper = new FlatRentDataMapper(new Advert());
 				realty = rentFlatMapper.mapAdvertObject(content, queryBuilder, advertType);
 				break;
 				
 			case RENT_APARTMENT_DAILY:
-				FlatRentDataMapper rentFlatDailyMapper = new FlatRentDataMapper(new FlatRentRealty());
+				FlatRentDataMapper rentFlatDailyMapper = new FlatRentDataMapper(new Advert());
 				realty = rentFlatDailyMapper.mapAdvertObject(content, queryBuilder, advertType);
 				break;
 				

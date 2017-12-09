@@ -7,9 +7,9 @@ import java.util.List;
 import javax.jms.JMSException;
 
 import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.common.models.mq.adverts.ProcessModel;
+import kz.aphion.adverts.common.models.mq.adverts.ProcessStatus;
 import kz.aphion.adverts.common.models.mq.phones.RegisterPhoneModel;
-import kz.aphion.adverts.common.models.mq.realties.ProcessRealtyModel;
-import kz.aphion.adverts.common.models.mq.realties.RealtyProcessStatus;
 import kz.aphion.adverts.common.mq.QueueNameConstants;
 import kz.aphion.adverts.crawler.core.CrawlerHttpClient;
 import kz.aphion.adverts.crawler.core.DataManager;
@@ -26,14 +26,14 @@ import kz.aphion.adverts.crawler.kn.QueryBuilder;
 import kz.aphion.adverts.crawler.kn.mappers.KnAdvertMapper;
 import kz.aphion.adverts.crawler.kn.mappers.RealtyComparator;
 import kz.aphion.adverts.persistence.SourceSystemType;
+import kz.aphion.adverts.persistence.adverts.Advert;
+import kz.aphion.adverts.persistence.adverts.AdvertStatus;
 import kz.aphion.adverts.persistence.crawler.CrawlerSourceSystemTypeEnum;
 import kz.aphion.adverts.persistence.crawler.ProxyServerTypeEnum;
 import kz.aphion.adverts.persistence.crawler.UserAgentTypeEnum;
 import kz.aphion.adverts.persistence.phones.PhoneOwner;
 import kz.aphion.adverts.persistence.phones.PhoneSource;
 import kz.aphion.adverts.persistence.phones.PhoneSourceCategory;
-import kz.aphion.adverts.persistence.realty.Realty;
-import kz.aphion.adverts.persistence.realty.RealtyAdvertStatus;
 
 import org.apache.commons.lang.StringUtils;
 import org.mongodb.morphia.Datastore;
@@ -148,7 +148,7 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 						KnAdvertCategoryType advertType = getAdvertType(crawlerModel);
 			    		
 			    		//Готовый список объявлений со странице
-						List<Realty> adverts = KnAdvertMapper.parseAdvertsFromCurrentPageAndConvert(advertType, content, queryBuilder, crawlerModel);
+						List<Advert> adverts = KnAdvertMapper.parseAdvertsFromCurrentPageAndConvert(advertType, content, queryBuilder, crawlerModel);
 			        	
 			    		//Условия для торможения цикла, а именно получения страниц
 						//Если вернулся пустой список, тонадо тормозить цикл
@@ -157,7 +157,7 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 			    		}
 			    		
 			    		if (adverts.size() > 0) {
-			    			for (Realty realty : adverts) {
+			    			for (Advert realty : adverts) {
 								//Увеличиваем счетчик всех объявлений
 			    				totalCount++;
 			    				
@@ -167,7 +167,7 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 									 foundExistingAdvertsCount++;
 									 
 								// Так как поидее не должно быть больше одного
-							    Realty existingRealty = (Realty)existingAdverts.get(0); 
+							    Advert existingRealty = (Advert)existingAdverts.get(0); 
 							   
 							    //Проверяем на измения объявления
 							    if (advertType == KnAdvertCategoryType.SELL_APARTMENT)
@@ -181,7 +181,7 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 							    	
 							    	 // Обновляем старую версию
 									 Query updateQuery = ds.createQuery(realty.getClass()).field(Mapper.ID_KEY).equal(existingRealty.id);
-									 UpdateOperations<?> ops = ds.createUpdateOperations(realty.getClass()).set("status", RealtyAdvertStatus.ARCHIVED);
+									 UpdateOperations<?> ops = ds.createUpdateOperations(realty.getClass()).set("status", AdvertStatus.ARCHIVED);
 									 ds.update(updateQuery, ops);
 									
 									 // Сохраняем новую версию
@@ -193,7 +193,7 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 									 // Отправляем сообщение в очередь обработки телефонов
 									 sendPhoneNumberRegistrationMessage(realty);
 									 
-									 logger.info("Advert [{}] with id [{}] was moved to archive, with id [%s] added.", realty.source.externalAdvertId, existingRealty.id, realty.id); 	
+									 logger.info("Advert [{}] with id [{}] was moved to archive, with id [%s] added.", realty.source.externalId, existingRealty.id, realty.id); 	
 							    }
 							    
 							    existingAdverts.clear();
@@ -241,12 +241,12 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 	 * @param realty
 	 * @return
 	 */
-	private List<?> getExistingAdverts(Datastore ds, Realty realty) {
+	private List<?> getExistingAdverts(Datastore ds, Advert realty) {
 		Query<?> q = ds.createQuery(realty.getClass());
 		 
-		 q.field("status").equal(RealtyAdvertStatus.ACTIVE);
-		 q.field("source.externalAdvertId").equal(realty.source.externalAdvertId);
-		 q.field("source.sourceType").equal(SourceSystemType.KN);
+		 q.field("status").equal(AdvertStatus.ACTIVE);
+		 q.field("source.externalId").equal(realty.source.externalId);
+		 q.field("source.type").equal(SourceSystemType.KN);
 		 
 		 return q.asList();
 	}
@@ -257,17 +257,14 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 	 * 
 	 * @param realty
 	 */
-	private void sendMessageForProcessing(Realty newRealty, boolean wasUpdated, Realty oldRealty) {
+	private void sendMessageForProcessing(Advert newRealty, boolean wasUpdated, Advert oldRealty) {
 		try {
-			ProcessRealtyModel model = new ProcessRealtyModel();
+			ProcessModel model = new ProcessModel();
 			
 			model.advertId = newRealty.id.toString();
-			model.status = wasUpdated == false ? RealtyProcessStatus.NEW : RealtyProcessStatus.UPDATED; 
+			model.status = wasUpdated == false ? ProcessStatus.NEW : ProcessStatus.UPDATED; 
 			model.oldAdvertId = wasUpdated == false ? null : oldRealty.id.toString();
 			model.eventTime = Calendar.getInstance();			
-			
-			model.type = newRealty.type;
-			model.operation = newRealty.operation;
 			
 			String message = new GsonBuilder().setPrettyPrinting().create().toJson(model);
 		
@@ -319,7 +316,7 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 	 * 
 	 * @param realty
 	 */
-	private void sendPhoneNumberRegistrationMessage(Realty realty) {
+	private void sendPhoneNumberRegistrationMessage(Advert realty) {
 		try {
 			RegisterPhoneModel model = new RegisterPhoneModel();
 			model.source = PhoneSource.KN;
@@ -330,20 +327,20 @@ public class KnCrawlerJob extends CrawlerProcessJob {
 			model.regions = realty.location.regions;
 			
 			if (realty.publisher == null) {
-				logger.error("Advert Id [{}] with Id[{}] Can't send message to registration phone queue, published is null.", realty.source.externalAdvertId, realty.id);
+				logger.error("Advert Id [{}] with Id[{}] Can't send message to registration phone queue, published is null.", realty.source.externalId, realty.id);
 			}
 			
-			switch (realty.publisher.publisherType) {
-				case DEVELOPER_COMPANY:
+			switch (realty.publisher.type) {
+				case COMPANY:
 					model.owner = PhoneOwner.DEVELOPER_COMPANY;
 					break;
 				case OWNER:
 					model.owner = PhoneOwner.OWNER;
 					break;
-				case REALTOR:
+				case AGENT:
 					model.owner = PhoneOwner.REALTOR;
 					break;
-				case REALTOR_COMPANY:
+				case AGENT_COMPANY:
 					model.owner = PhoneOwner.REALTOR_COMPANY;
 					break;
 				case UNDEFINED:

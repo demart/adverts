@@ -15,9 +15,7 @@ import kz.aphion.adverts.crawler.irr.jobs.IrrCrawlerJob;
 import kz.aphion.adverts.crawler.irr.mappers.flat.FlatRentDataMapper;
 import kz.aphion.adverts.crawler.irr.mappers.flat.FlatSellDataMapper;
 import kz.aphion.adverts.crawler.irr.persistence.IrrRegion;
-import kz.aphion.adverts.persistence.realty.Realty;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatRentRealty;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatSellRealty;
+import kz.aphion.adverts.persistence.adverts.Advert;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -34,7 +32,7 @@ public class IrrAdvertMapper {
 	private static Logger logger = LoggerFactory.getLogger(IrrAdvertMapper.class);
 
 	
-	public static List<Realty> extractAndConvertAdverts(IrrAdvertCategoryType advertType, Map<String, Object> jsonResponseMap, QueryBuilder queryBuilder, CrawlerModel crawlerModel) throws Exception {
+	public static List<Advert> extractAndConvertAdverts(IrrAdvertCategoryType advertType, Map<String, Object> jsonResponseMap, QueryBuilder queryBuilder, CrawlerModel crawlerModel) throws Exception {
 		//если блок с объявлениями пустой, то нужно остановить цикл
 		if (jsonResponseMap.get("advertisements").toString().length() < 5) {
 			if (logger.isDebugEnabled())
@@ -46,7 +44,7 @@ public class IrrAdvertMapper {
 		if (logger.isDebugEnabled())
 			logger.debug("Received " + rawAdverts.size() + " adverts to process");
 		
-		List<Realty> adverts = new ArrayList<Realty>();
+		List<Advert> adverts = new ArrayList<Advert>();
 		for (Map<String, Object> rawAdvert : rawAdverts) {
 			if (logger.isDebugEnabled())
 				logger.debug("Advert with Id: " + rawAdvert.get("id") + " will be converted");
@@ -64,12 +62,12 @@ public class IrrAdvertMapper {
 			Map<String, Object> advert = (Map<String, Object>) advertInformation.get("advertisement");
 			
 			try {
-				Realty realty = convertRealtyToAdvertEntity(advertType, advert);
+				Advert realty = convertRealtyToAdvertEntity(advertType, advert);
 				if (realty != null) {
 					
 					// Пробуем замапить внешние регионы на внутренние
 					if (StringUtils.isBlank(realty.location.externalRegionId)) {
-						logger.error("FOUND ADVERT [" + realty.source.externalAdvertId + "] WITHOUT REGION!!!");
+						logger.error("FOUND ADVERT [" + realty.source.externalId + "] WITHOUT REGION!!!");
 					} else {
 						IrrRegion irrRegionEntity = IrrDataManager.getIrrRegion(realty.location.externalRegionId);
 						
@@ -81,7 +79,7 @@ public class IrrAdvertMapper {
 						}
 					}
 					if (realty.location.region == null) {
-						logger.error("ATTENTION: Advert.Id [" + realty.source.externalAdvertId + "] Can't map irr geo id [" + realty.location.externalRegionId + "] in internal region dictionary.");
+						logger.error("ATTENTION: Advert.Id [" + realty.source.externalId + "] Can't map irr geo id [" + realty.location.externalRegionId + "] in internal region dictionary.");
 					}
 					
 					adverts.add(realty);
@@ -98,19 +96,21 @@ public class IrrAdvertMapper {
 		return adverts;
 	}
 
-	private static Realty convertRealtyToAdvertEntity(IrrAdvertCategoryType advertType, Map<String, Object> rawAdvert) throws CrawlerException, ParseException {
-		Realty realty = null;
+	private static Advert convertRealtyToAdvertEntity(IrrAdvertCategoryType advertType, Map<String, Object> rawAdvert) throws CrawlerException, ParseException {
+		Advert realty = null;
 		
 		switch (advertType) {
 			case SELL_APARTMENT:
-				FlatSellDataMapper sellFlatMapper = new FlatSellDataMapper(new FlatSellRealty());
+				FlatSellDataMapper sellFlatMapper = new FlatSellDataMapper(new Advert());
 				realty = sellFlatMapper.mapAdvertObject(rawAdvert);
 				break;
 				
 			case RENT_APARTMENT:
-				FlatRentDataMapper rentFlatMapper = new FlatRentDataMapper(new FlatRentRealty());
+				FlatRentDataMapper rentFlatMapper = new FlatRentDataMapper(new Advert());
 				realty = rentFlatMapper.mapAdvertObject(rawAdvert);
 				break;
+		default:
+			break;
 		}
 		
 		return realty;
