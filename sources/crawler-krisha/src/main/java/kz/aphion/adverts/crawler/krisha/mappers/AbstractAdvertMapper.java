@@ -5,12 +5,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import kz.aphion.adverts.persistence.SourceSystemType;
-import kz.aphion.adverts.persistence.realty.Realty;
-import kz.aphion.adverts.persistence.realty.RealtyAdvertStatus;
-import kz.aphion.adverts.persistence.realty.RealtyLocation;
-import kz.aphion.adverts.persistence.realty.RealtyPhoto;
-import kz.aphion.adverts.persistence.realty.RealtyPublisher;
-import kz.aphion.adverts.persistence.realty.RealtySource;
+import kz.aphion.adverts.persistence.adverts.Advert;
+import kz.aphion.adverts.persistence.adverts.AdvertLocation;
+import kz.aphion.adverts.persistence.adverts.AdvertPhoto;
+import kz.aphion.adverts.persistence.adverts.AdvertPublisher;
+import kz.aphion.adverts.persistence.adverts.AdvertSource;
+import kz.aphion.adverts.persistence.adverts.AdvertStatus;
+import kz.aphion.adverts.persistence.adverts.AdvertType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * @author artem.demidovich
  *
  */
-public abstract class AbstractAdvertMapper<T extends Realty> {
+public abstract class AbstractAdvertMapper<T extends Advert> {
 
 	private static Logger logger = LoggerFactory.getLogger(AbstractAdvertMapper.class);
 	
@@ -33,18 +34,19 @@ public abstract class AbstractAdvertMapper<T extends Realty> {
 	
 	public T mapAdvertObject(Map<String,Object> advert) {
 		
-		realty.status = RealtyAdvertStatus.ACTIVE;
+		realty.type = AdvertType.REALTY;
+		realty.status = AdvertStatus.ACTIVE;
 		
-		realty.source = new RealtySource();
-		realty.source.sourceType = SourceSystemType.KRISHA;
+		realty.source = new AdvertSource();
+		realty.source.type = SourceSystemType.KRISHA;
 		
-		realty.location = new RealtyLocation();
-		realty.publisher = new RealtyPublisher();
+		realty.location = new AdvertLocation();
+		realty.publisher = new AdvertPublisher();
 		
 		for (Entry<String,Object> entry : advert.entrySet()) {
 			switch (entry.getKey()) {
 			case "id":
-				realty.source.externalAdvertId = (String)entry.getValue();
+				realty.source.externalId = (String)entry.getValue();
 				break;
 			case "storage_id":
 				// Никак не используем
@@ -54,7 +56,7 @@ public abstract class AbstractAdvertMapper<T extends Realty> {
 				// Никак не используем, но возможно нужно, 
 				// как раз смотреть на версию, чтобы обновлять данные у себя
 				//realty.source.sourceDataVersion = entry.getValue().toString();
-				realty.source.sourceDataVersion = (String)entry.getValue();
+				realty.source.dataVersion = (String)entry.getValue();
 				break;
 			case "created_at":
 				// Пока никак не используем
@@ -79,7 +81,7 @@ public abstract class AbstractAdvertMapper<T extends Realty> {
 				break;
 				
 			case "Files":
-				List<RealtyPhoto> photos = CommonMapperUtils.convertPhotos((Map<String, Object>)entry.getValue());
+				List<AdvertPhoto> photos = CommonMapperUtils.convertPhotos((Map<String, Object>)entry.getValue());
 				realty.hasPhoto = (photos != null && photos.size() > 0) ? true : false;
 				realty.photos = photos;
 				

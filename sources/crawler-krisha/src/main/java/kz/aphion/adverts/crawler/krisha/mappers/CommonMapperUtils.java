@@ -8,11 +8,11 @@ import java.util.Map.Entry;
 
 import kz.aphion.adverts.crawler.krisha.KrishaAdvertCategoryType;
 import kz.aphion.adverts.persistence.CurrencyType;
+import kz.aphion.adverts.persistence.adverts.Advert;
+import kz.aphion.adverts.persistence.adverts.AdvertPhoto;
+import kz.aphion.adverts.persistence.adverts.AdvertPublisherType;
 import kz.aphion.adverts.persistence.adverts.MapName;
 import kz.aphion.adverts.persistence.adverts.MapType;
-import kz.aphion.adverts.persistence.realty.Realty;
-import kz.aphion.adverts.persistence.realty.RealtyPhoto;
-import kz.aphion.adverts.persistence.realty.RealtyPublisherType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,21 +87,21 @@ public class CommonMapperUtils {
 	}
 
 
-	public static RealtyPublisherType getPublisherType(Entry<String, Object> dataItem) {
+	public static AdvertPublisherType getPublisherType(Entry<String, Object> dataItem) {
 		String whoSell = CommonMapperUtils.getEntryStringValue(dataItem);
 		
 		switch (whoSell) {
 			case "0":
-				return RealtyPublisherType.UNDEFINED;
+				return AdvertPublisherType.UNDEFINED;
 			case "1": // Хозяин или представитель
-				return RealtyPublisherType.OWNER;
+				return AdvertPublisherType.OWNER;
 			case "2": // Компания или специалист (риэлтор)
-				return RealtyPublisherType.REALTOR;
+				return AdvertPublisherType.AGENT;
 			case "3": // ????
-				return RealtyPublisherType.REALTOR_COMPANY;
+				return AdvertPublisherType.AGENT_COMPANY;
 			default:
 				logger.error("ATTENTION! Found new [who] value: " + whoSell);
-				return RealtyPublisherType.UNDEFINED;
+				return AdvertPublisherType.UNDEFINED;
 			}
 	}
 
@@ -148,7 +148,7 @@ public class CommonMapperUtils {
 	 * @param realty
 	 * @param systemData
 	 */
-	public static void convertSystemData(Realty realty, Map<String, Object> systemData) {
+	public static void convertSystemData(Advert realty, Map<String, Object> systemData) {
 		for (Entry<String, Object> systemDataItem : systemData.entrySet()) {
 			switch (systemDataItem.getKey()) {
 			case "price-2":
@@ -206,6 +206,8 @@ public class CommonMapperUtils {
 			case "auto_re":
 				// Подумать!
 				break;
+			case "show_till_sec": // ??? 57
+				break;
 			default: 
 				logger.error("ATTENTION! Found new system_data key: " + systemDataItem.getKey() + " with value: " + systemDataItem.getValue());
 				break;
@@ -218,7 +220,7 @@ public class CommonMapperUtils {
 	 * @param realty
 	 * @param serviceData
 	 */
-	public static void convertServiceData(Realty realty, Map<String, Object> serviceData) {
+	public static void convertServiceData(Advert realty, Map<String, Object> serviceData) {
 		for (Entry<String, Object> serviceDataItem : serviceData.entrySet()) {
 			switch (serviceDataItem.getKey()) {
 				case "cat_id":
@@ -319,7 +321,7 @@ public class CommonMapperUtils {
 	 * @param realty
 	 * @param status
 	 */
-	public static void convertStatusData(Realty realty, Map<String, Object> status) {
+	public static void convertStatusData(Advert realty, Map<String, Object> status) {
 		for (Entry<String, Object> statusEntry : status.entrySet()) {
 			switch (statusEntry.getKey()) {
 			case "value":
@@ -377,12 +379,12 @@ public class CommonMapperUtils {
 	 * @param rawPhotos
 	 * @return
 	 */
-	public static List<RealtyPhoto> convertPhotos(Map<String, Object> rawPhotos) {
-		List<RealtyPhoto> photos = new ArrayList<RealtyPhoto>();
+	public static List<AdvertPhoto> convertPhotos(Map<String, Object> rawPhotos) {
+		List<AdvertPhoto> photos = new ArrayList<AdvertPhoto>();
 		for (Entry<String, Object> rawPhotoElement : rawPhotos.entrySet()) {
 			Map<String, Object> rawPhoto = (Map<String, Object>)rawPhotoElement.getValue();
 			
-			RealtyPhoto photo = new RealtyPhoto();
+			AdvertPhoto photo = new AdvertPhoto();
 			for (Entry<String, Object> rawPhotoItem : rawPhoto.entrySet()) {
 				switch (rawPhotoItem.getKey()) {
 				case "mime-type":
@@ -398,10 +400,10 @@ public class CommonMapperUtils {
 					photo.height = Long.parseLong((String)rawPhotoItem.getValue());
 					break;
 				case "thumbnails":
-					photo.thumbnails = new ArrayList<RealtyPhoto>();
+					photo.thumbnails = new ArrayList<AdvertPhoto>();
 					List<Map<String,Object>> thumbnails = (List<Map<String,Object>>)rawPhotoItem.getValue();
 					for (Map<String, Object> thumbnail : thumbnails) {
-						RealtyPhoto thumb = new RealtyPhoto();
+						AdvertPhoto thumb = new AdvertPhoto();
 						for (Entry<String, Object> map : thumbnail.entrySet()) {
 							switch (map.getKey()) {
 							case "mime-type":

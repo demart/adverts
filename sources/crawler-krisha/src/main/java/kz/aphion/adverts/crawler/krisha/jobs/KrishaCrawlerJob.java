@@ -28,6 +28,8 @@ import kz.aphion.adverts.crawler.krisha.QueryBuilder;
 import kz.aphion.adverts.crawler.krisha.mappers.KrishaAdvertMapper;
 import kz.aphion.adverts.crawler.krisha.mappers.RealtyComparator;
 import kz.aphion.adverts.persistence.SourceSystemType;
+import kz.aphion.adverts.persistence.adverts.Advert;
+import kz.aphion.adverts.persistence.adverts.AdvertStatus;
 import kz.aphion.adverts.persistence.crawler.CrawlerSourceSystemTypeEnum;
 import kz.aphion.adverts.persistence.crawler.ProxyServerTypeEnum;
 import kz.aphion.adverts.persistence.crawler.UserAgentTypeEnum;
@@ -143,7 +145,7 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 			KrishaAdvertCategoryType advertType = getAdvertType(crawlerModel);
 			
 			// Корвертируем объекты
-			List<Realty> adverts= KrishaAdvertMapper.extractAndConvertAdverts(advertType, jsonResponseMap);
+			List<Advert> adverts= KrishaAdvertMapper.extractAndConvertAdverts(advertType, jsonResponseMap);
 			if (adverts == null) {
 				logger.info("No any adverts to process. Compliting process.");
 				// TODO Completing process
@@ -154,7 +156,7 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 			// Делаем проверки или дополнительные связи со структурой БД
 			// Проверяем обрабатывали ли объявление		
 			// Выкидываем обработанные объявления
-			for (Realty realty : adverts) {
+			for (Advert realty : adverts) {
 				if (crawlerModel.lastSourceSystemScannedTime.compareTo(realty.publishedAt) < 0  
 						&& startProcessingTime.compareTo(realty.publishedAt) >= 0
 						) {
@@ -167,7 +169,7 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 						 foundExistingAdvertsCount += 1;
 						 
 						 // Так как поидее не должно быть больше одного
-						 Realty existingRealty = (Realty)existingAdverts.get(0);
+						 Advert existingRealty = (Advert)existingAdverts.get(0);
 						 boolean wasUpdated = false;
 						 
 						 wasUpdated = RealtyComparator.isUpdated(existingRealty, realty);
@@ -205,7 +207,7 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 							 
 							 // Обновляем старую версию
 							 Query updateQuery = ds.createQuery(realty.getClass()).field(Mapper.ID_KEY).equal(existingRealty.id);
-							 UpdateOperations<?> ops = ds.createUpdateOperations(realty.getClass()).set("status", RealtyAdvertStatus.ARCHIVED);
+							 UpdateOperations<?> ops = ds.createUpdateOperations(realty.getClass()).set("status", AdvertStatus.ARCHIVED);
 							 ds.update(updateQuery, ops);
 							 
 							 // Сохраняем новую версию
@@ -217,11 +219,11 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 							 // Отправляем сообщение в очередь обработки телефонов
 							 sendPhoneNumberRegistrationMessage(realty);
 							 
-							 logger.info("Advert [{}] with id [{}] was moved to archive, with id [{}] added.", realty.source.externalAdvertId, existingRealty.id, realty.id);
+							 logger.info("Advert [{}] with id [{}] was moved to archive, with id [{}] added.", realty.source.externalId, existingRealty.id, realty.id);
 							 
 						 } else {
 							 // Ничего не делаем, так как по умолчанию считаем что объявление не изменилось
-							 logger.info("Advert [" + realty.source.externalAdvertId + "] already exists and up-to-date.");
+							 logger.info("Advert [" + realty.source.externalId + "] already exists and up-to-date.");
 							 foundExistingUpToDateAdvertsCount +=1;
 						 }
 						 
@@ -246,7 +248,7 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 					skippedAdvertsCount += 1;
 					// Время публикации не совпадает с интересующим нас временным отрезком
 					if (logger.isDebugEnabled())
-						logger.debug("Advert with Id [" + realty.source.externalAdvertId + "] with publishedTime: [" + realty.publishedAt.getTime().toLocaleString() + "] out of scanning period between: ["+ crawlerModel.lastSourceSystemScannedTime.getTime().toLocaleString() +"] and ["+ startProcessingTime.getTime().toLocaleString() +"]");
+						logger.debug("Advert with Id [" + realty.source.externalId + "] with publishedTime: [" + realty.publishedAt.getTime().toLocaleString() + "] out of scanning period between: ["+ crawlerModel.lastSourceSystemScannedTime.getTime().toLocaleString() +"] and ["+ startProcessingTime.getTime().toLocaleString() +"]");
 				}
 			}
 			
@@ -271,12 +273,12 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 	 * @param realty
 	 * @return
 	 */
-	private List getExistingAdverts(Datastore ds, Realty realty) {
+	private List getExistingAdverts(Datastore ds, Advert realty) {
 		Query q = ds.createQuery(realty.getClass());
 		 
-		 q.field("status").equal(RealtyAdvertStatus.ACTIVE);
-		 q.field("source.externalAdvertId").equal(realty.source.externalAdvertId);
-		 q.field("source.sourceType").equal(SourceSystemType.KRISHA);
+		 q.field("status").equal(AdvertStatus.ACTIVE);
+		 q.field("source.externalId").equal(realty.source.externalId);
+		 q.field("source.type").equal(SourceSystemType.KRISHA);
 		 
 		 return q.asList();
 	}
@@ -286,7 +288,7 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 	 * 
 	 * @param realty
 	 */
-	private void sendMessageForProcessing(Realty newRealty, boolean wasUpdated, Realty oldRealty) {
+	private void sendMessageForProcessing(Advert newRealty, boolean wasUpdated, Advert oldRealty) {
 		try {
 			ProcessModel model = new ProcessModel();
 			
@@ -294,10 +296,7 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 			model.status = wasUpdated == false ? ProcessStatus.NEW : ProcessStatus.UPDATED; 
 			model.oldAdvertId = wasUpdated == false ? null : oldRealty.id.toString();
 			model.eventTime = Calendar.getInstance();			
-			
-			model.type = newRealty.type;
-			model.operation = newRealty.operation;
-			
+
 			String message = new GsonBuilder().setPrettyPrinting().create().toJson(model);
 		
 			getMqProvider().sendTextMessageToQueue(this.crawlerModel.destinationQueueName, message);
@@ -314,7 +313,7 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 	 * 
 	 * @param realty
 	 */
-	private void sendPhoneNumberRegistrationMessage(Realty realty) {
+	private void sendPhoneNumberRegistrationMessage(Advert realty) {
 		try {
 			RegisterPhoneModel model = new RegisterPhoneModel();
 			model.source = PhoneSource.KRISHA;
@@ -324,22 +323,22 @@ public class KrishaCrawlerJob extends CrawlerProcessJob {
 			model.region = realty.location.region;
 			model.regions = realty.location.regions;
 			
-			if (realty.publisher == null || realty.publisher.publisherType == null) {
-				logger.error("Advert Id [{}] with Id[{}] Can't send message to registration phone queue, published is null.", realty.source.externalAdvertId, realty.id);
+			if (realty.publisher == null || realty.publisher.type == null) {
+				logger.error("Advert Id [{}] with Id[{}] Can't send message to registration phone queue, published is null.", realty.source.externalId, realty.id);
 				return;
 			}
 			
-			switch (realty.publisher.publisherType) {
-				case DEVELOPER_COMPANY:
+			switch (realty.publisher.type) {
+				case COMPANY:
 					model.owner = PhoneOwner.DEVELOPER_COMPANY;
 					break;
 				case OWNER:
 					model.owner = PhoneOwner.OWNER;
 					break;
-				case REALTOR:
+				case AGENT:
 					model.owner = PhoneOwner.REALTOR;
 					break;
-				case REALTOR_COMPANY:
+				case AGENT_COMPANY:
 					model.owner = PhoneOwner.REALTOR_COMPANY;
 					break;
 				case UNDEFINED:

@@ -1,14 +1,16 @@
 package kz.aphion.adverts.crawler.krisha.mappers.flat;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import kz.aphion.adverts.crawler.krisha.mappers.AbstractAdvertMapper;
 import kz.aphion.adverts.crawler.krisha.mappers.CommonMapperUtils;
-import kz.aphion.adverts.persistence.realty.RealtyPublisherCompany;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatRentDataModel;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatRentRealty;
+import kz.aphion.adverts.persistence.adverts.Advert;
+import kz.aphion.adverts.persistence.adverts.AdvertOperationType;
+import kz.aphion.adverts.persistence.adverts.AdvertPublisherCompany;
+import kz.aphion.adverts.persistence.realty.RealtyType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,18 +21,21 @@ import org.slf4j.LoggerFactory;
  * @author artem.demidovich
  *
  */
-public class FlatRentDataMapper  extends AbstractAdvertMapper<FlatRentRealty> {
+public class FlatRentDataMapper  extends AbstractAdvertMapper<Advert> {
 
 	private static Logger logger = LoggerFactory.getLogger(FlatRentDataMapper.class);
 	
-	public FlatRentDataMapper(FlatRentRealty realty) {
+	public FlatRentDataMapper(Advert realty) {
 		super(realty);
 	}
 	
 	@Override
 	public void mapAdvertData(Map<String, Object> advert) {
 
-		realty.data = new FlatRentDataModel();
+		realty.subType = RealtyType.FLAT.toString();
+		realty.operation = AdvertOperationType.RENT;
+		
+		realty.data = new HashMap<String, Object>();
 		
 		// Commented because of changing structure of db
 		//realty.data.residentalComplex = new ResidentialComplex();
@@ -56,7 +61,7 @@ public class FlatRentDataMapper  extends AbstractAdvertMapper<FlatRentRealty> {
 				// Плохое место, нужно думать как избежать 1,5 значений
 				String rooms = (String)dataItem.getValue();
 				rooms = rooms.replace(",", ".");
-				realty.data.rooms = Float.parseFloat(rooms);
+				realty.data.put("rooms", Float.parseFloat(rooms));
 				break;
 			case "price":
 				// НЕ берем тут так как были проблемы с конвертацией строк в long,
@@ -67,10 +72,10 @@ public class FlatRentDataMapper  extends AbstractAdvertMapper<FlatRentRealty> {
 				//realty.data.priceCurrency = CommonMapperUtils.getCurrencyType(dataItem);
 				break;
 			case "rent.period":
-				realty.data.rentPeriod = FlatDataMapperUtils.getFlatRentPeriodType(dataItem);
+				realty.data.put("rentPeriod", FlatDataMapperUtils.getFlatRentPeriodType(dataItem));
 				break;
 			case "flat.building":
-				realty.data.flatBuildingType = FlatDataMapperUtils.getFlatBuildingType(dataItem);
+				realty.data.put("flatBuildingType", FlatDataMapperUtils.getFlatBuildingType(dataItem));
 				break;
 			case "house.year": // Год постройки (сдачи в <nobr>эксплуатацию) *
 				//if (dataItem.getValue() instanceof Long) {
@@ -78,7 +83,7 @@ public class FlatRentDataMapper  extends AbstractAdvertMapper<FlatRentRealty> {
 				//} else {
 					String houseYear = (String)dataItem.getValue();
 					houseYear = houseYear.replaceAll("[^\\d]", "");
-					realty.data.houseYear = Long.parseLong(houseYear);
+					realty.data.put("houseYear", Long.parseLong(houseYear));
 				//}
 				break;
 			case "map.house_num": // Номер дома
@@ -94,7 +99,7 @@ public class FlatRentDataMapper  extends AbstractAdvertMapper<FlatRentRealty> {
 				//	realty.data.flatFloor = (Long)dataItem.getValue();
 				//} else {
 					String flatFloor = (String)dataItem.getValue();
-					realty.data.flatFloor = Long.parseLong(flatFloor);
+					realty.data.put("flatFloor", Long.parseLong(flatFloor));
 				//}
 				break;
 			case "house.floor_num": // Всего этажей
@@ -102,7 +107,7 @@ public class FlatRentDataMapper  extends AbstractAdvertMapper<FlatRentRealty> {
 				//	realty.data.houseFloorCount = (Long)dataItem.getValue();
 				//} else {
 					String flatFloorNum = (String)dataItem.getValue();
-					realty.data.houseFloorCount = Long.parseLong(flatFloorNum);
+					realty.data.put("houseFloorCount", Long.parseLong(flatFloorNum));
 				//}
 				break;
 			case "live.square": // Площадь, м
@@ -113,64 +118,64 @@ public class FlatRentDataMapper  extends AbstractAdvertMapper<FlatRentRealty> {
 					//	realty.data.square = (Float)dataItem.getValue();
 					//} else {
 						String liveSquare = (String)dataItem.getValue();
-						realty.data.square = Float.parseFloat(liveSquare);
+						realty.data.put("square", Float.parseFloat(liveSquare));
 					//}
 				//}
 				break;
 			case "live.square_l":
 				String liveSquareLiving = (String)dataItem.getValue();
-				realty.data.squareLiving = Float.parseFloat(liveSquareLiving);
+				realty.data.put("squareLiving", Float.parseFloat(liveSquareLiving));
 				break;
 			case "live.square_k":
 				String liveSquareKitchen = (String)dataItem.getValue();
-				realty.data.squareKitchen = Float.parseFloat(liveSquareKitchen);
+				realty.data.put("squareKitchen", Float.parseFloat(liveSquareKitchen));
 				break;
 			case "live.furniture":
-				realty.data.furnitureType = FlatDataMapperUtils.getFlatFurnitureType(dataItem);
+				realty.data.put("furnitureType", FlatDataMapperUtils.getFlatFurnitureType(dataItem));
 				break;				
 			case "flat.priv_dorm": // В прив. общежитии
-				realty.data.privatizedDormType = FlatDataMapperUtils.getFlatPrivatizedDormType(dataItem);
+				realty.data.put("privatizedDormType", FlatDataMapperUtils.getFlatPrivatizedDormType(dataItem));
 				break;
 			case "flat.flooring": // Пол
-				realty.data.floorType = FlatDataMapperUtils.getFlatFlooringType(dataItem);
+				realty.data.put("floorType", FlatDataMapperUtils.getFlatFlooringType(dataItem));
 				break;
 			case "flat.parking": // Паркинг
-				realty.data.parkingType = FlatDataMapperUtils.getParkingType(dataItem);
+				realty.data.put("parkingType", FlatDataMapperUtils.getParkingType(dataItem));
 			case "flat.renovation": // Состояние
-				realty.data.renovationType = FlatDataMapperUtils.getFlatRenovationType(dataItem);
+				realty.data.put("renovationType", FlatDataMapperUtils.getFlatRenovationType(dataItem));
 				break;
 			case "flat.phone":
-				realty.data.phoneType = FlatDataMapperUtils.getFlatPhoneType(dataItem);
+				realty.data.put("phoneType", FlatDataMapperUtils.getFlatPhoneType(dataItem));
 				break;
 			case "inet.type": // Интернет
-				realty.data.internetType = FlatDataMapperUtils.getFlatInternetType(dataItem);
+				realty.data.put("internetType", FlatDataMapperUtils.getFlatInternetType(dataItem));
 				break;
 			case "flat.toilet": // Санузел
-				realty.data.lavatoryType = FlatDataMapperUtils.getFlatLavatoryType(dataItem);
+				realty.data.put("lavatoryType", FlatDataMapperUtils.getFlatLavatoryType(dataItem));
 				break;
 			case "flat.balcony": // Балкон
-				realty.data.balconyType = FlatDataMapperUtils.getFlatBalconyType(dataItem);
+				realty.data.put("balconyType", FlatDataMapperUtils.getFlatBalconyType(dataItem));
 				break;
 			case "flat.balcony_g": // Балкон остеклен
-				realty.data.balconyGlazingType = FlatDataMapperUtils.getFlatBalconyGlazingType(dataItem);
+				realty.data.put("balconyGlazingType", FlatDataMapperUtils.getFlatBalconyGlazingType(dataItem));
 				break;
 			case "flat.door": // Тип двери
-				realty.data.doorType = FlatDataMapperUtils.getFlatDoorTypes(dataItem);
+				realty.data.put("doorType", FlatDataMapperUtils.getFlatDoorTypes(dataItem));
 				break;
 			case "flat.security": // Безопасность
 				//Map<String, Object> flatSecurity = (Map<String, Object>)dataItem.getValue();
 				//realty.data.securityTypes = FlatDataMapperUtils.getFlatSecurityTypes(flatSecurity);
-				realty.data.securityTypes = FlatDataMapperUtils.getFlatSecurityTypes(dataItem);
+				realty.data.put("securityTypes", FlatDataMapperUtils.getFlatSecurityTypes(dataItem));
 				break;
 			case "flat.options":
 				//Map<String, Object> flatOptions = (Map<String, Object>)dataItem.getValue();
 				//realty.data.miscellaneous = FlatDataMapperUtils.getFlatMiscellaneousTypes(flatOptions);
-				realty.data.miscellaneous = FlatDataMapperUtils.getFlatMiscellaneousTypes(dataItem);
+				realty.data.put("miscellaneous", FlatDataMapperUtils.getFlatMiscellaneousTypes(dataItem));
 				break;
 			case "flat.rent_opts":
 				//Map<String, Object> flatRentOptions = (Map<String, Object>)dataItem.getValue();
 				//realty.data.rentMiscellaneous = FlatDataMapperUtils.getFlatRentMiscellaneousTypes(flatRentOptions);
-				realty.data.rentMiscellaneous = FlatDataMapperUtils.getFlatRentMiscellaneousTypes(dataItem);
+				realty.data.put("rentMiscellaneous", FlatDataMapperUtils.getFlatRentMiscellaneousTypes(dataItem));
 				break;
 			case "map.geo_id": // ID региона
 				// TODO Нужно конвертировать во внутренний регион
@@ -200,7 +205,7 @@ public class FlatRentDataMapper  extends AbstractAdvertMapper<FlatRentRealty> {
 				realty.location.cornerStreetName = mapCornerStreet;
 				break;
 			case "who": // Контактная информация
-				realty.publisher.publisherType = CommonMapperUtils.getPublisherType(dataItem);
+				realty.publisher.type = CommonMapperUtils.getPublisherType(dataItem);
 				break;
 			case "who.sub": // Хрен его знает
 				// ???
@@ -319,7 +324,7 @@ public class FlatRentDataMapper  extends AbstractAdvertMapper<FlatRentRealty> {
 				break;
 			case "text":
 				String text = (String)dataItem.getValue();
-				realty.data.text = text;
+				realty.data.put("text", text);
 				break;
 			case "ceiling": // Высота потолков
 				//if (dataItem.getValue() instanceof Long) {
@@ -329,13 +334,13 @@ public class FlatRentDataMapper  extends AbstractAdvertMapper<FlatRentRealty> {
 				//		realty.data.ceilingHeight = (Float)dataItem.getValue();
 				//	} else {
 						String ceiling = (String)dataItem.getValue();
-						realty.data.ceilingHeight = Float.parseFloat(ceiling);
+						realty.data.put("ceilingHeight", Float.parseFloat(ceiling));
 				//	}
 				//}
 				break;
 			case "company.id": // Идентификатор компании
 				String companyId = (String)dataItem.getValue();
-				realty.publisher.company = new RealtyPublisherCompany();
+				realty.publisher.company = new AdvertPublisherCompany();
 				realty.publisher.company.externalId = companyId;
 				break;
 			case"user_id": // ID пользователя внешйней системы
@@ -361,6 +366,17 @@ public class FlatRentDataMapper  extends AbstractAdvertMapper<FlatRentRealty> {
 			case "rent.square":
 				break;
 			case "send_to_market": // Опубликовать в маркете
+				break;
+				// NEW FIELDS 09.12.17
+			case "map.initial_coords": // ???  {"lat":51.165307, "lon":71.432109}
+				break;
+			case "hide_house_num": // true;
+				break;
+			case "checked": // true;
+				break;
+			case "land.square_au": //1
+				break;
+			case "land.square": //1
 				break;
 			default:
 				logger.error("ATTENTION! Found new data key: " + dataItem.getKey() + " with value: " + dataItem.getValue());

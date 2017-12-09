@@ -4,20 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
 import kz.aphion.adverts.crawler.krisha.KrishaAdvertCategoryType;
 import kz.aphion.adverts.crawler.krisha.KrishaDataManager;
-import kz.aphion.adverts.crawler.krisha.persistence.KrishaRegion;
-import kz.aphion.adverts.crawler.krisha.mappers.flat.FlatDataMapperUtils;
 import kz.aphion.adverts.crawler.krisha.mappers.flat.FlatRentDataMapper;
 import kz.aphion.adverts.crawler.krisha.mappers.flat.FlatSellDataMapper;
-import kz.aphion.adverts.persistence.realty.Realty;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatRentRealty;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatSellRealty;
+import kz.aphion.adverts.crawler.krisha.persistence.KrishaRegion;
+import kz.aphion.adverts.persistence.adverts.Advert;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Класс конвертации объектов объявлений
@@ -29,7 +26,7 @@ public class KrishaAdvertMapper {
 
 	private static Logger logger = LoggerFactory.getLogger(KrishaAdvertMapper.class);
 	
-	public static List<Realty> extractAndConvertAdverts(KrishaAdvertCategoryType advertType, Map<String, Object> jsonResponseMap) throws CrawlerException {
+	public static List<Advert> extractAndConvertAdverts(KrishaAdvertCategoryType advertType, Map<String, Object> jsonResponseMap) throws CrawlerException {
 		if (!jsonResponseMap.containsKey("adverts")) {
 			if (logger.isDebugEnabled())
 				logger.debug("Received data with empty adverts list. Completing process.");
@@ -40,18 +37,18 @@ public class KrishaAdvertMapper {
 		if (logger.isDebugEnabled())
 			logger.debug("Received " + rawAdverts.size() + " adverts to process");
 		
-		List<Realty> adverts = new ArrayList<Realty>();
+		List<Advert> adverts = new ArrayList<Advert>();
 		for (Map<String, Object> rawAdvert : rawAdverts) {
 			if (logger.isDebugEnabled())
 				logger.debug("Advert with Id: " + rawAdvert.get("id") + " will be converted");
 			
 			try {
-				Realty realty = convertRealtyToAdvertEntity(advertType, rawAdvert);
+				Advert realty = convertRealtyToAdvertEntity(advertType, rawAdvert);
 				if (realty != null) {
 					
 					// Пробуем замапить внешние регионы на внутренние
 					if (StringUtils.isBlank(realty.location.externalRegionId)) {
-						logger.error("FOUND ADVERT [" + realty.source.externalAdvertId + "] WITHOUT REGION!!!");
+						logger.error("FOUND ADVERT [" + realty.source.externalId + "] WITHOUT REGION!!!");
 					} else {
 						//Logger.error("ADVERT [" + realty.source.externalAdvertId + "] REGION: [" + realty.location.externalRegionId + "]");
 						KrishaRegion krishaRegionEntity = KrishaDataManager.getKrishaRegion(realty.location.externalRegionId);
@@ -65,7 +62,7 @@ public class KrishaAdvertMapper {
 						}
 					}
 					if (realty.location.region == null) {
-						logger.error("ATTENTION: Advert.Id [" + realty.source.externalAdvertId + "] Can't map krisha geo id [" + realty.location.externalRegionId + "] in internal region dictionary.");
+						logger.error("ATTENTION: Advert.Id [" + realty.source.externalId + "] Can't map krisha geo id [" + realty.location.externalRegionId + "] in internal region dictionary.");
 					}
 					
 					adverts.add(realty);
@@ -81,22 +78,22 @@ public class KrishaAdvertMapper {
 		return adverts;
 	}
 
-	private static Realty convertRealtyToAdvertEntity(KrishaAdvertCategoryType advertType, Map<String, Object> rawAdvert) {
+	private static Advert convertRealtyToAdvertEntity(KrishaAdvertCategoryType advertType, Map<String, Object> rawAdvert) {
 		// Пробежаться и выяснить тип
 		KrishaAdvertCategoryType category = CommonMapperUtils.getAdvertCategoryType(rawAdvert);
 		if (category == null)
 			category = advertType;
 		
-		Realty realty = null;
+		Advert realty = null;
 		
 		switch (advertType) {
 			case SELL_APARTMENT:
-				FlatSellDataMapper sellFlatMapper = new FlatSellDataMapper(new FlatSellRealty());
+				FlatSellDataMapper sellFlatMapper = new FlatSellDataMapper(new Advert());
 				realty = sellFlatMapper.mapAdvertObject(rawAdvert);
 				// TODO
 				break;
 			case RENT_APARTMENT:
-				FlatRentDataMapper rentFlatMapper = new FlatRentDataMapper(new FlatRentRealty());
+				FlatRentDataMapper rentFlatMapper = new FlatRentDataMapper(new Advert());
 				realty = rentFlatMapper.mapAdvertObject(rawAdvert);
 				// TODO
 				break;

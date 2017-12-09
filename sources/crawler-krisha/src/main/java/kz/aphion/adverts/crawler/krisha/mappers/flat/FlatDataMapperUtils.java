@@ -2,6 +2,7 @@ package kz.aphion.adverts.crawler.krisha.mappers.flat;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -10,8 +11,8 @@ import kz.aphion.adverts.crawler.krisha.KrishaDataManager;
 import kz.aphion.adverts.crawler.krisha.mappers.CommonMapperUtils;
 import kz.aphion.adverts.crawler.krisha.persistence.KrishaRegion;
 import kz.aphion.adverts.crawler.krisha.persistence.KrishaResidentialComplex;
+import kz.aphion.adverts.persistence.CalendarConverter;
 import kz.aphion.adverts.persistence.realty.MortgageStatus;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatRealtyBaseDataModel;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBalconyGlazingType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBalconyType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBuildingType;
@@ -30,14 +31,17 @@ import kz.aphion.adverts.persistence.realty.data.flat.types.FlatRentPeriodType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatSecurityType;
 
 import org.apache.commons.lang.StringUtils;
+import org.mongodb.morphia.mapping.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.mongodb.DBObject;
 
 public class FlatDataMapperUtils {
 
 	private static Logger logger = LoggerFactory.getLogger(FlatDataMapperUtils.class);
 	
-	public static void mapResidentialComplex(Map<String, Object> advert, FlatRealtyBaseDataModel data, String externalComplexId) {
+	public static void mapResidentialComplex(Map<String, Object> advert, HashMap<String, Object> data, String externalComplexId) {
 		if (StringUtils.isBlank(externalComplexId))
 			return;
 		
@@ -62,7 +66,12 @@ public class FlatDataMapperUtils {
 			}
 		} else {
 			if (complexEntity.complex != null) {
-				data.residentalComplex = complexEntity.complex;
+				// Convert to DBObject
+				Mapper mapper = new Mapper();
+				mapper.getConverters().addConverter(CalendarConverter.class);
+				DBObject complexDBO = mapper.toDBObject(complexEntity.complex);
+				//logger.info("{}", complexDBO);
+				data.put("residentalComplex", complexDBO);
 				//complex.relationId = complexEntity.id;
 				//complex.name = complexEntity.name;
 			} else {
