@@ -1,6 +1,7 @@
 package kz.aphion.adverts.analyser.comparator;
 
 import kz.aphion.adverts.analyser.mq.AnalyserProcessStatus;
+import kz.aphion.adverts.persistence.adverts.Advert;
 
 /**
  * Интерфейс для серии классов реализующих сравнение объектов, как новый объект изменился
@@ -18,6 +19,6 @@ public interface AdvertComparator {
 	 * @param newAdvertId
 	 * @param oldAdvertId
 	 */
-	public AnalyserProcessStatus compare(String newAdvertId, String oldAdvertId);
+	public AnalyserProcessStatus compare(Advert newAdvert, Advert oldAdvert);
 	
 }

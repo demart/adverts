@@ -336,10 +336,10 @@ public class OlxRealtyCrawlerJob extends CrawlerProcessJob  {
 					model.owner = PhoneOwner.OWNER;
 					break;
 				case AGENT:
-					model.owner = PhoneOwner.REALTOR;
+					model.owner = PhoneOwner.AGENT;
 					break;
 				case AGENT_COMPANY:
-					model.owner = PhoneOwner.REALTOR_COMPANY;
+					model.owner = PhoneOwner.AGENT_COMPANY;
 					break;
 				case UNDEFINED:
 					model.owner = PhoneOwner.UNDEFINED;

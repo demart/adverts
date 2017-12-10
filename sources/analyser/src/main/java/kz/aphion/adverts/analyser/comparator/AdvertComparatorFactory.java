@@ -2,9 +2,10 @@ package kz.aphion.adverts.analyser.comparator;
 
 import kz.aphion.adverts.analyser.comparator.impl.FlatRentAdvertComparator;
 import kz.aphion.adverts.analyser.comparator.impl.FlatSellAdvertComparator;
-import kz.aphion.adverts.analyser.mq.ProcessRealtyModel;
-import kz.aphion.adverts.persistence.realty.types.RealtyOperationType;
-import kz.aphion.adverts.persistence.realty.types.RealtyType;
+import kz.aphion.adverts.persistence.adverts.Advert;
+import kz.aphion.adverts.persistence.adverts.AdvertOperationType;
+import kz.aphion.adverts.persistence.adverts.AdvertType;
+import kz.aphion.adverts.persistence.realty.RealtyType;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
@@ -26,11 +27,16 @@ public class AdvertComparatorFactory {
 	 * @param realy
 	 * @return
 	 */
-	public static AdvertComparator getAdvertComparatorInstance(ProcessRealtyModel model) {
-		if (model.type == RealtyType.FLAT && model.operation == RealtyOperationType.SELL)
+	public static AdvertComparator getAdvertComparatorInstance(Advert newAdvert, Advert oldAdvert) {
+		if (newAdvert == null) 
+			return null;
+		
+		if (newAdvert.type == AdvertType.REALTY && newAdvert.subType.equals(RealtyType.FLAT) && newAdvert.operation ==  AdvertOperationType.SELL)
 			return new FlatSellAdvertComparator();
-		if (model.type == RealtyType.FLAT && model.operation == RealtyOperationType.RENT)
+		
+		if (newAdvert.type == AdvertType.REALTY && newAdvert.subType.equals(RealtyType.FLAT) && newAdvert.operation ==  AdvertOperationType.RENT)
 			return new FlatRentAdvertComparator();
+		
 		throw new NotImplementedException();
 	}
 	

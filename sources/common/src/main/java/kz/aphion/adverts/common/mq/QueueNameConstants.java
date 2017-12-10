@@ -35,25 +35,25 @@ public enum QueueNameConstants {
 	 * Очередь для отправки новых объявлений в обработку анализатору
 	 * ЗДЕСЬ ДЛЯ ТОГО ЧТОБЫ НЕ ЗАБЫТЬ ЕЁ НАЗВАНИЕ
 	 */
-	ADVERTS_REALTY_ANALYSE_QUEUE("adverts.crawler.realty"),
+	ADVERTS_ANALYSE_QUEUE("adverts.analyser"),
 	
 	/**
 	 * Название очереди куда писать исходящие сообщения после обработки модулем analyse
 	 * На данным момент это очередь модуля подписок. 
 	 */
-	ADVERTS_REALTY_SUBSCRIPTION_QUEUE("adverts.realty.subscriptions"),
+	ADVERTS_SUBSCRIPTION_QUEUE("adverts.subscriptions"),
 
 	/**
 	 * TEST TEST TEST
 	 * Название очереди куда писать исходящие сообщения после обработки модулем analyse
 	 * На данным момент это очередь модуля подписок. 
 	 */
-	ADVERTS_REALTY_SUBSCRIPTION_QUEUE_TEST("adverts.realty.subscriptions.test"),
+	ADVERTS_SUBSCRIPTION_QUEUE_TEST("adverts.subscriptions.test"),
 
 	/**
 	 * Название очереди откуда надо читать сообщения для Live Search
 	 */
-	ADVERTS_REALTY_SUBSCRIPTION_LIVE_QUEUE("adverts.realty.subscriptions.live"),
+	ADVERTS_SUBSCRIPTION_LIVE_QUEUE("adverts.subscriptions.live"),
 
 	
 	// ===========================================================

@@ -1,5 +1,7 @@
 package kz.aphion.adverts.analyser.searcher;
 
+import kz.aphion.adverts.persistence.adverts.Advert;
+
 /**
  * Общий интерфейс всех искателей дубликатов
  * @author artem.demidovich
@@ -8,6 +10,6 @@ package kz.aphion.adverts.analyser.searcher;
  */
 public interface DuplicateSearcher {
 
-	public void searchDuplicates(String advertId);
+	public void searchDuplicates(Advert advert);
 	
 }

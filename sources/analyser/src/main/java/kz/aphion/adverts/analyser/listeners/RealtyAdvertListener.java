@@ -6,7 +6,7 @@ import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 import kz.aphion.adverts.analyser.processors.AdvertAnalyserProcessor;
-import kz.aphion.adverts.analyser.processors.RealtyAdvertAnalyserProcessor;
+import kz.aphion.adverts.analyser.processors.AdvertAnalyserProcessorImpl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ public class RealtyAdvertListener implements MessageListener  {
                 String text = textMessage.getText();
                 logger.debug("Received new message");
                 
-                AdvertAnalyserProcessor processor = new RealtyAdvertAnalyserProcessor();
+                AdvertAnalyserProcessor processor = new AdvertAnalyserProcessorImpl();
                 processor.processMessage(text);
 
                 logger.debug("Processing completed");

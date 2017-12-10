@@ -18,14 +18,14 @@ public enum PhoneOwner {
 	OWNER,
 	
 	/**
-	 * Риэлтор
+	 * Риэлтор или посредник
 	 */
-	REALTOR,
+	AGENT,
 	
 	/**
-	 * Компания риэлтор
+	 * Компания риэлтор или посредник
 	 */
-	REALTOR_COMPANY,
+	AGENT_COMPANY,
 	
 	/**
 	 * Кампания

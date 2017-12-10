@@ -1,27 +1,32 @@
 package kz.aphion.adverts.analyser.processors;
 
 import java.util.Calendar;
+import java.util.List;
 
 import javax.jms.JMSException;
 
 import kz.aphion.adverts.analyser.comparator.AdvertComparator;
 import kz.aphion.adverts.analyser.comparator.AdvertComparatorFactory;
 import kz.aphion.adverts.analyser.mq.AnalyserProcessStatus;
-import kz.aphion.adverts.analyser.mq.ProcessRealtyModel;
 import kz.aphion.adverts.analyser.mq.RealtyAnalyserToSubscriptionProcessModel;
 import kz.aphion.adverts.analyser.utils.MessageUtils;
+import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.common.MQ;
+import kz.aphion.adverts.common.models.mq.adverts.ProcessModel;
 import kz.aphion.adverts.common.mq.QueueNameConstants;
+import kz.aphion.adverts.persistence.adverts.Advert;
 
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class RealtyAdvertAnalyserProcessor implements AdvertAnalyserProcessor  {
+public class AdvertAnalyserProcessorImpl implements AdvertAnalyserProcessor  {
 	
-	private static Logger logger = LoggerFactory.getLogger(RealtyAdvertAnalyserProcessor.class);
+	private static Logger logger = LoggerFactory.getLogger(AdvertAnalyserProcessorImpl.class);
 	
 	/**
 	 * Метод является входной точкой для обработки запроса на анализ объявления поступающие от краулера
@@ -30,10 +35,10 @@ public class RealtyAdvertAnalyserProcessor implements AdvertAnalyserProcessor  {
 	 * @throws JMSException 
 	 */
 	public void processMessage(String message) throws JMSException, Exception {
-		ProcessRealtyModel model = MessageUtils.parseModel(message);
+		ProcessModel model = MessageUtils.parseModel(message);
 		if (model == null || model.status == null) {
 			// Не смогли извлечь, ругаемся и приступаем к следующему сообщению
-			logger.warn("Can't process message [" + message + "] Message not belongs to ProcessRealtyModel");
+			logger.warn("Can't process message [" + message + "] Message not belongs to ProcessModel");
 			return;
 		}
 
@@ -65,17 +70,15 @@ public class RealtyAdvertAnalyserProcessor implements AdvertAnalyserProcessor  {
 	 * @throws Exception 
 	 * @throws JMSException 
 	 */
-	private void processNewAdvert(ProcessRealtyModel model) throws JMSException, Exception {
+	private void processNewAdvert(ProcessModel model) throws JMSException, Exception {
 		// Отправляем объявление в систему подписок
-		logger.debug("Realty model with id: "+ model.advertId + " is NEW and will be send to subscription module.");
+		logger.debug("Advert model with id: "+ model.advertId + " is NEW and will be send to subscription module.");
 		
 		// Формируем модель
 		RealtyAnalyserToSubscriptionProcessModel analyserModel = new RealtyAnalyserToSubscriptionProcessModel();
 		analyserModel.advertId = model.advertId;
 		analyserModel.oldAdvertId = model.oldAdvertId;
 		analyserModel.eventTime = Calendar.getInstance();
-		analyserModel.operation = model.operation;
-		analyserModel.type = model.type;
 		analyserModel.status = AnalyserProcessStatus.NEW;
 		
 		// Сериализуем
@@ -83,19 +86,19 @@ public class RealtyAdvertAnalyserProcessor implements AdvertAnalyserProcessor  {
 		String text = gson.toJson(analyserModel);
 		
 		// Отправляем в очередь подписок
-		MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.ADVERTS_REALTY_SUBSCRIPTION_QUEUE.getValue(), text);
+		MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.ADVERTS_SUBSCRIPTION_QUEUE.getValue(), text);
 		// Отправляем в очередь live подписок
-		MQ.INSTANCE.sendTextMessageToTopic(QueueNameConstants.ADVERTS_REALTY_SUBSCRIPTION_LIVE_QUEUE.getValue(), text);
+		MQ.INSTANCE.sendTextMessageToTopic(QueueNameConstants.ADVERTS_SUBSCRIPTION_LIVE_QUEUE.getValue(), text);
 		
-		logger.debug("Realty model with id: "+ model.advertId + " was sent to subscription & subscription-live modules.");
+		logger.debug("Advert model with id: "+ model.advertId + " was sent to subscription & subscription-live modules.");
 	}
 	
 	/**
 	 * Метод обрабатывает все существующие но обновленные объявления
 	 * @param model
 	 */
-	private void processExistingAdvert(ProcessRealtyModel model) throws JMSException, Exception  {
-		logger.debug("Realty model with id: "+ model.advertId + " is UPDATED, for now skipped");
+	private void processExistingAdvert(ProcessModel model) throws JMSException, Exception  {
+		logger.debug("Advert model with id: "+ model.advertId + " is UPDATED, for now skipped");
 		// Что делать если в подписках фигурирует старое объявление которое было заменнено новым?
 		// Надо как-то обработать эту ситуацию
 		
@@ -106,8 +109,16 @@ public class RealtyAdvertAnalyserProcessor implements AdvertAnalyserProcessor  {
 		// 4. Достать подходящий сравниватель и получить результат оценки Лучше/Хуже/Не изменилось
 		// 5. Софрмировать и отправить в подписки
 		
-		AdvertComparator comparator = AdvertComparatorFactory.getAdvertComparatorInstance(model);
-		AnalyserProcessStatus comparationStatus = comparator.compare(model.advertId, model.oldAdvertId);
+		Advert oldAdvert = getAdvertObject(model.oldAdvertId);
+		Advert newAdvert = getAdvertObject(model.advertId);
+		
+		AdvertComparator comparator = AdvertComparatorFactory.getAdvertComparatorInstance(newAdvert, oldAdvert);
+		if (comparator == null) {
+			logger.warn("New advert.id {} is null, analyzer will skip processing, check why it may happened", model.advertId);
+			return;
+		}
+		
+		AnalyserProcessStatus comparationStatus = comparator.compare(newAdvert, oldAdvert);
 		
 		// Если нужно, то можно что-то сделать на основе статуса, уведомить или еще что нить
 		if (comparationStatus == null) {
@@ -115,7 +126,7 @@ public class RealtyAdvertAnalyserProcessor implements AdvertAnalyserProcessor  {
 			// в дальнешую обраотку.
 			// Это может произойти при кординальноим изменении объявления или удаления обявления и т.д.
 			
-			logger.warn("Realty model with id: "+ model.advertId + " was not sent to subscription & subscription-live modules, because it was impossible to process");
+			logger.warn("Advert model with id: "+ model.advertId + " was not sent to subscription & subscription-live modules, because it was impossible to process");
 			return;
 		}
 		
@@ -124,8 +135,6 @@ public class RealtyAdvertAnalyserProcessor implements AdvertAnalyserProcessor  {
 		analyserModel.advertId = model.advertId;
 		analyserModel.oldAdvertId = model.oldAdvertId;
 		analyserModel.eventTime = Calendar.getInstance();
-		analyserModel.operation = model.operation;
-		analyserModel.type = model.type;
 		analyserModel.status = comparationStatus;
 		
 		// Сериализуем
@@ -133,11 +142,11 @@ public class RealtyAdvertAnalyserProcessor implements AdvertAnalyserProcessor  {
 		String text = gson.toJson(analyserModel);
 		
 		// Отправляем в очередь подписок
-		MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.ADVERTS_REALTY_SUBSCRIPTION_QUEUE.getValue(), text);
+		MQ.INSTANCE.sendTextMessageToQueue(QueueNameConstants.ADVERTS_SUBSCRIPTION_QUEUE.getValue(), text);
 		// Отправляем в очередь live подписок
-		MQ.INSTANCE.sendTextMessageToTopic(QueueNameConstants.ADVERTS_REALTY_SUBSCRIPTION_LIVE_QUEUE.getValue(), text);
+		MQ.INSTANCE.sendTextMessageToTopic(QueueNameConstants.ADVERTS_SUBSCRIPTION_LIVE_QUEUE.getValue(), text);
 		
-		logger.debug("Realty model with id: "+ model.advertId + " was sent to subscription & subscription-live modules.");
+		logger.debug("Advert model with id: "+ model.advertId + " was sent to subscription & subscription-live modules.");
 		
 	}		
 		
@@ -165,6 +174,20 @@ public class RealtyAdvertAnalyserProcessor implements AdvertAnalyserProcessor  {
 		//		Если являются частью той же самой группы то
 		//			Пересчитать кто является самым лучшим
 		//			Отправить уведомление системе подписок
+
+	
+	private Advert getAdvertObject(String advertId) {
+		Query<Advert> q = DB.DS().createQuery(Advert.class);
+		 
+		q.field("id").equal(new ObjectId(advertId));
+		 
+		List<Advert> result = q.asList();
+		
+		if (result.size() > 0)
+			return result.get(0);
+		return null;
+		
+	}
 
 	
 }

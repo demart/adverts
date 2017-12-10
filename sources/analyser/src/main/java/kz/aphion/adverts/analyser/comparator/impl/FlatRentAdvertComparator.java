@@ -1,17 +1,18 @@
 package kz.aphion.adverts.analyser.comparator.impl;
 
-import java.util.List;
-
 import kz.aphion.adverts.analyser.comparator.AdvertComparator;
 import kz.aphion.adverts.analyser.mq.AnalyserProcessStatus;
 import kz.aphion.adverts.common.DB;
-import kz.aphion.adverts.persistence.realty.RealtyAdvertStatus;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatRentRealty;
+import kz.aphion.adverts.persistence.CalendarConverter;
+import kz.aphion.adverts.persistence.adverts.Advert;
+import kz.aphion.adverts.persistence.adverts.AdvertStatus;
+import kz.aphion.adverts.persistence.realty.ResidentialComplex;
 
-import org.bson.types.ObjectId;
-import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.mapping.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.mongodb.DBObject;
 
 /**
  * 
@@ -52,20 +53,18 @@ public class FlatRentAdvertComparator implements AdvertComparator {
 
 	
 	@Override
-	public AnalyserProcessStatus compare(String newAdvertId, String oldAdvertId) {
-		logger.debug("Start comparing new advert {} with old advert {}", newAdvertId, oldAdvertId);
+	public AnalyserProcessStatus compare(Advert newAdvert, Advert oldAdvert) {
+		logger.debug("Start comparing new advert {} with old advert {}", newAdvert.id, oldAdvert.id);
 		
-		FlatRentRealty newAdvert = getAdvertObject(newAdvertId);
-		if (newAdvert == null || newAdvert.status != RealtyAdvertStatus.ACTIVE) {
+		if (newAdvert == null || newAdvert.status != AdvertStatus.ACTIVE) {
 			// ERROR ... MUST BE ACTIVE
-			logger.warn("New advert with id {} not found, please check why it could happened", newAdvertId);
+			logger.warn("New advert with id {} not found, please check why it could happened", newAdvert.id);
 			return null;
 		}
 		
-		FlatRentRealty oldAdvert = getAdvertObject(oldAdvertId);
-		if (oldAdvert == null || oldAdvert.status != RealtyAdvertStatus.ARCHIVED) {
+		if (oldAdvert == null || oldAdvert.status != AdvertStatus.ARCHIVED) {
 			// ERROR ... MUST BE ARCHIEVED
-			logger.warn("Old advert with id {} not found, please check why it could happened", oldAdvertId);
+			logger.warn("Old advert with id {} not found, please check why it could happened", oldAdvert.id);
 			return AnalyserProcessStatus.SAME; // Раз старое объявление не найдено, то пока считаем что новое есть новое и кого нужно уведомляем
 		}
 		
@@ -73,12 +72,12 @@ public class FlatRentAdvertComparator implements AdvertComparator {
 		AnalyserProcessStatus changeStatus = comparePrices(newAdvert, oldAdvert);
 		if (changeStatus == null || changeStatus == AnalyserProcessStatus.SAME) {
 			// Другие проверки
-			logger.debug("New advert with id {} and old advert id {} has the same prices, will check photo and complexes", newAdvertId, oldAdvertId);
+			logger.debug("New advert with id {} and old advert id {} has the same prices, will check photo and complexes", newAdvert.id, oldAdvert.id);
 			
 			// TODO Add Photo check
 			changeStatus = comparePhotos(newAdvert, oldAdvert);
 			if (changeStatus == null || changeStatus == AnalyserProcessStatus.SAME) {
-				logger.debug("New advert with id {} and old advert id {} has the same photos, will check complexes", newAdvertId, oldAdvertId);
+				logger.debug("New advert with id {} and old advert id {} has the same photos, will check complexes", newAdvert.id, oldAdvert.id);
 				
 				// TODO Add Residential Complex
 				changeStatus = compareResidentialComplexes(newAdvert, oldAdvert);
@@ -86,22 +85,22 @@ public class FlatRentAdvertComparator implements AdvertComparator {
 					// Nothing more to check
 					
 				} else {
-					logger.debug("New advert with id {} and old advert id {} has not the same residential complexes data. Status was changed to {}", newAdvertId, oldAdvertId, changeStatus);
+					logger.debug("New advert with id {} and old advert id {} has not the same residential complexes data. Status was changed to {}", newAdvert.id, oldAdvert.id, changeStatus);
 					return changeStatus;
 				}
 				
 			} else {
-				logger.debug("New advert with id {} and old advert id {} has not the same photo data. Status was changed to {}", newAdvertId, oldAdvertId, changeStatus);
+				logger.debug("New advert with id {} and old advert id {} has not the same photo data. Status was changed to {}", newAdvert.id, oldAdvert.id, changeStatus);
 				return changeStatus;
 			}
 
 		} else {
 			// Но если цена изменилась, то это серьезно и нужно уведомлять пользователя
-			logger.debug("In new advert with id {} price was changed, status is {}", newAdvertId, changeStatus);
+			logger.debug("In new advert with id {} price was changed, status is {}", newAdvert.id, changeStatus);
 			return changeStatus;
 		}
 		
-		logger.debug("New advert with id {} and old advert with id {} seems the same...", newAdvertId, oldAdvertId);
+		logger.debug("New advert with id {} and old advert with id {} seems the same...", newAdvert.id, oldAdvert.id);
 		return AnalyserProcessStatus.SAME; // Ничего не поменялось
 	}
 
@@ -113,7 +112,7 @@ public class FlatRentAdvertComparator implements AdvertComparator {
 	 * @param oldAdvert
 	 * @return
 	 */
-	private AnalyserProcessStatus compareResidentialComplexes(FlatRentRealty newAdvert, FlatRentRealty oldAdvert) {
+	private AnalyserProcessStatus compareResidentialComplexes(Advert newAdvert, Advert oldAdvert) {
 		if (newAdvert.data == null) {
 			logger.warn("New advert with id {} has no data, strange..", newAdvert.id);
 			return null;
@@ -124,22 +123,28 @@ public class FlatRentAdvertComparator implements AdvertComparator {
 			return AnalyserProcessStatus.BETTER;
 		}
 		
-		if (newAdvert.data.residentalComplex != null && oldAdvert.data.residentalComplex == null) {
-			logger.debug("New advert with id {} and old advert with id {} different. New advert has residendial id {}", newAdvert.id, oldAdvert.id, newAdvert.data.residentalComplex.id);
+		Mapper mapper = new Mapper();
+		mapper.getConverters().addConverter(CalendarConverter.class);
+		ResidentialComplex oldComplex = (DBObject)oldAdvert.data.get("residentalComplex") != null ? mapper.fromDBObject(DB.DS(), ResidentialComplex.class, (DBObject)oldAdvert.data.get("residentalComplex"), mapper.createEntityCache()) : null;
+		ResidentialComplex newComplex = (DBObject)newAdvert.data.get("residentalComplex") != null ? mapper.fromDBObject(DB.DS(), ResidentialComplex.class, (DBObject)newAdvert.data.get("residentalComplex"), mapper.createEntityCache()) : null;
+		
+		
+		if (newComplex != null && oldComplex == null) {
+			logger.debug("New advert with id {} and old advert with id {} different. New advert has residendial id {}", newAdvert.id, oldAdvert.id, newComplex.id);
 			return AnalyserProcessStatus.BETTER;
 		}
 		
-		if (newAdvert.data.residentalComplex == null && oldAdvert.data.residentalComplex != null) {
+		if (newComplex == null && oldComplex != null) {
 			return AnalyserProcessStatus.WORSTE;
 		}
 
-		if (newAdvert.data.residentalComplex == null && oldAdvert.data.residentalComplex == null) {
+		if (newComplex == null && oldComplex == null) {
 			logger.debug("New advert with id {} and old advert with id {} seems the same NULL residential complexes...", newAdvert.id, oldAdvert.id);
 			return AnalyserProcessStatus.SAME;
 		}
 		
-		if (newAdvert.data.residentalComplex.id == oldAdvert.data.residentalComplex.id) {
-			logger.debug("New advert with id {} and old advert with id {} seems has the same residential comlpex {}...", newAdvert.id, oldAdvert.id, newAdvert.data.residentalComplex.id);
+		if (newComplex.id == oldComplex.id) {
+			logger.debug("New advert with id {} and old advert with id {} seems has the same residential comlpex {}...", newAdvert.id, oldAdvert.id, newComplex.id);
 			return AnalyserProcessStatus.SAME;
 		}
 		
@@ -153,7 +158,7 @@ public class FlatRentAdvertComparator implements AdvertComparator {
 	 * @param oldAdvert
 	 * @return
 	 */
-	private AnalyserProcessStatus comparePhotos(FlatRentRealty newAdvert, FlatRentRealty oldAdvert) {
+	private AnalyserProcessStatus comparePhotos(Advert newAdvert, Advert oldAdvert) {
 		if (newAdvert.hasPhoto == null && oldAdvert.hasPhoto == null) {
 			logger.debug("New advert with id {} and old advert with id {} has not photo", newAdvert.id, oldAdvert.id);
 			return AnalyserProcessStatus.SAME;
@@ -193,7 +198,7 @@ public class FlatRentAdvertComparator implements AdvertComparator {
 	 * @param oldAdvert
 	 * @return
 	 */
-	private AnalyserProcessStatus comparePrices(FlatRentRealty newAdvert, FlatRentRealty oldAdvert) {
+	private AnalyserProcessStatus comparePrices(Advert newAdvert, Advert oldAdvert) {
 		/// Проверка цены
 		if (newAdvert.price == null && oldAdvert.price == null) {
 			// Аномально, но ничего не поменялось
@@ -226,19 +231,6 @@ public class FlatRentAdvertComparator implements AdvertComparator {
 		}
 		
 		return AnalyserProcessStatus.SAME;
-	}
-	
-	private FlatRentRealty getAdvertObject(String advertId) {
-		Query<FlatRentRealty> q = DB.DS().createQuery(FlatRentRealty.class);
-		 
-		q.field("id").equal(new ObjectId(advertId));
-		 
-		List<FlatRentRealty> result = q.asList();
-		
-		if (result.size() > 0)
-			return result.get(0);
-		return null;
-		
 	}
 	
 }

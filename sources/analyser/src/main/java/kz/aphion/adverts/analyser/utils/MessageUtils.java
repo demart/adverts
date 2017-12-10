@@ -1,6 +1,6 @@
 package kz.aphion.adverts.analyser.utils;
 
-import kz.aphion.adverts.analyser.mq.ProcessRealtyModel;
+import kz.aphion.adverts.common.models.mq.adverts.ProcessModel;
 
 import com.google.gson.Gson;
 
@@ -17,12 +17,12 @@ public class MessageUtils {
 	 * @param jsonModel
 	 * @return
 	 */
-	public static ProcessRealtyModel parseModel(String jsonModel) {
+	public static ProcessModel parseModel(String jsonModel) {
 		if (jsonModel == null)
 			return null;
 		
 		Gson gson = new Gson();
-		ProcessRealtyModel model = gson.fromJson(jsonModel, ProcessRealtyModel.class);
+		ProcessModel model = gson.fromJson(jsonModel, ProcessModel.class);
 		
 		return model;
 	}
