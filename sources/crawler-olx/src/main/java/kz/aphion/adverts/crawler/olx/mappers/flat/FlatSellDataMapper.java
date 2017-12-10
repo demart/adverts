@@ -1,9 +1,11 @@
 package kz.aphion.adverts.crawler.olx.mappers.flat;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ThreadLocalRandom;
 
 import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
 import kz.aphion.adverts.crawler.olx.OlxAdvertCategoryType;
@@ -11,14 +13,15 @@ import kz.aphion.adverts.crawler.olx.mappers.CommonMapperUtils;
 import kz.aphion.adverts.crawler.olx.mappers.OlxPhoneMapper;
 import kz.aphion.adverts.crawler.olx.mappers.OlxPhotoMapper;
 import kz.aphion.adverts.persistence.SourceSystemType;
-import kz.aphion.adverts.persistence.realty.Realty;
-import kz.aphion.adverts.persistence.realty.RealtyAdvertStatus;
-import kz.aphion.adverts.persistence.realty.RealtyLocation;
-import kz.aphion.adverts.persistence.realty.RealtyPublisher;
-import kz.aphion.adverts.persistence.realty.RealtyPublisherType;
-import kz.aphion.adverts.persistence.realty.RealtySource;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatSellDataModel;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatSellRealty;
+import kz.aphion.adverts.persistence.adverts.Advert;
+import kz.aphion.adverts.persistence.adverts.AdvertLocation;
+import kz.aphion.adverts.persistence.adverts.AdvertOperationType;
+import kz.aphion.adverts.persistence.adverts.AdvertPublisher;
+import kz.aphion.adverts.persistence.adverts.AdvertPublisherType;
+import kz.aphion.adverts.persistence.adverts.AdvertSource;
+import kz.aphion.adverts.persistence.adverts.AdvertStatus;
+import kz.aphion.adverts.persistence.adverts.AdvertType;
+import kz.aphion.adverts.persistence.realty.RealtyType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBuildingType;
 
 import org.slf4j.Logger;
@@ -35,17 +38,21 @@ public class FlatSellDataMapper {
 
 	private static Logger logger = LoggerFactory.getLogger(FlatSellDataMapper.class);
 
-	public static Realty mapAdvertObject(Map<String, Object> advert) throws CrawlerException {
+	public static Advert mapAdvertObject(Map<String, Object> advert) throws CrawlerException {
 		
-		FlatSellRealty realty = new FlatSellRealty();
+		Advert realty = new Advert();
+		realty.type = AdvertType.REALTY;
+		realty.subType = RealtyType.FLAT.toString();
+		realty.operation = AdvertOperationType.SELL;
 		
-		realty.data = new FlatSellDataModel();
-		realty.status = RealtyAdvertStatus.ACTIVE;
-		realty.source = new RealtySource();
-		realty.source.sourceType = SourceSystemType.OLX;
+		realty.data = new HashMap<String, Object>();
 		
-		realty.location = new RealtyLocation();
-		realty.publisher = new RealtyPublisher();
+		realty.status = AdvertStatus.ACTIVE;
+		realty.source = new AdvertSource();
+		realty.source.type = SourceSystemType.OLX;
+		
+		realty.location = new AdvertLocation();
+		realty.publisher = new AdvertPublisher();
 		
 		// Это нужно для того чтобы понять до какого уровня у нас есть данные
 		// Например до района или только до города
@@ -58,11 +65,11 @@ public class FlatSellDataMapper {
 			switch (entry.getKey()) {
 				case "id":
 					// id": "107604886",
-					realty.source.externalAdvertId = (String)entry.getValue();
+					realty.source.externalId = (String)entry.getValue();
 					break;
 				case "url":
 					// url": "http://olx.kz/obyavlenie/prodam-2-komnatnuyu-kvartiru-zhk-kypchak-76-5-kv-m-teplaya-neuglovaya-ID7huVG.html",
-					realty.source.originalAdvertLink = (String)entry.getValue();
+					realty.source.originalLink = (String)entry.getValue();
 					break;
 
 				case "title":
@@ -79,7 +86,7 @@ public class FlatSellDataMapper {
 
 				case "description":
 					// description": "Продам 2-х комнатную квартиру ЖК \"Кыпчак\", теплая, солнечная сторона, евроремонт, балкон большой застекленнный, 2 лифта, кухня студия с установленным новым кухонным гарнитуром.",
-					realty.data.text = (String)entry.getValue();
+					realty.data.put("text", (String)entry.getValue());
 					break;
 				
 				case "category_id":
@@ -126,7 +133,14 @@ public class FlatSellDataMapper {
 					// has_phone": 1,
 					// Если есть телефон то отправляем запрос на сервер для его получения
 					if ("1".equals(entry.getValue())) {
-						List<String> phones = OlxPhoneMapper.callServerAndGetPhone(realty.source.externalAdvertId);
+						try {
+							int randomNum = ThreadLocalRandom.current().nextInt(100, 900 + 1);
+							logger.debug("sleep {} before make a call to get phone", randomNum);
+							Thread.sleep(randomNum);
+						} catch (InterruptedException e) {
+							logger.error("Sleep error in thread", e);
+						}
+						List<String> phones = OlxPhoneMapper.callServerAndGetPhone(realty.source.externalId);
 						realty.publisher.phones = phones;
 					} else {
 						logger.warn("Olx Advert has_phone field [{}] not equals 1, maybe there is no any phones",  entry.getValue());
@@ -351,7 +365,7 @@ public class FlatSellDataMapper {
 	 * @param realty
 	 * @param entry
 	 */
-	private static void convertAdvertParams(FlatSellRealty realty, List<List<String>> params) {
+	private static void convertAdvertParams(Advert realty, List<List<String>> params) {
 		for (List<String> list : params) {
 			
 			String name = list.get(0).trim();
@@ -362,10 +376,10 @@ public class FlatSellDataMapper {
 					// "Частного лица", "Агентства"
 					switch (value) {
 						case "Частного лица":
-							realty.publisher.publisherType = RealtyPublisherType.OWNER;
+							realty.publisher.type = AdvertPublisherType.OWNER;
 							break;
 						case "Агентства":
-							realty.publisher.publisherType = RealtyPublisherType.REALTOR;
+							realty.publisher.type = AdvertPublisherType.AGENT_COMPANY;
 							break;
 						default:
 							logger.warn("Found new key in advert parameter [{}] with value [{}]", name, value);
@@ -391,46 +405,46 @@ public class FlatSellDataMapper {
 				case "Количество комнат":
 					// "2 "	
 					Float roomCount = Float.parseFloat(value);
-					realty.data.rooms = roomCount;
+					realty.data.put("rooms", roomCount);
 					break;
 				case "Общая площадь":
 					// "50 м²"
 					String tatalSquare = value.replaceAll("м²", "").trim();
 					tatalSquare = tatalSquare.replace(" ", "");
 					Float square = Float.parseFloat(tatalSquare);
-					realty.data.square = square;
+					realty.data.put("square", square);
 					break;
 				case "Жилая площадь":
 					// "50 м²"
 					String livingSquareStr = value.replaceAll("м²", "").trim();
 					livingSquareStr = livingSquareStr.replace(" ", "");
 					Float livingSquare = Float.parseFloat(livingSquareStr);
-					realty.data.squareLiving = livingSquare;
+					realty.data.put("squareLiving", livingSquare);
 					break;	
 				case "Площадь кухни":
 					// "50 м²"				
 					String kitchenSquareStr = value.replaceAll("м²", "").trim();
 					kitchenSquareStr = kitchenSquareStr.replace(" ", "");
 					Float kitchenSquare = Float.parseFloat(kitchenSquareStr);
-					realty.data.squareKitchen = kitchenSquare;
+					realty.data.put("squareKitchen", kitchenSquare);
 					break;					
 				case "Тип":
 					// "Кирпичный", "Панельный", "Монолитный", "Блочный", "Деревянный"
 					switch (value) {
 						case "Кирпичный":
-							realty.data.flatBuildingType = FlatBuildingType.BRICK;
+							realty.data.put("flatBuildingType", FlatBuildingType.BRICK);
 							break;
 						case "Панельный":
-							realty.data.flatBuildingType = FlatBuildingType.PANEL;
+							realty.data.put("flatBuildingType", FlatBuildingType.PANEL);
 							break;
 						case "Монолитный":
-							realty.data.flatBuildingType = FlatBuildingType.MONOLITHIC;
+							realty.data.put("flatBuildingType", FlatBuildingType.MONOLITHIC);
 							break;
 						case "Блочный":
-							realty.data.flatBuildingType = FlatBuildingType.BLOCK;
+							realty.data.put("flatBuildingType", FlatBuildingType.BLOCK);
 							break;
 						case "Деревянный":
-							realty.data.flatBuildingType = FlatBuildingType.WOODEN;
+							realty.data.put("flatBuildingType", FlatBuildingType.WOODEN);
 							break;
 							
 						default:
@@ -441,12 +455,12 @@ public class FlatSellDataMapper {
 				case "Этажность дома":
 					// "2 "
 					Long houseFloorCount = Long.parseLong(value);
-					realty.data.houseFloorCount = houseFloorCount;
+					realty.data.put("houseFloorCount", houseFloorCount);
 					break;
 				case "Этаж":
 					// "5 "
 					Long floor = Long.parseLong(value);
-					realty.data.flatFloor = floor;
+					realty.data.put("flatFloor", floor);
 					break;
 				default:
 					break;

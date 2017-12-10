@@ -7,7 +7,7 @@ import kz.aphion.adverts.crawler.olx.OlxAdvertCategoryType;
 import kz.aphion.adverts.crawler.olx.OlxDataManager;
 import kz.aphion.adverts.crawler.olx.persistence.OlxRegion;
 import kz.aphion.adverts.persistence.RegionType;
-import kz.aphion.adverts.persistence.realty.Realty;
+import kz.aphion.adverts.persistence.adverts.Advert;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ public class CommonMapperUtils {
 	 * @param regionEntry Название региона
 	 * @throws CrawlerException 
 	 */
-	public static void convertRegion(Realty realty, String regionId, String cityId, String districtId) throws CrawlerException {
+	public static void convertRegion(Advert realty, String regionId, String cityId, String districtId) throws CrawlerException {
 		OlxRegion olxRegion = null;
 		
 		// Пробуем найти район		

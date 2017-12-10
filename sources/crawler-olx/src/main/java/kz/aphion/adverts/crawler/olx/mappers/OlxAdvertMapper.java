@@ -9,7 +9,7 @@ import kz.aphion.adverts.crawler.olx.OlxAdvertCategoryType;
 import kz.aphion.adverts.crawler.olx.QueryBuilder;
 import kz.aphion.adverts.crawler.olx.mappers.flat.FlatRentDataMapper;
 import kz.aphion.adverts.crawler.olx.mappers.flat.FlatSellDataMapper;
-import kz.aphion.adverts.persistence.realty.Realty;
+import kz.aphion.adverts.persistence.adverts.Advert;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ public class OlxAdvertMapper {
 
 	private static Logger logger = LoggerFactory.getLogger(QueryBuilder.class);
 
-	public static List<Realty> extractAndConvertAdverts(Map<String, Object> jsonResponseMap) throws CrawlerException {
+	public static List<Advert> extractAndConvertAdverts(Map<String, Object> jsonResponseMap) throws CrawlerException {
 		if (!jsonResponseMap.containsKey("ads")) {
 			if (logger.isDebugEnabled())
 				logger.debug("Received data with empty adverts list. Completing process.");
@@ -37,13 +37,13 @@ public class OlxAdvertMapper {
 			logger.debug("Received " + rawAdverts.size() + " adverts to process");
 		
 		
-		List<Realty> adverts = new ArrayList<Realty>();
+		List<Advert> adverts = new ArrayList<Advert>();
 		for (Map<String, Object> rawAdvert : rawAdverts) {
 			if (logger.isDebugEnabled())
 				logger.debug("Advert with Id: " + rawAdvert.get("id") + " will be converted");
 			
 			try {
-				Realty realty = convertRealtyToAdvertEntity(rawAdvert);
+				Advert realty = convertRealtyToAdvertEntity(rawAdvert);
 				if (realty != null) {
 					adverts.add(realty);
 				} else {
@@ -60,7 +60,7 @@ public class OlxAdvertMapper {
 	}
 	
 	
-	private static Realty convertRealtyToAdvertEntity(Map<String, Object> rawAdvert) throws CrawlerException {
+	private static Advert convertRealtyToAdvertEntity(Map<String, Object> rawAdvert) throws CrawlerException {
 		if (!rawAdvert.containsKey("category_id"))
 			throw new CrawlerException("Can't find category_id parameter in olx raw advert");
 		

@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 import kz.aphion.adverts.crawler.core.exceptions.CrawlerException;
 import kz.aphion.adverts.crawler.olx.OlxJsonToMapParser;
 import kz.aphion.adverts.crawler.olx.UrlBuilder;
-import kz.aphion.adverts.persistence.realty.RealtyPhoto;
+import kz.aphion.adverts.persistence.adverts.AdvertPhoto;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +39,8 @@ public class OlxPhotoMapper {
 	 * @param rawPhotos
 	 * @throws CrawlerException 
 	 */
-	public static List<RealtyPhoto> convertPhotos(Map<String, Object> rawPhotos) throws CrawlerException {
-		List<RealtyPhoto> photos = new ArrayList<RealtyPhoto>();
+	public static List<AdvertPhoto> convertPhotos(Map<String, Object> rawPhotos) throws CrawlerException {
+		List<AdvertPhoto> photos = new ArrayList<AdvertPhoto>();
 		Long riakRing = null;
 		Long riakKey = null;
 		Long riakRev = null;
@@ -51,7 +51,7 @@ public class OlxPhotoMapper {
 		
 		List<Map<String, Object>> rawPhotoItems = (List<Map<String, Object>>)rawPhotos.get("data");
 		for (Map<String, Object> photoItem : rawPhotoItems) {
-			RealtyPhoto photo = new RealtyPhoto();
+			AdvertPhoto photo = new AdvertPhoto();
 			
 			Long slotId = null;
 			
