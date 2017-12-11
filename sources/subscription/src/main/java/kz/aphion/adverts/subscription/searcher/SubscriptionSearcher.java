@@ -2,7 +2,7 @@ package kz.aphion.adverts.subscription.searcher;
 
 import java.util.List;
 
-import kz.aphion.adverts.persistence.BaseEntity;
+import kz.aphion.adverts.persistence.adverts.Advert;
 import kz.aphion.adverts.persistence.subscription.Subscription;
 
 /**
@@ -20,13 +20,13 @@ public interface SubscriptionSearcher {
 	 * Указываем идентификтор записи в БД
 	 * @param objectId
 	 */
-	public void setAdvertObjectId(String objectId);
+	public void setAdvert(Advert advert);
 	
 	/**
 	 * Получает объект
 	 * @return
 	 */
-	public BaseEntity getAdvertObject();
+	public Advert getAdvert();
 	
 	
 }

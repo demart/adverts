@@ -1,8 +1,8 @@
 package kz.aphion.adverts.subscription.searcher;
 
-import kz.aphion.adverts.persistence.realty.types.RealtyOperationType;
-import kz.aphion.adverts.persistence.realty.types.RealtyType;
-import kz.aphion.adverts.subscription.mq.RealtyAnalyserToSubscriptionProcessModel;
+import kz.aphion.adverts.persistence.adverts.Advert;
+import kz.aphion.adverts.persistence.adverts.AdvertType;
+import kz.aphion.adverts.persistence.realty.RealtyType;
 import kz.aphion.adverts.subscription.searcher.impl.FlatRentSubscriptionSearcher;
 import kz.aphion.adverts.subscription.searcher.impl.FlatSellSubscriptionSearcher;
 
@@ -25,20 +25,26 @@ public class SubscriptionSearcherFactory {
 	 * @param realy
 	 * @return
 	 */
-	public static SubscriptionSearcher getRealtySubscriptionSearcher(RealtyAnalyserToSubscriptionProcessModel model) {
-		logger.info("Invoking realty subscription search factory");
-		SubscriptionSearcher searcher = null;
-		if (model.type == RealtyType.FLAT && model.operation == RealtyOperationType.SELL) {
-			 searcher = new FlatSellSubscriptionSearcher();
-		}
-		
-		if (model.type == RealtyType.FLAT && model.operation == RealtyOperationType.RENT) {
-			searcher = new FlatRentSubscriptionSearcher();
-		}
-		
-		if (searcher != null) {
-			searcher.setAdvertObjectId(model.advertId);
-			return searcher;
+	public static SubscriptionSearcher getAdvertSubscriptionSearcher(Advert advert) {
+		logger.info("Invoking advert subscription search factory");
+
+		if (advert.type == AdvertType.REALTY) {
+			RealtyType subType = RealtyType.valueOf(advert.subType);
+			
+			switch (subType) {
+				case FLAT:
+					switch (advert.operation) {
+						case SELL:
+							return new FlatSellSubscriptionSearcher();
+						case RENT:
+							return new FlatRentSubscriptionSearcher();
+						default:
+							break;
+					}
+					break;
+				default:
+					break;
+			}
 		}
 		
 		throw new NotImplementedException();

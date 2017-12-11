@@ -3,14 +3,12 @@ package kz.aphion.adverts.subscription.searcher.impl;
 import java.util.List;
 
 import kz.aphion.adverts.common.DB;
-import kz.aphion.adverts.persistence.BaseEntity;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatRentRealty;
+import kz.aphion.adverts.persistence.adverts.Advert;
 import kz.aphion.adverts.persistence.subscription.Subscription;
-import kz.aphion.adverts.subscription.processors.RealtyAdvertSubscriptionProcessor;
+import kz.aphion.adverts.subscription.processors.AdvertSubscriptionProcessorImpl;
 import kz.aphion.adverts.subscription.searcher.SubscriptionSearcher;
 import kz.aphion.adverts.subscription.searcher.impl.utils.FlatSubscriptionSearcherQueryBuilder;
 
-import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
 import org.slf4j.Logger;
@@ -19,20 +17,17 @@ import org.slf4j.LoggerFactory;
 
 public class FlatRentSubscriptionSearcher implements SubscriptionSearcher {
 
-	private static Logger logger = LoggerFactory.getLogger(RealtyAdvertSubscriptionProcessor.class);
-
+	private static Logger logger = LoggerFactory.getLogger(AdvertSubscriptionProcessorImpl.class);
 	
-	private ObjectId advertId;
-	
-	private FlatRentRealty realty;
+	private Advert realty;
 	
 	@Override
-	public void setAdvertObjectId(String objectId) {
-		this.advertId = new ObjectId(objectId);
+	public void setAdvert(Advert advert) {
+		this.realty = advert;
 	}
 
 	@Override
-	public BaseEntity getAdvertObject() {
+	public Advert getAdvert() {
 		return realty;
 	}
 	
@@ -41,12 +36,6 @@ public class FlatRentSubscriptionSearcher implements SubscriptionSearcher {
 	public List<Subscription> search() {
 		try {
 			Datastore ds = DB.DS();
-			
-			realty = ds.get(FlatRentRealty.class, advertId);
-			if (realty == null) {
-				logger.warn("Object with provided Id [" + advertId + "] not found. Possibly already exists newer version.");
-				return null;
-			}
 			
 			List<Subscription> result = search(ds, realty);
 			if (result != null)
@@ -60,8 +49,8 @@ public class FlatRentSubscriptionSearcher implements SubscriptionSearcher {
 		}
 	}
 
-	private List<Subscription> search(Datastore ds, FlatRentRealty realty) {
-		Query<Subscription> q = FlatSubscriptionSearcherQueryBuilder.buidQuery(ds, realty);
+	private List<Subscription> search(Datastore ds, Advert realty) {
+		Query<Subscription> q = FlatSubscriptionSearcherQueryBuilder.buidRentQuery(ds, realty);
 		List<Subscription> result = q.asList();
 		return result;
 	}

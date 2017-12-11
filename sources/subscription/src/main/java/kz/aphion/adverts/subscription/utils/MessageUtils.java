@@ -1,6 +1,6 @@
 package kz.aphion.adverts.subscription.utils;
 
-import kz.aphion.adverts.subscription.mq.RealtyAnalyserToSubscriptionProcessModel;
+import kz.aphion.adverts.subscription.mq.AdvertAnalyserToSubscriptionProcessModel;
 
 import com.google.gson.Gson;
 
@@ -17,12 +17,12 @@ public class MessageUtils {
 	 * @param jsonModel
 	 * @return
 	 */
-	public static RealtyAnalyserToSubscriptionProcessModel parseModel(String jsonModel) {
+	public static AdvertAnalyserToSubscriptionProcessModel parseModel(String jsonModel) {
 		if (jsonModel == null)
 			return null;
 		
 		Gson gson = new Gson();
-		RealtyAnalyserToSubscriptionProcessModel model = gson.fromJson(jsonModel, RealtyAnalyserToSubscriptionProcessModel.class);
+		AdvertAnalyserToSubscriptionProcessModel model = gson.fromJson(jsonModel, AdvertAnalyserToSubscriptionProcessModel.class);
 		
 		return model;
 	}

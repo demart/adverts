@@ -1,6 +1,7 @@
 package kz.aphion.adverts.subscription.processors;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -189,7 +190,8 @@ public class SubscriptionAdvertNotificationBuilderProcessor implements AdvertSub
 	
 	private boolean addMobileChannelsToNotification(Subscription subscription, List<SubscriptionAdvert> subscriptionAdverts, NotificationEventBuilder notificationBuilder) {
 		boolean wasMobileFound = false;
-		for (UserDevice userDevice : subscription.user.devices) {
+		List<UserDevice> devices = DB.DS().createQuery(UserDevice.class).field("user.id").equal(subscription.user.id).asList();
+		for (UserDevice userDevice : devices) {
 			if (userDevice.status == UserDeviceStatus.DELETED)
 				continue;
 			
@@ -220,7 +222,8 @@ public class SubscriptionAdvertNotificationBuilderProcessor implements AdvertSub
 	
 	private boolean addWebChannelsToNotification(Subscription subscription, List<SubscriptionAdvert> subscriptionAdverts, NotificationEventBuilder notificationBuilder) {
 		boolean wasFound = false;
-		for (UserDevice userDevice : subscription.user.devices) {
+		List<UserDevice> devices = DB.DS().createQuery(UserDevice.class).field("user.id").equal(subscription.user.id).asList();
+		for (UserDevice userDevice : devices) {
 			if (userDevice.status == UserDeviceStatus.DELETED)
 				continue;
 			
@@ -319,16 +322,16 @@ public class SubscriptionAdvertNotificationBuilderProcessor implements AdvertSub
 	 */
 	private List<SubscriptionAdvert> getActiveSubscriptionAdverts(Datastore ds, SubscriptionNotificationBuilderModel model, Subscription subscription) {
 		List<SubscriptionAdvert> subscriptionAdverts = new ArrayList<SubscriptionAdvert>();
+		// TODO Change for more optimal
+		List<SubscriptionAdvert> loadedAdverts = DB.DS().createQuery(SubscriptionAdvert.class)
+														.field("subscription.id").equal(subscription.id)
+														.field("status").notIn(Arrays.asList(SubscriptionAdvertStatus.DELETED,SubscriptionAdvertStatus.REPLACED))
+														.asList();
 		
-		for (SubscriptionAdvert subscriptionAdvertObject : subscription.adverts) {
+		for (SubscriptionAdvert subscriptionAdvertObject : loadedAdverts) {
 			for (String subscriptionAdvertId : model.subscriptionAdvertIds) {
 				if (subscriptionAdvertId.equals(subscriptionAdvertObject.id.toString())) {
-					
-					// Check if it is active one
-					if (subscriptionAdvertObject.status != SubscriptionAdvertStatus.DELETED && 
-						subscriptionAdvertObject.status != SubscriptionAdvertStatus.REPLACED) {
-						subscriptionAdverts.add(subscriptionAdvertObject);
-					}
+					subscriptionAdverts.add(subscriptionAdvertObject);
 				}
 			}
 		}

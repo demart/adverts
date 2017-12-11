@@ -6,7 +6,7 @@ import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 import kz.aphion.adverts.subscription.processors.AdvertSubscriptionProcessor;
-import kz.aphion.adverts.subscription.processors.RealtyAdvertSubscriptionProcessor;
+import kz.aphion.adverts.subscription.processors.AdvertSubscriptionProcessorImpl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ public class RealtyAdvertSubscriptionListener implements MessageListener  {
                 String text = textMessage.getText();
                 logger.trace("Received new message:\n {}", text);
                 
-                AdvertSubscriptionProcessor processor = new RealtyAdvertSubscriptionProcessor();
+                AdvertSubscriptionProcessor processor = new AdvertSubscriptionProcessorImpl();
                 processor.processMessage(text);
 
                 logger.trace("Processing completed");

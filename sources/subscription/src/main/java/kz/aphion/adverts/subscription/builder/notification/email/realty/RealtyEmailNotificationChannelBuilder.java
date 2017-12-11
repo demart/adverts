@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.util.List;
 
 import kz.aphion.adverts.notification.mq.models.NotificationChannel;
+import kz.aphion.adverts.persistence.adverts.AdvertOperationType;
+import kz.aphion.adverts.persistence.realty.RealtyType;
 import kz.aphion.adverts.persistence.subscription.Subscription;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvert;
-import kz.aphion.adverts.persistence.subscription.criteria.realty.RealtyBaseSubscriptionCriteria;
-import kz.aphion.adverts.persistence.subscription.criteria.realty.RealtyRentFlatSubscriptionCriteria;
-import kz.aphion.adverts.persistence.subscription.criteria.realty.RealtySellFlatSubscriptionCriteria;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,18 +26,15 @@ public class RealtyEmailNotificationChannelBuilder {
 	private static Logger logger = LoggerFactory.getLogger(RealtyEmailNotificationChannelBuilder.class);
 
 	public NotificationChannel build(Subscription subscription, List<SubscriptionAdvert> subscriptionAdverts) throws TemplateException, IOException {
-		if (!(subscription.criteria instanceof RealtyBaseSubscriptionCriteria)) {
-			logger.error("Subscription.criteria doesn't belog to Realty Criteria.");
-			return null;	
-		}
+		if (RealtyType.FLAT != RealtyType.valueOf(subscription.advertSubType))
+			throw new NotImplementedException("Suppported only Flat notifications");
 		
 		// TODO Проанализировать и сделать 1 шаблон для квартир по продаже и аренде
-		
-		if (subscription.criteria instanceof RealtySellFlatSubscriptionCriteria){
+		if (subscription.operationType == AdvertOperationType.SELL){
 			return new FlatSellRealtyEmailNotificationChannelBuilder().build(subscription, subscriptionAdverts);
 		}
 		
-		if (subscription.criteria instanceof RealtyRentFlatSubscriptionCriteria){
+		if (subscription.operationType == AdvertOperationType.RENT){
 			return new FlatRentRealtyEmailNotificationChannelBuilder().build(subscription, subscriptionAdverts);
 		}
 		

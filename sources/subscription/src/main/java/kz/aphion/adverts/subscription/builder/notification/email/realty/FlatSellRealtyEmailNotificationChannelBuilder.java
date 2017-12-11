@@ -3,28 +3,39 @@ package kz.aphion.adverts.subscription.builder.notification.email.realty;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.notification.mq.models.NotificationChannel;
 import kz.aphion.adverts.notification.mq.models.NotificationChannelType;
 import kz.aphion.adverts.notification.mq.models.NotificationParameter;
+import kz.aphion.adverts.persistence.CalendarConverter;
 import kz.aphion.adverts.persistence.Region;
-import kz.aphion.adverts.persistence.realty.Realty;
-import kz.aphion.adverts.persistence.realty.building.ResidentialComplex;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatSellRealty;
+import kz.aphion.adverts.persistence.adverts.Advert;
+import kz.aphion.adverts.persistence.realty.ResidentialComplex;
+import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBuildingType;
+import kz.aphion.adverts.persistence.realty.data.flat.types.FlatFurnitureType;
+import kz.aphion.adverts.persistence.realty.data.flat.types.FlatInternetType;
+import kz.aphion.adverts.persistence.realty.data.flat.types.FlatLavatoryType;
+import kz.aphion.adverts.persistence.realty.data.flat.types.FlatPhoneType;
+import kz.aphion.adverts.persistence.realty.data.flat.types.FlatRenovationType;
 import kz.aphion.adverts.persistence.subscription.Subscription;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvert;
-import kz.aphion.adverts.persistence.subscription.criteria.realty.RealtyFlatBaseSubscriptionCriteria;
-import kz.aphion.adverts.persistence.subscription.criteria.realty.RealtySellFlatSubscriptionCriteria;
+import kz.aphion.adverts.persistence.subscription.SubscriptionAdvertStatus;
+import kz.aphion.adverts.persistence.subscription.criteria.SubscriptionCriteria;
 import kz.aphion.adverts.subscription.builder.FM;
 import kz.aphion.adverts.subscription.builder.notification.email.realty.models.FlatSellRealtyModel;
 
 import org.apache.commons.lang.StringUtils;
+import org.mongodb.morphia.mapping.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.mongodb.DBObject;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -46,11 +57,6 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 	private static final String EMAIL_TEMPLATE = "email-notification-realty-flat-sell-template-v1.ftlh.html";
 
 	public NotificationChannel build(Subscription subscription, List<SubscriptionAdvert> subscriptionAdverts) throws TemplateException, IOException {
-		if (subscription.criteria instanceof RealtySellFlatSubscriptionCriteria == false) {
-			logger.error("FlatSellRealtyEmailNotificationChannelBuilder was selected by mistake, please check subscription.id: " + subscription.id);
-			return null;
-		}
-		
 		NotificationChannel email = new NotificationChannel();
 		
 		email.uid = UUID.randomUUID().toString();
@@ -110,7 +116,12 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 		
 		root.put("title", "Найдены новые объявления о продаже квартир");
 		
-		root.put("totalAdvertsCount", subscription.adverts != null ? subscription.adverts.size() : 0);
+		long totalAdvertsCount = DB.DS().createQuery(SubscriptionAdvert.class)
+				.field("subscription.id").equal(subscription.id)
+				.field("status").notIn(Arrays.asList(SubscriptionAdvertStatus.DELETED,SubscriptionAdvertStatus.REPLACED))
+				.count();
+				
+		root.put("totalAdvertsCount", totalAdvertsCount);
 		root.put("newAdvertsCount", subscriptionAdverts != null ? subscriptionAdverts.size() : 0);
 		
 		root.put("companyName", "Aphion Software"); // ???
@@ -153,33 +164,33 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 		
 		// TODO FIX IT TO PROPER IMPL
 		
-		FlatSellRealty realty = (FlatSellRealty)subscriptionAdvert.advert;
+		Advert realty = subscriptionAdvert.advert;
 		
 		model.title = getAdvertTitle(realty);
 		model.shortDescription = getAdvertShortDescription(realty);
 		model.description = getAdvertDescription(realty);
 		
-		model.price = ((Realty)subscriptionAdvert.advert).price;
+		model.price = realty.price;
 		
 		model.priceText = String.valueOf(Math.round(model.price / 100000) * 0.1);
 		
-		model.hasImage = ((Realty)subscriptionAdvert.advert).hasPhoto;
+		model.hasImage = realty.hasPhoto;
 		
-		if (((Realty)subscriptionAdvert.advert).photos != null && ((Realty)subscriptionAdvert.advert).photos.size() > 0) {
-			model.imageUrl = ((Realty)subscriptionAdvert.advert).photos.get(0).path;
+		if (realty.photos != null && realty.photos.size() > 0) {
+			model.imageUrl = realty.photos.get(0).path;
 		} else {
 			model.hasImage = false;
 		}
 		
-		if (((Realty)subscriptionAdvert.advert).publisher != null && ((Realty)subscriptionAdvert.advert).publisher.publisherType != null) {
-			switch (((Realty)subscriptionAdvert.advert).publisher.publisherType) {
-				case DEVELOPER_COMPANY:
+		if (realty.publisher != null && realty.publisher.type != null) {
+			switch (realty.publisher.type) {
+				case COMPANY:
 					model.publisher = "Строительная компания";
 					break;
-				case REALTOR:
+				case AGENT:
 					model.publisher = "Риэлтор";
 					break;
-				case REALTOR_COMPANY:
+				case AGENT_COMPANY:
 					model.publisher = "Риэлторская компания";
 					break;
 				case OWNER:
@@ -198,15 +209,16 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 	}
 	
 	
-	private String getAdvertTitle(FlatSellRealty realty) {
+	private String getAdvertTitle(Advert realty) {
 		StringBuilder realtyTitle = new StringBuilder();
 		
 		// Template [ROOM], [ADDRESS], [PRICE]
 		
 		// [ROOM]
 		// 1-комнатная кватрира
-		if (realty.data.rooms != null) {
-			realtyTitle.append(realty.data.rooms.intValue()).append("-комнатная квартира, ");
+		Float rooms = (Float)realty.data.get("rooms");
+		if (rooms != null) {
+			realtyTitle.append(rooms.intValue()).append("-комнатная квартира, ");
 		}
 		
 		// [ADDRESS]
@@ -227,10 +239,14 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 		return realtyTitle.toString().trim();
 	}
 	
-	private String getAdvertShortDescription(FlatSellRealty realty) {
+	private String getAdvertShortDescription(Advert realty) {
 		StringBuilder shortDescription = new StringBuilder();
 		
 		//TEMPLATE: [REGION TREE], [FLOOR], [SQUARE]
+		
+		Long flatFloor = (Long)realty.data.get("flatFloor");
+		Long houseFloorCount = (Long)realty.data.get("houseFloorCount");
+		Float square = (Float)realty.data.get("square");
 		
 		// [REGION TREE]
 		if (realty.location != null) {
@@ -250,7 +266,7 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 							}
 						}
 
-						if (realty.data != null && (realty.data.flatFloor != null || realty.data.square != null)) {
+						if (realty.data != null && (flatFloor != null || square != null)) {
 							shortDescription.append(", "); // because we need to know do we need to add it or not
 						}
 
@@ -260,28 +276,28 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 		}
 		
 		// [FLOOR]
-		if (realty.data != null && realty.data.flatFloor != null) {
-			shortDescription.append(realty.data.flatFloor).append(" этаж");
+		if (flatFloor != null) {
+			shortDescription.append(flatFloor).append(" этаж");
 			
-			if (realty.data.houseFloorCount != null) {
-				shortDescription.append(" из ").append(realty.data.flatFloor);
+			if (houseFloorCount != null) {
+				shortDescription.append(" из ").append(houseFloorCount);
 			}
 			
-			if (realty.data.square != null) {
+			if (square != null) {
 				shortDescription.append(", ");
 			}
 			
 		}
 		
 		// [SQUARE]
-		if (realty.data != null && realty.data.square != null) {
-			shortDescription.append("площадь – ").append(realty.data.square).append(" м2");
+		if (square != null) {
+			shortDescription.append("площадь – ").append(square).append(" м2");
 		}
 		
 		return shortDescription.toString();
 	}
 	
-	private String getAdvertDescription(FlatSellRealty realty) {
+	private String getAdvertDescription(Advert realty) {
 		StringBuilder description = new StringBuilder();
 		
 		// ЖК
@@ -298,13 +314,18 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 		// коменты
 		
 		// ЖК
-		if (realty.data.residentalComplex != null) {
-			description.append("жил. комплекс ").append(realty.data.residentalComplex.complexName).append(", ");
+		if (realty.data.get("residentalComplex") != null) {
+			Mapper mapper = new Mapper();
+			mapper.getConverters().addConverter(CalendarConverter.class);
+			ResidentialComplex residentalComplex = (DBObject)realty.data.get("residentalComplex") != null ? mapper.fromDBObject(DB.DS(), ResidentialComplex.class, (DBObject)realty.data.get("residentalComplex"), mapper.createEntityCache()) : null;
+			if (residentalComplex != null)
+				description.append("жил. комплекс ").append(residentalComplex.complexName).append(", ");
 		}
 		
 		// Тип дома
-		if (realty.data.flatBuildingType != null) {
-			switch (realty.data.flatBuildingType) {
+		FlatBuildingType flatBuildingType = FlatBuildingType.valueOf((String)realty.data.get("flatBuildingType"));
+		if (flatBuildingType != null) {
+			switch (flatBuildingType) {
 				case BLOCK:
 					description.append("блочный, ");
 					break;
@@ -332,13 +353,15 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 		}
 		
 		// Год постройки
-		if (realty.data.houseYear != null) {
-			description.append(realty.data.houseYear).append(" г.п., ");
+		Long houseYear = (Long)realty.data.get("houseYear");
+		if (houseYear != null) {
+			description.append(houseYear).append(" г.п., ");
 		}
 		
 		// Состояние
-		if (realty.data.renovationType != null) {
-			switch (realty.data.renovationType) {
+		FlatRenovationType renovationType = FlatRenovationType.valueOf((String)realty.data.get("renovationType"));
+		if (renovationType != null) {
+			switch (renovationType) {
 				case AVARAGE:
 					description.append("среднее, ");
 					break;
@@ -364,23 +387,27 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 		}
 		
 		// жил площадь
-		if (realty.data.squareLiving != null) {
-			description.append("жил. площадь ").append(realty.data.squareLiving).append(" кв.м., ");
+		Float squareLiving = (Float)realty.data.get("squareLiving");
+		if (squareLiving != null) {
+			description.append("жил. площадь ").append(squareLiving).append(" кв.м., ");
 		}
 		
 		// кухня площадь
-		if (realty.data.squareKitchen != null) {
-			description.append("кухня ").append(realty.data.squareLiving).append(" кв.м., ");
+		Float squareKitchen = (Float)realty.data.get("squareKitchen");
+		if (squareKitchen != null) {
+			description.append("кухня ").append(squareLiving).append(" кв.м., ");
 		}
 		
 		// потолки
-		if (realty.data.ceilingHeight != null) {
-			description.append("потолки ").append(realty.data.ceilingHeight).append(" м., ");
+		Float ceilingHeight = (Float)realty.data.get("ceilingHeight");
+		if (ceilingHeight != null) {
+			description.append("потолки ").append(ceilingHeight).append(" м., ");
 		}
 		
 		// сан узлы
-		if (realty.data.lavatoryType != null) {
-			switch (realty.data.lavatoryType) {
+		FlatLavatoryType lavatoryType = FlatLavatoryType.valueOf((String)realty.data.get("lavatoryType"));
+		if (lavatoryType != null) {
+			switch (lavatoryType) {
 				case COMBINED:
 					description.append("санузел совмещенный, ");
 					break;
@@ -401,8 +428,9 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 		}
 		
 		// телефон
-		if (realty.data.phoneType != null) {
-			switch (realty.data.phoneType) {
+		FlatPhoneType phoneType = FlatPhoneType.valueOf((String)realty.data.get("phoneType"));
+		if (phoneType != null) {
+			switch (phoneType) {
 				case ABILITY_TO_CONNECT:
 					description.append("телефон: есть возможность подключения, ");
 					break;
@@ -421,8 +449,9 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 		}
 		
 		// интернет
-		if (realty.data.internetType != null) {
-			switch (realty.data.internetType) {
+		FlatInternetType internetType = FlatInternetType.valueOf((String)realty.data.get("internetType"));
+		if (internetType != null) {
+			switch (internetType) {
 				case ADSL:
 					description.append("интернет ADSL, ");
 					break;
@@ -443,8 +472,9 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 		}
 		
 		// мебель
-		if (realty.data.furnitureType != null) {
-			switch (realty.data.furnitureType) {
+		FlatFurnitureType furnitureType = FlatFurnitureType.valueOf((String)realty.data.get("furnitureType"));
+		if (furnitureType != null) {
+			switch (furnitureType) {
 				case EMPTY:
 					description.append("пустая, ");
 					break;
@@ -462,8 +492,9 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 		}
 		
 		// коменты
-		if (StringUtils.isNotBlank(realty.data.text)) {
-			description.append(realty.data.text);
+		String text = (String)realty.data.get("text");
+		if (StringUtils.isNotBlank(text)) {
+			description.append(text);
 		}
 		
 		return description.toString();
@@ -482,64 +513,68 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 		// TODO Сделать правильный формат описания 
 		
 		StringBuilder descr = new StringBuilder();
-		
-		if (subscription.criteria instanceof RealtySellFlatSubscriptionCriteria) {
-			
-			RealtyFlatBaseSubscriptionCriteria baseCriteria = (RealtyFlatBaseSubscriptionCriteria)subscription.criteria;
-			
-			// Room
-			descr.append("Ищу ");
-			descr.append(getDescriptionRoomCount(baseCriteria));
-			descr.append(" для покупки, ");
-			// Location			
-			if (baseCriteria.location != null) {
-				descr.append("расположение: ");
-				descr.append(getDescriptionLocation(baseCriteria));
-				descr.append(", ");
-			}
-			// Residential Complex
-			if (baseCriteria.residentalComplexs != null) {
-				descr.append("в ЖК ");
-				descr.append(getDescriptionResidentialComplexes(baseCriteria));
-				descr.append(", ");
-			}
-			
-			// Square
-			if (baseCriteria.squareFrom != null || baseCriteria.squareTo != null) {
-				descr.append("c общей площадью ");
-				descr.append(getDescriptionSquare(baseCriteria));
-				descr.append("квадратных метров, ");
-			}
-			// House years
-			if (baseCriteria.houseYearFrom != null || baseCriteria.houseYearTo != null) {
-				descr.append("в доме ");
-				descr.append(getDescriptionHouseYear(baseCriteria));
-				descr.append(" года постройки, ");
-			}
-			
-			// Floor
-			if (baseCriteria.flatFloorFrom != null || baseCriteria.flatFloorTo != null) {
-				descr.append("этажи ");
-				descr.append(getDescriptionFlatFloor(baseCriteria));
-				descr.append(" ");
-			}
-			
-			descr.append(", а так же другие критерии.");
+
+		// Room
+		descr.append("Ищу ");
+		descr.append(getDescriptionRoomCount(subscription.criteria));
+		descr.append(" для покупки, ");
+		// Location			
+		if (subscription.criteria.location != null) {
+			descr.append("расположение: ");
+			descr.append(getDescriptionLocation(subscription.criteria));
+			descr.append(", ");
 		}
+		// Residential Complex
+		if (subscription.criteria.data.get("residentalComplexs") != null) {
+			descr.append("в ЖК ");
+			descr.append(getDescriptionResidentialComplexes(subscription.criteria));
+			descr.append(", ");
+		}
+		
+		// Square
+		Float squareFrom = Float.valueOf((String)subscription.criteria.data.get("squareFrom"));
+		Float squareTo = Float.valueOf((String)subscription.criteria.data.get("squareTo"));
+		if (squareFrom != null || squareTo != null) {
+			descr.append("c общей площадью ");
+			descr.append(getDescriptionSquare(subscription.criteria));
+			descr.append("квадратных метров, ");
+		}
+		// House years
+		Long houseYearFrom = Long.valueOf((String)subscription.criteria.data.get("houseYearFrom"));
+		Long houseYearTo = Long.valueOf((String)subscription.criteria.data.get("houseYearTo"));
+		if (houseYearFrom != null || houseYearTo != null) {
+			descr.append("в доме ");
+			descr.append(getDescriptionHouseYear(subscription.criteria));
+			descr.append(" года постройки, ");
+		}
+		
+		// Floor
+		Long flatFloorFrom = Long.valueOf((String)subscription.criteria.data.get("flatFloorFrom"));
+		Long flatFloorTo = Long.valueOf((String)subscription.criteria.data.get("flatFloorTo"));
+		if (flatFloorFrom != null || flatFloorTo != null) {
+			descr.append("этажи ");
+			descr.append(getDescriptionFlatFloor(subscription.criteria));
+			descr.append(" ");
+		}
+		
+		descr.append(", а так же другие критерии.");
 		
 		return descr.toString();
 	}
 
-	private String getDescriptionRoomCount(RealtyFlatBaseSubscriptionCriteria baseCriteria) {
-		if (baseCriteria.roomFrom == null && baseCriteria.roomTo == null) {
+	private String getDescriptionRoomCount(SubscriptionCriteria baseCriteria) {
+		Float roomFrom = Float.valueOf((String)baseCriteria.data.get("roomFrom"));
+		Float roomTo = Float.valueOf((String)baseCriteria.data.get("roomTo"));
+		
+		if (roomFrom == null && roomTo == null) {
 			return "квартиру";
 		} else {
-			if (baseCriteria.roomFrom == baseCriteria.roomTo) {
-				return String.valueOf(Math.round(baseCriteria.roomFrom.floatValue())) + "-комнатную квартиру";
+			if (roomFrom == roomTo) {
+				return String.valueOf(Math.round(roomFrom.floatValue())) + "-комнатную квартиру";
 			} else {
-				if (baseCriteria.roomFrom != null && baseCriteria.roomTo != null) {
-					int start = Math.round(baseCriteria.roomFrom.floatValue());
-					int end = Math.round(baseCriteria.roomTo.floatValue());
+				if (roomFrom != null && roomTo != null) {
+					int start = Math.round(roomFrom.floatValue());
+					int end = Math.round(roomTo.floatValue());
 						
 					String startEnd = "";
 					for (int i=start; i<end; i++) {
@@ -552,11 +587,11 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 					return startEnd + "-комнатную квартиру";
 				} else {
 					// странные кейсы, возможно не должно существовать вовсе
-					if (baseCriteria.roomFrom != null) {
-						return String.valueOf(Math.round(baseCriteria.roomFrom.floatValue())) + "-комнатную и больше квартиру";
+					if (roomFrom != null) {
+						return String.valueOf(Math.round(roomFrom.floatValue())) + "-комнатную и больше квартиру";
 					}
-					if (baseCriteria.roomTo != null) {
-						return String.valueOf(Math.round(baseCriteria.roomTo.floatValue())) + "-комнатную и меньше квартиру";
+					if (roomTo != null) {
+						return String.valueOf(Math.round(roomTo.floatValue())) + "-комнатную и меньше квартиру";
 					}	
 				}
 			}
@@ -564,7 +599,7 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 		return "";
 	}
 	
-	private String getDescriptionLocation(RealtyFlatBaseSubscriptionCriteria baseCriteria) {
+	private String getDescriptionLocation(SubscriptionCriteria baseCriteria) {
 		// Не учитывает выбранные объекты на карте
 		String regions = "";
 		for (Region region : baseCriteria.location.regions) {
@@ -573,43 +608,54 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 		return StringUtils.removeEnd(regions, ", ");
 	}
 	
-	private Object getDescriptionResidentialComplexes(RealtyFlatBaseSubscriptionCriteria baseCriteria) {
+	private Object getDescriptionResidentialComplexes(SubscriptionCriteria baseCriteria) {
 		String rcs = "";
-		for (ResidentialComplex rc : baseCriteria.residentalComplexs) {
-			rcs += rc.complexName + ", ";
+		for (Object rc : (List<Object>)baseCriteria.data.get("residentalComplexs")) {
+			Mapper mapper = new Mapper();
+			mapper.getConverters().addConverter(CalendarConverter.class);
+			ResidentialComplex residentalComplex = (DBObject)rc != null ? mapper.fromDBObject(DB.DS(), ResidentialComplex.class, (DBObject)rc, mapper.createEntityCache()) : null;
+			if (residentalComplex != null)
+				rcs += residentalComplex.complexName + ", ";
 		}
 		return StringUtils.removeEnd(rcs, ", ");
 	}
 	
-	private Object getDescriptionSquare(RealtyFlatBaseSubscriptionCriteria baseCriteria) {
+	private Object getDescriptionSquare(SubscriptionCriteria baseCriteria) {
+		Float squareFrom = Float.valueOf((String)baseCriteria.data.get("squareFrom"));
+		Float squareTo = Float.valueOf((String)baseCriteria.data.get("squareTo"));
+		
 		String square = "";
-		if (baseCriteria.squareFrom != null) {
-			square += "от " + baseCriteria.squareFrom + " ";
+		if (squareFrom != null) {
+			square += "от " + squareFrom + " ";
 		}
-		if (baseCriteria.squareTo != null) {
-			square += "до " + baseCriteria.squareTo + " ";
+		if (squareTo != null) {
+			square += "до " + squareTo + " ";
 		}
 		return square;
 	}	
 
-	private Object getDescriptionHouseYear(RealtyFlatBaseSubscriptionCriteria baseCriteria) {
+	private Object getDescriptionHouseYear(SubscriptionCriteria baseCriteria) {
+		Long houseYearFrom = Long.valueOf((String)baseCriteria.data.get("houseYearFrom"));
+		Long houseYearTo = Long.valueOf((String)baseCriteria.data.get("houseYearTo"));
 		String years = "";
-		if (baseCriteria.houseYearFrom != null) {
-			years += "от " + baseCriteria.houseYearFrom + " ";
+		if (houseYearFrom != null) {
+			years += "от " + houseYearFrom + " ";
 		}
-		if (baseCriteria.houseYearTo != null) {
-			years += "до " + baseCriteria.houseYearTo + " ";
+		if (houseYearTo != null) {
+			years += "до " + houseYearTo + " ";
 		}
 		return years;
 	}
 	
-	private Object getDescriptionFlatFloor(RealtyFlatBaseSubscriptionCriteria baseCriteria) {
+	private Object getDescriptionFlatFloor(SubscriptionCriteria baseCriteria) {
+		Long flatFloorFrom = Long.valueOf((String)baseCriteria.data.get("flatFloorFrom"));
+		Long flatFloorTo = Long.valueOf((String)baseCriteria.data.get("flatFloorTo"));
 		String floors = "";
-		if (baseCriteria.flatFloorFrom != null) {
-			floors += "c " + baseCriteria.flatFloorFrom + " ";
+		if (flatFloorFrom != null) {
+			floors += "c " + flatFloorFrom + " ";
 		}
-		if (baseCriteria.houseYearTo != null) {
-			floors += "по " + baseCriteria.flatFloorTo + " ";
+		if (flatFloorTo != null) {
+			floors += "по " + flatFloorTo + " ";
 		}
 		return floors;
 	}

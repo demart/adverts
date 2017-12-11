@@ -10,17 +10,19 @@ import javax.jms.JMSException;
 import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.common.MQ;
 import kz.aphion.adverts.common.mq.QueueNameConstants;
+import kz.aphion.adverts.persistence.adverts.Advert;
 import kz.aphion.adverts.persistence.subscription.Subscription;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvert;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvertStatus;
 import kz.aphion.adverts.persistence.subscription.notification.SubscriptionNotificationType;
-import kz.aphion.adverts.subscription.mq.RealtyAnalyserToSubscriptionProcessModel;
+import kz.aphion.adverts.subscription.mq.AdvertAnalyserToSubscriptionProcessModel;
 import kz.aphion.adverts.subscription.mq.SubscriptionNotificationBuilderModel;
 import kz.aphion.adverts.subscription.mq.SubscriptionProcessStatus;
 import kz.aphion.adverts.subscription.searcher.SubscriptionSearcher;
 import kz.aphion.adverts.subscription.searcher.SubscriptionSearcherFactory;
 import kz.aphion.adverts.subscription.utils.MessageUtils;
 
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +38,9 @@ import com.google.gson.GsonBuilder;
  *
  * Created at Jun 12, 2016
  */
-public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProcessor {
+public class AdvertSubscriptionProcessorImpl implements AdvertSubscriptionProcessor {
 	
-	private static Logger logger = LoggerFactory.getLogger(RealtyAdvertSubscriptionProcessor.class);
+	private static Logger logger = LoggerFactory.getLogger(AdvertSubscriptionProcessorImpl.class);
 	
 	/**
 	 * Метод является входной точкой для обработки запроса
@@ -47,7 +49,7 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 	 * @throws JMSException 
 	 */
 	public void processMessage(String message) throws JMSException, Exception {
-		RealtyAnalyserToSubscriptionProcessModel model = MessageUtils.parseModel(message);
+		AdvertAnalyserToSubscriptionProcessModel model = MessageUtils.parseModel(message);
 		if (model == null) {
 			// Не смогли извлечь, ругаемся и приступаем к следующему сообщению
 			logger.warn("Can't process message [" + message + "] Message does not belong to RealtyAnalyserToSubscriptionProcessModel");
@@ -111,14 +113,21 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 	}
 
 	
-	private void processAdvert(RealtyAnalyserToSubscriptionProcessModel model, SubscriptionAdvertStatus targetAdvertStatus, SubscriptionProcessStatus targetProcessStatus) throws JMSException, Exception {
+	private void processAdvert(AdvertAnalyserToSubscriptionProcessModel model, SubscriptionAdvertStatus targetAdvertStatus, SubscriptionProcessStatus targetProcessStatus) throws JMSException, Exception {
 		
 		Datastore ds = DB.DS();
 		
+		Advert advert = ds.get(Advert.class, new ObjectId(model.advertId));
+		if (advert == null) {
+			logger.warn("Advert by id {} not found, subscription will skip this message, check why it may happened", model.advertId);
+			return;
+		}
+		
 		// Получаем искателя подписок под соответсвующий тип
-		SubscriptionSearcher searcher = SubscriptionSearcherFactory.getRealtySubscriptionSearcher(model);
+		SubscriptionSearcher searcher = SubscriptionSearcherFactory.getAdvertSubscriptionSearcher(advert);
 			
 		// Выполняем поиск подписок
+		searcher.setAdvert(advert);
 		List<Subscription> subscriptions = searcher.search();
 		
 		if (subscriptions == null) {
@@ -133,11 +142,10 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 				// Статус объявления при отправке в систему уведомлений
 				SubscriptionProcessStatus processStatus = SubscriptionProcessStatus.NEW;
 				
-				List<SubscriptionAdvert> adverts = subscription.adverts;
+				List<SubscriptionAdvert> adverts = ds.createQuery(SubscriptionAdvert.class).field("subscription.id").equal(subscription.id).asList();
 				if (adverts == null) {
 					// Если не было до этого объявлений в подписке
 					adverts = new ArrayList<SubscriptionAdvert>();
-					subscription.adverts = adverts;
 				} else {
 					// Если объявления были то нужно найти и заменить старое если оно есть
 					logger.debug("Subscription has adverts, trying to find and mark as REPLACED");
@@ -147,14 +155,14 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 					}
 				}
 
-				SubscriptionAdvert advert = createSubscriptionAdvertAndAddToSubscription(subscription, searcher, advertStatus);
+				SubscriptionAdvert subscriptionAdvert = createSubscriptionAdvertAndAddToSubscription(subscription, searcher, advertStatus);
 
 				// Обновляем данные
-				ds.save(advert);
+				ds.save(subscriptionAdvert);
 				ds.merge(subscription);
 
 				// Отправляем только если успешно всё обработали и сохранили
-				sendImmediateNotificationMessageIfRequired(subscription, advert, processStatus);
+				sendImmediateNotificationMessageIfRequired(subscription, subscriptionAdvert, processStatus);
 
 				logger.debug("Subscriptions id [" + subscription.id + "] successfully merged with new advert result object");
 
@@ -218,7 +226,7 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 		SubscriptionAdvert advert = new SubscriptionAdvert();
 		
 		advert.subscription = subscription;
-		advert.advert = searcher.getAdvertObject();
+		advert.advert = searcher.getAdvert();
 		advert.created = Calendar.getInstance();
 		advert.updated = Calendar.getInstance();
 		advert.viewedAt = null;
@@ -226,8 +234,6 @@ public class RealtyAdvertSubscriptionProcessor implements AdvertSubscriptionProc
 		advert.wasNotificationSent = false;
 		advert.notificationWasSentAt = null;
 		advert.status = status;
-		
-		subscription.adverts.add(advert);
 		
 		return advert;
 	}
