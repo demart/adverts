@@ -1,15 +1,9 @@
-package kz.aphion.adverts.subscription.utils;
+package kz.aphion.adverts.subscription.live.utils;
 
 import kz.aphion.adverts.common.models.mq.adverts.AnalyserProcessModel;
 
 import com.google.gson.Gson;
 
-/**
- * Утилиты для работы сообщениями сервера очередей
- * @author artem.demidovich
- *
- * Created at Jun 12, 2016
- */
 public class MessageUtils {
 
 	/**
@@ -26,5 +20,4 @@ public class MessageUtils {
 		
 		return model;
 	}
-	
 }

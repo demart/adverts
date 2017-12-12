@@ -1,6 +1,6 @@
 package kz.aphion.adverts.analyser.comparator;
 
-import kz.aphion.adverts.analyser.mq.AnalyserProcessStatus;
+import kz.aphion.adverts.common.models.mq.adverts.AnalyserProcessStatus;
 import kz.aphion.adverts.persistence.adverts.Advert;
 
 /**

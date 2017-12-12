@@ -9,13 +9,13 @@ import javax.jms.JMSException;
 
 import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.common.MQ;
+import kz.aphion.adverts.common.models.mq.adverts.AnalyserProcessModel;
 import kz.aphion.adverts.common.mq.QueueNameConstants;
 import kz.aphion.adverts.persistence.adverts.Advert;
 import kz.aphion.adverts.persistence.subscription.Subscription;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvert;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvertStatus;
 import kz.aphion.adverts.persistence.subscription.notification.SubscriptionNotificationType;
-import kz.aphion.adverts.subscription.mq.AdvertAnalyserToSubscriptionProcessModel;
 import kz.aphion.adverts.subscription.mq.SubscriptionNotificationBuilderModel;
 import kz.aphion.adverts.subscription.mq.SubscriptionProcessStatus;
 import kz.aphion.adverts.subscription.searcher.SubscriptionSearcher;
@@ -49,7 +49,7 @@ public class AdvertSubscriptionProcessorImpl implements AdvertSubscriptionProces
 	 * @throws JMSException 
 	 */
 	public void processMessage(String message) throws JMSException, Exception {
-		AdvertAnalyserToSubscriptionProcessModel model = MessageUtils.parseModel(message);
+		AnalyserProcessModel model = MessageUtils.parseModel(message);
 		if (model == null) {
 			// Не смогли извлечь, ругаемся и приступаем к следующему сообщению
 			logger.warn("Can't process message [" + message + "] Message does not belong to RealtyAnalyserToSubscriptionProcessModel");
@@ -113,7 +113,7 @@ public class AdvertSubscriptionProcessorImpl implements AdvertSubscriptionProces
 	}
 
 	
-	private void processAdvert(AdvertAnalyserToSubscriptionProcessModel model, SubscriptionAdvertStatus targetAdvertStatus, SubscriptionProcessStatus targetProcessStatus) throws JMSException, Exception {
+	private void processAdvert(AnalyserProcessModel model, SubscriptionAdvertStatus targetAdvertStatus, SubscriptionProcessStatus targetProcessStatus) throws JMSException, Exception {
 		
 		Datastore ds = DB.DS();
 		

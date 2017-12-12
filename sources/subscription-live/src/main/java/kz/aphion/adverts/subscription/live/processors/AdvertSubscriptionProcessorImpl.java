@@ -3,9 +3,10 @@ package kz.aphion.adverts.subscription.live.processors;
 import javax.jms.JMSException;
 
 import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.common.models.mq.adverts.AnalyserProcessModel;
 import kz.aphion.adverts.persistence.adverts.Advert;
 import kz.aphion.adverts.subscription.live.ConnectionManager;
-import kz.aphion.adverts.subscription.live.mq.AdvertAnalyserToSubscriptionProcessModel;
+import kz.aphion.adverts.subscription.live.utils.MessageUtils;
 
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
@@ -31,7 +32,7 @@ public class AdvertSubscriptionProcessorImpl implements AdvertSubscriptionProces
 	 * @throws JMSException 
 	 */
 	public void processMessage(String message) throws JMSException, Exception {
-		AdvertAnalyserToSubscriptionProcessModel model = AdvertAnalyserToSubscriptionProcessModel.parseModel(message);
+		AnalyserProcessModel model = MessageUtils.parseModel(message);
 		if (model == null) {
 			// Не смогли извлечь, ругаемся и приступаем к следующему сообщению
 			logger.warn("Can't process message [" + message + "] Message does not belong to AdvertAnalyserToSubscriptionProcessModel");

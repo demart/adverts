@@ -1,14 +1,14 @@
-package kz.aphion.adverts.subscription.mq;
+package kz.aphion.adverts.common.models.mq.adverts;
 
 import java.util.Calendar;
 
 /**
- * Модель используется для передачи сообщения из Analyser в модуль подписок
+ * Модель передачи данных из модуля анализатора в модуль подписок
  * @author artem.demidovich
  *
- * Created at Aug 10, 2016
+ * Created at Dec 12, 2017
  */
-public class AdvertAnalyserToSubscriptionProcessModel {
+public class AnalyserProcessModel {
 	
 	/**
 	 * Идентификатор объявления

@@ -7,30 +7,30 @@ import java.util.HashMap;
 import java.util.List;
 
 import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.models.realty.data.MortgageStatus;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatBalconyGlazingType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatBalconyType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatBuildingType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatDoorType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatFloorType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatFurnitureType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatInternetType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatLavatoryType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatMiscellaneousType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatParkingType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatPhoneType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatPrivatizedDormType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatRenovationType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatRentPeriodType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatSecurityType;
 import kz.aphion.adverts.persistence.CalendarConverter;
 import kz.aphion.adverts.persistence.Region;
 import kz.aphion.adverts.persistence.adverts.Advert;
 import kz.aphion.adverts.persistence.adverts.AdvertOperationType;
 import kz.aphion.adverts.persistence.adverts.AdvertPublisherType;
 import kz.aphion.adverts.persistence.adverts.AdvertType;
-import kz.aphion.adverts.persistence.realty.MortgageStatus;
 import kz.aphion.adverts.persistence.realty.RealtyType;
 import kz.aphion.adverts.persistence.realty.ResidentialComplex;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBalconyGlazingType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBalconyType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBuildingType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatDoorType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatFloorType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatFurnitureType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatInternetType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatLavatoryType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatMiscellaneousType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatParkingType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatPhoneType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatPrivatizedDormType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatRenovationType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatRentPeriodType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatSecurityType;
 import kz.aphion.adverts.persistence.subscription.Subscription;
 import kz.aphion.adverts.persistence.subscription.SubscriptionStatus;
 
@@ -843,8 +843,9 @@ public class FlatSubscriptionSearcherQueryBuilder {
 	
 	
 	private static Query<Subscription> buildPriceQuery(Query<Subscription> q, Advert realty) {
-		logger.debug("Realty.price: " + realty.price);
-		if (realty.price == null) {
+		Long price = (Long)realty.data.get("price");
+		logger.debug("Realty.price: " + price);
+		if (price == null) {
 			// Если нет цены в объявлении то нам подходят подписки без указания цены
 			q.and(
 				q.criteria("criteria.priceFrom").doesNotExist(),
@@ -855,11 +856,11 @@ public class FlatSubscriptionSearcherQueryBuilder {
 			q.and(
 				q.or(
 					q.criteria("criteria.priceFrom").doesNotExist(),
-					q.criteria("criteria.priceFrom").lessThanOrEq(realty.price)
+					q.criteria("criteria.priceFrom").lessThanOrEq(price)
 				),
 				q.or(
 					q.criteria("criteria.priceTo").doesNotExist(),
-					q.criteria("criteria.priceTo").greaterThanOrEq(realty.price)
+					q.criteria("criteria.priceTo").greaterThanOrEq(price)
 				)
 			);
 		}

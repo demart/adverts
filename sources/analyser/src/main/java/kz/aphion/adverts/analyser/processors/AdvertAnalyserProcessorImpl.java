@@ -7,11 +7,11 @@ import javax.jms.JMSException;
 
 import kz.aphion.adverts.analyser.comparator.AdvertComparator;
 import kz.aphion.adverts.analyser.comparator.AdvertComparatorFactory;
-import kz.aphion.adverts.analyser.mq.AnalyserProcessStatus;
-import kz.aphion.adverts.analyser.mq.RealtyAnalyserToSubscriptionProcessModel;
 import kz.aphion.adverts.analyser.utils.MessageUtils;
 import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.common.MQ;
+import kz.aphion.adverts.common.models.mq.adverts.AnalyserProcessModel;
+import kz.aphion.adverts.common.models.mq.adverts.AnalyserProcessStatus;
 import kz.aphion.adverts.common.models.mq.adverts.ProcessModel;
 import kz.aphion.adverts.common.mq.QueueNameConstants;
 import kz.aphion.adverts.persistence.adverts.Advert;
@@ -75,7 +75,7 @@ public class AdvertAnalyserProcessorImpl implements AdvertAnalyserProcessor  {
 		logger.debug("Advert model with id: "+ model.advertId + " is NEW and will be send to subscription module.");
 		
 		// Формируем модель
-		RealtyAnalyserToSubscriptionProcessModel analyserModel = new RealtyAnalyserToSubscriptionProcessModel();
+		AnalyserProcessModel analyserModel = new AnalyserProcessModel();
 		analyserModel.advertId = model.advertId;
 		analyserModel.oldAdvertId = model.oldAdvertId;
 		analyserModel.eventTime = Calendar.getInstance();
@@ -131,7 +131,7 @@ public class AdvertAnalyserProcessorImpl implements AdvertAnalyserProcessor  {
 		}
 		
 		// Формируем модель
-		RealtyAnalyserToSubscriptionProcessModel analyserModel = new RealtyAnalyserToSubscriptionProcessModel();
+		AnalyserProcessModel analyserModel = new AnalyserProcessModel();
 		analyserModel.advertId = model.advertId;
 		analyserModel.oldAdvertId = model.oldAdvertId;
 		analyserModel.eventTime = Calendar.getInstance();

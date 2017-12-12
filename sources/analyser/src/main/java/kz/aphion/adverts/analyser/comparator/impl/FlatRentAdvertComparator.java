@@ -1,8 +1,8 @@
 package kz.aphion.adverts.analyser.comparator.impl;
 
 import kz.aphion.adverts.analyser.comparator.AdvertComparator;
-import kz.aphion.adverts.analyser.mq.AnalyserProcessStatus;
 import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.common.models.mq.adverts.AnalyserProcessStatus;
 import kz.aphion.adverts.models.realty.FlatRentAdvertModel;
 import kz.aphion.adverts.persistence.CalendarConverter;
 import kz.aphion.adverts.persistence.adverts.Advert;

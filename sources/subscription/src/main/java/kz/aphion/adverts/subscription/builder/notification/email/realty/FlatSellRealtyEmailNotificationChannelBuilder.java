@@ -10,6 +10,12 @@ import java.util.Map;
 import java.util.UUID;
 
 import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatBuildingType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatFurnitureType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatInternetType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatLavatoryType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatPhoneType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatRenovationType;
 import kz.aphion.adverts.notification.mq.models.NotificationChannel;
 import kz.aphion.adverts.notification.mq.models.NotificationChannelType;
 import kz.aphion.adverts.notification.mq.models.NotificationParameter;
@@ -17,12 +23,6 @@ import kz.aphion.adverts.persistence.CalendarConverter;
 import kz.aphion.adverts.persistence.Region;
 import kz.aphion.adverts.persistence.adverts.Advert;
 import kz.aphion.adverts.persistence.realty.ResidentialComplex;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBuildingType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatFurnitureType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatInternetType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatLavatoryType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatPhoneType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatRenovationType;
 import kz.aphion.adverts.persistence.subscription.Subscription;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvert;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvertStatus;
@@ -170,7 +170,7 @@ public class FlatSellRealtyEmailNotificationChannelBuilder {
 		model.shortDescription = getAdvertShortDescription(realty);
 		model.description = getAdvertDescription(realty);
 		
-		model.price = realty.price;
+		model.price = (Long)realty.data.get("price");
 		
 		model.priceText = String.valueOf(Math.round(model.price / 100000) * 0.1);
 		

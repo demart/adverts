@@ -1,4 +1,4 @@
-package kz.aphion.adverts.analyser.mq;
+package kz.aphion.adverts.common.models.mq.adverts;
 
 /**
  * Состояние объявления на момент обработки analyser
@@ -31,7 +31,5 @@ public enum AnalyserProcessStatus {
 	 * oldAdvertId должно быть заполнено при указании этого статуса
 	 */
 	WORSTE,
-	
-	
 	
 }
