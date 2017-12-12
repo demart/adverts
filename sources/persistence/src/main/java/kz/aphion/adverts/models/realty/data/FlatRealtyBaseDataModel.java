@@ -18,6 +18,7 @@ import kz.aphion.adverts.models.realty.data.flat.types.FlatPrivatizedDormType;
 import kz.aphion.adverts.models.realty.data.flat.types.FlatRenovationType;
 import kz.aphion.adverts.models.realty.data.flat.types.FlatSecurityType;
 import kz.aphion.adverts.persistence.CalendarConverter;
+import kz.aphion.adverts.persistence.adverts.Advert;
 import kz.aphion.adverts.persistence.realty.ResidentialComplex;
 
 import org.mongodb.morphia.Datastore;
@@ -31,12 +32,12 @@ import com.mongodb.DBObject;
  * @author artem.demidovich
  *
  */
-public abstract class FlatRealtyBaseDataModel extends RealtyBaseDataModel {
+public class FlatRealtyBaseDataModel extends RealtyBaseDataModel {
 	
 	/**
 	 * Информация о ЖК
 	 */
-	//protected ResidentialComplex residentalComplex;
+	//protected ResidentialComplex residentialComplex;
 	
 	/**
 	 * Кол-во комнат
@@ -138,26 +139,30 @@ public abstract class FlatRealtyBaseDataModel extends RealtyBaseDataModel {
 	 */
 	//protected List<FlatSecurityType> securityTypes;
 	
+	public FlatRealtyBaseDataModel(Advert advert) {
+		super(advert);
+	}
+
 	/**
 	 * Разное
 	 */
 	//protected List<FlatMiscellaneousType> miscellaneous;	
 	
 	
-	public ResidentialComplex getResidentalComplex(Datastore db) {
+	public ResidentialComplex getResidentialComplex(Datastore db) {
 		Mapper mapper = new Mapper();
 		mapper.getConverters().addConverter(CalendarConverter.class);
-		ResidentialComplex residentalComplex = (DBObject)getData().get("residentalComplex") != null ? mapper.fromDBObject(db, ResidentialComplex.class, (DBObject)getData().get("residentalComplex"), mapper.createEntityCache()) : null;
+		ResidentialComplex residentialComplex = (DBObject)getData().get("residentialComplex") != null ? mapper.fromDBObject(db, ResidentialComplex.class, (DBObject)getData().get("residentialComplex"), mapper.createEntityCache()) : null;
 		
-		return residentalComplex;
+		return residentialComplex;
 	}
 
-	public void setResidentalComplex(ResidentialComplex residentalComplex) {
+	public void setResidentialComplex(ResidentialComplex residentialComplex) {
 		Mapper mapper = new Mapper();
 		mapper.getConverters().addConverter(CalendarConverter.class);
-		DBObject complexDBO = mapper.toDBObject(residentalComplex);
+		DBObject complexDBO = mapper.toDBObject(residentialComplex);
 		
-		getData().put("residentalComplex", complexDBO);
+		getData().put("residentialComplex", complexDBO);
 	}
 
 	public Float getRooms() {

@@ -114,7 +114,7 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<Advert> {
 						mapper.getConverters().addConverter(CalendarConverter.class);
 						DBObject complexDBO = mapper.toDBObject(complexEntity.complex);
 						logger.info("{}", complexDBO);
-						realty.data.put("residentalComplex", complexDBO);
+						realty.data.put("residentialComplex", complexDBO);
 					} else {
 						// If not found, what to do
 					}

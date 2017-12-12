@@ -142,7 +142,9 @@ public class AdvertSubscriptionProcessorImpl implements AdvertSubscriptionProces
 				// Статус объявления при отправке в систему уведомлений
 				SubscriptionProcessStatus processStatus = SubscriptionProcessStatus.NEW;
 				
-				List<SubscriptionAdvert> adverts = ds.createQuery(SubscriptionAdvert.class).field("subscription.id").equal(subscription.id).asList();
+				List<SubscriptionAdvert> adverts = ds.createQuery(SubscriptionAdvert.class)
+													 .field("subscription.id").equal(subscription.id)
+													 .asList();
 				if (adverts == null) {
 					// Если не было до этого объявлений в подписке
 					adverts = new ArrayList<SubscriptionAdvert>();

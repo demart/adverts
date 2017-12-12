@@ -3,10 +3,15 @@ package kz.aphion.adverts.subscription.searcher.impl.utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.models.AdvertModel;
+import kz.aphion.adverts.models.realty.FlatRentAdvertModel;
+import kz.aphion.adverts.models.realty.FlatSellAdvertModel;
+import kz.aphion.adverts.models.realty.data.FlatRealtyBaseDataModel;
+import kz.aphion.adverts.models.realty.data.FlatRentDataModel;
+import kz.aphion.adverts.models.realty.data.FlatSellDataModel;
 import kz.aphion.adverts.models.realty.data.MortgageStatus;
 import kz.aphion.adverts.models.realty.data.flat.types.FlatBalconyGlazingType;
 import kz.aphion.adverts.models.realty.data.flat.types.FlatBalconyType;
@@ -21,9 +26,9 @@ import kz.aphion.adverts.models.realty.data.flat.types.FlatParkingType;
 import kz.aphion.adverts.models.realty.data.flat.types.FlatPhoneType;
 import kz.aphion.adverts.models.realty.data.flat.types.FlatPrivatizedDormType;
 import kz.aphion.adverts.models.realty.data.flat.types.FlatRenovationType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatRentMiscellaneousType;
 import kz.aphion.adverts.models.realty.data.flat.types.FlatRentPeriodType;
 import kz.aphion.adverts.models.realty.data.flat.types.FlatSecurityType;
-import kz.aphion.adverts.persistence.CalendarConverter;
 import kz.aphion.adverts.persistence.Region;
 import kz.aphion.adverts.persistence.adverts.Advert;
 import kz.aphion.adverts.persistence.adverts.AdvertOperationType;
@@ -35,12 +40,9 @@ import kz.aphion.adverts.persistence.subscription.Subscription;
 import kz.aphion.adverts.persistence.subscription.SubscriptionStatus;
 
 import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.mapping.Mapper;
 import org.mongodb.morphia.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.mongodb.DBObject;
 
 public class FlatSubscriptionSearcherQueryBuilder {
 
@@ -50,10 +52,12 @@ public class FlatSubscriptionSearcherQueryBuilder {
 		logger.debug("Builing Query for FlatSellRealty subscriptions");
 		Query<Subscription> q = buildBaseCriteria(ds, AdvertOperationType.SELL);
 
+		FlatSellAdvertModel model = new FlatSellAdvertModel(realty);
+		
 		// Формируем общие параметры для поиск
-		q = buildCommonQuery(q, realty);
+		q = buildCommonQuery(q, model, model.getDataModel());
 		// В залоге или нет
-		q = buildMortgagesStatusQuery(q, realty.data);
+		q = buildMortgagesStatusQuery(q, model.getDataModel());
 		
 		logger.debug("Query for FlatSellRealty subscriptions was built");
 		return q;
@@ -63,13 +67,15 @@ public class FlatSubscriptionSearcherQueryBuilder {
 		logger.debug("Builing Query for FlatRentRealty subscriptions");
 		Query<Subscription> q = buildBaseCriteria(ds, AdvertOperationType.RENT);
 		
+		FlatRentAdvertModel model = new FlatRentAdvertModel(realty);
+		
 		// Формируем общие параметры для поиск
-		q = buildCommonQuery(q, realty);
+		q = buildCommonQuery(q, model, model.getDataModel());
 		// Срок аренды
 		// Обязательно должен быть указан в подписках!
-		q = buildRentPeriodQuery(q, realty.data);
+		q = buildRentPeriodQuery(q, model.getDataModel());
 		// Дополнительные критерии для аренды квартиры или комнаты
-		q = buildFlatRentMiscellaneousTypesQuery(q, realty.data);
+		q = buildFlatRentMiscellaneousTypesQuery(q, model.getDataModel());
 		
 		logger.debug("Query for FlatRentRealty subscriptions was built");
 		return q;
@@ -102,61 +108,61 @@ public class FlatSubscriptionSearcherQueryBuilder {
 	 * @param data общий объект данных о недвижимости
 	 * @return
 	 */
-	private static Query<Subscription> buildCommonQuery(Query<Subscription> q, Advert realty) {
+	private static Query<Subscription> buildCommonQuery(Query<Subscription> q, AdvertModel realty, FlatRealtyBaseDataModel model) {
 		// Цена объекта
-		q = buildPriceQuery(q, realty);
+		q = buildPriceQuery(q, model);
 		// Фотография объекта
-		q = buildHasPhotoQuery(q, realty);
+		q = buildHasPhotoQuery(q, realty.getAdvert());
 		// Площадь объекта
-		q = buildSquareQuery(q, realty.data);
+		q = buildSquareQuery(q, model);
 		// Жилая площадь
-		q = buildSquareLivingQuery(q, realty.data);
+		q = buildSquareLivingQuery(q, model);
 		// Площадь кухни
-		q = buildSquareKitckenQuery(q, realty.data);
+		q = buildSquareKitckenQuery(q, model);
 		// Кто опубликовал объявления
-		q = buildPublisherTypeQuery(q, realty);
+		q = buildPublisherTypeQuery(q, realty.getAdvert());
 		// В каком регионе (районе) расположен объект
-		q = buildLocationRegionsQuery(q, realty);
+		q = buildLocationRegionsQuery(q, realty.getAdvert());
 		// Какой жилой комплекс		
-		q = buildResidentialComplexQuery(q, realty.data);
+		q = buildResidentialComplexQuery(q, model);
 		// Кол-во комнат
-		q = buildRoomQuery(q, realty.data);
+		q = buildRoomQuery(q, model);
 		// Год постройки дома
-		q = buildBuildingYear(q, realty.data);
+		q = buildBuildingYear(q, model);
 		// Этаж квартиры
-		q = buildFlatFloorQuery(q, realty.data);
+		q = buildFlatFloorQuery(q, model);
 		// Этажность дома
-		q = buildHouseFloorCountQuery(q, realty.data);
+		q = buildHouseFloorCountQuery(q, model);
 		// Высота потолков
-		q = buildCeilingHieght(q, realty.data);
+		q = buildCeilingHieght(q, model);
 		// Тип здания
-		q = buildFlatBuildingTypeQuery(q, realty.data);
+		q = buildFlatBuildingTypeQuery(q, model);
 		// Приватизиованное общежитие
-		q = buildPrivatizedDormTypeQuery(q, realty.data);
+		q = buildPrivatizedDormTypeQuery(q, model);
 		// Ремонта
-		q = buildRenovationTypeQuery(q, realty.data);
+		q = buildRenovationTypeQuery(q, model);
 		// Телефон
-		q = buildPhoneType(q, realty.data);
+		q = buildPhoneType(q, model);
 		// Интернет
-		q = buildInternetTypeQuery(q, realty.data);
+		q = buildInternetTypeQuery(q, model);
 		// Сан. узел
-		q = buildLavatoryType(q, realty.data);
+		q = buildLavatoryType(q, model);
 		// Балкон
-		q = buildBalconyType(q, realty.data);
+		q = buildBalconyType(q, model);
 		// Остекление балкона
-		q = buildBalconyGlazingType(q, realty.data);
+		q = buildBalconyGlazingType(q, model);
 		// Дверь
-		q = buildDoorTypeQuery(q, realty.data);
+		q = buildDoorTypeQuery(q, model);
 		// Парковка
-		q = buildParkingTypeQuery(q, realty.data);
+		q = buildParkingTypeQuery(q, model);
 		// Мебель
-		q = buildFurnitureTypeQuery(q, realty.data);
+		q = buildFurnitureTypeQuery(q, model);
 		// Пол
-		q = buildFloorTypeQuery(q, realty.data);
+		q = buildFloorTypeQuery(q, model);
 		// Безопасность
-		q = buildSecurityTypesQuery(q, realty.data);
+		q = buildSecurityTypesQuery(q, model);
 		// Дополнительно
-		q = buildFlatMiscellaneousTypesQuery(q, realty.data);
+		q = buildFlatMiscellaneousTypesQuery(q, model);
 		
 		// TODO Добавить грамонтную работу по локации или регионы или крарты или все вместе с пересечением
 		//q.field("criteria.keywordsType")
@@ -167,33 +173,33 @@ public class FlatSubscriptionSearcherQueryBuilder {
 	}
 	
 	
-	private static Query<Subscription> buildMortgagesStatusQuery(Query<Subscription> q, HashMap<String, Object> data) {
-		MortgageStatus mortgageStatus = data.get("mortgageStatus") != null ? MortgageStatus.valueOf((String)data.get("mortgageStatus")) : null;
+	private static Query<Subscription> buildMortgagesStatusQuery(Query<Subscription> q, FlatSellDataModel model) {
+		MortgageStatus mortgageStatus = model.getMortgageStatus();
 		logger.debug("Realty.data.mortgageStatus: {}", mortgageStatus);
 		if (mortgageStatus == null || mortgageStatus == MortgageStatus.UNDEFINED) {
 			logger.debug("Realty.data.mortgageStatus search without mortgageStatus");
 			q.and(
-				q.criteria("criteria.data.mortgageStatuses").doesNotExist()
+				q.criteria("criteria.mortgageStatuses").doesNotExist()
 			);
 		} else {
 			logger.debug("Realty.data.mortgageStatus search with mortgageStatus");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.mortgageStatuses").doesNotExist(),
-					q.criteria("criteria.data.mortgageStatuses").hasAnyOf(Arrays.asList(mortgageStatus.toString()))
+					q.criteria("criteria.mortgageStatuses").doesNotExist(),
+					q.criteria("criteria.mortgageStatuses").hasAnyOf(Arrays.asList(mortgageStatus.toString()))
 				)
 			);
 		}
 		return q;
 	}
 	
-	private static Query<Subscription> buildFlatRentMiscellaneousTypesQuery(Query<Subscription> q, HashMap<String, Object> data){
-		List<String> rentMiscellaneous = (List<String>) data.get("rentMiscellaneous");
+	private static Query<Subscription> buildFlatRentMiscellaneousTypesQuery(Query<Subscription> q, FlatRentDataModel model){
+		List<FlatRentMiscellaneousType> rentMiscellaneous = model.getRentMiscellaneous();
 		logger.debug("Realty.data.rentMiscellaneous size: {}", rentMiscellaneous != null ? rentMiscellaneous.size() : 0);
 		if (rentMiscellaneous == null) {
 			logger.debug("Realty.data.rentMiscellaneous search without rentMiscellaneous");
 			q.and(
-				q.criteria("criteria.data.rentMiscellaneous").doesNotExist()
+				q.criteria("criteria.rentMiscellaneous").doesNotExist()
 			);
 		} else {
 			logger.debug("Realty.data.rentMiscellaneous search with rentMiscellaneous");
@@ -204,8 +210,8 @@ public class FlatSubscriptionSearcherQueryBuilder {
 			
 			q.and(
 				q.or(
-					q.criteria("criteria.data.rentMiscellaneous").doesNotExist(),
-					q.criteria("criteria.data.rentMiscellaneous").hasAnyOf(rentMiscellaneous)
+					q.criteria("criteria.rentMiscellaneous").doesNotExist(),
+					q.criteria("criteria.rentMiscellaneous").hasAnyOf(rentMiscellaneous)
 				)
 			);
 		}
@@ -213,33 +219,33 @@ public class FlatSubscriptionSearcherQueryBuilder {
 	}
 	
 	
-	private static Query<Subscription> buildRentPeriodQuery(Query<Subscription> q, HashMap<String, Object> data) {
-		FlatRentPeriodType rentPeriod = data.get("rentPeriod") != null ? FlatRentPeriodType.valueOf((String)data.get("rentPeriod")) : null;
+	private static Query<Subscription> buildRentPeriodQuery(Query<Subscription> q, FlatRentDataModel model) {
+		FlatRentPeriodType rentPeriod = model.getRentPeriod();
 		logger.debug("Realty.data.rentPeriod: {}", rentPeriod);
 		if (rentPeriod == null || rentPeriod == FlatRentPeriodType.UNDEFINED) {
 			logger.warn("Realty.data.rentPeriod search without rentPeriod. It should be mandatory field for FlatRentRealty subscription!");
 			q.and(
-				q.criteria("criteria.data.rentPeriods").doesNotExist()
+				q.criteria("criteria.rentPeriods").doesNotExist()
 			);
 		} else {
 			logger.debug("Realty.data.rentPeriod search with rentPeriod");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.rentPeriods").doesNotExist(),
-					q.criteria("criteria.data.rentPeriods").hasAnyOf(Arrays.asList(rentPeriod.toString()))
+					q.criteria("criteria.rentPeriods").doesNotExist(),
+					q.criteria("criteria.rentPeriods").hasAnyOf(Arrays.asList(rentPeriod.toString()))
 				)
 			);
 		}
 		return q;
 	}
 	
-	private static Query<Subscription> buildFlatMiscellaneousTypesQuery(Query<Subscription> q, HashMap<String, Object> data){
-		List<String> miscellaneous = (List<String>) data.get("miscellaneous");
+	private static Query<Subscription> buildFlatMiscellaneousTypesQuery(Query<Subscription> q, FlatRealtyBaseDataModel model){
+		List<FlatMiscellaneousType> miscellaneous = model.getMiscellaneous();
 		logger.debug("Realty.data.miscellaneous size: {}", miscellaneous != null ? miscellaneous.size() : 0);
 		if (miscellaneous == null || (miscellaneous.size() == 1 && miscellaneous.contains(FlatMiscellaneousType.UNDEFINED))) {
 			logger.debug("Realty.data.miscellaneous search without miscellaneous");
 			q.and(
-				q.criteria("criteria.data.miscellaneous").doesNotExist()
+				q.criteria("criteria.miscellaneous").doesNotExist()
 			);
 		} else {
 			logger.debug("Realty.data.miscellaneous search with miscellaneous");
@@ -250,8 +256,8 @@ public class FlatSubscriptionSearcherQueryBuilder {
 
 			q.and(
 				q.or(
-					q.criteria("criteria.data.miscellaneous").doesNotExist(),
-					q.criteria("criteria.data.miscellaneous").hasAnyOf(miscellaneous)
+					q.criteria("criteria.miscellaneous").doesNotExist(),
+					q.criteria("criteria.miscellaneous").hasAnyOf(miscellaneous)
 				)
 			);
 		}
@@ -259,13 +265,13 @@ public class FlatSubscriptionSearcherQueryBuilder {
 	}
 	
 	
-	private static Query<Subscription> buildSecurityTypesQuery(Query<Subscription> q, HashMap<String, Object> data) {
-		List<String> securityTypes = (List<String>) data.get("securityTypes");
+	private static Query<Subscription> buildSecurityTypesQuery(Query<Subscription> q, FlatRealtyBaseDataModel model) {
+		List<FlatSecurityType> securityTypes = model.getSecurityTypes();
 		logger.debug("Realty.data.securityTypes size: {}", securityTypes != null ? securityTypes.size() : 0);
 		if (securityTypes == null || (securityTypes.size() == 1 && securityTypes.contains(FlatSecurityType.UNDEFINED))) {
 			logger.debug("Realty.data.securityTypes search without securityTypes");
 			q.and(
-				q.criteria("criteria.data.securityTypes").doesNotExist()	
+				q.criteria("criteria.securityTypes").doesNotExist()	
 			);
 		} else {
 			logger.debug("Realty.data.securityTypes search with securityTypes");
@@ -276,84 +282,84 @@ public class FlatSubscriptionSearcherQueryBuilder {
 
 			q.and(
 				q.or(
-					q.criteria("criteria.data.securityTypes").doesNotExist(),
-					q.criteria("criteria.data.securityTypes").hasAnyOf(securityTypes)
+					q.criteria("criteria.securityTypes").doesNotExist(),
+					q.criteria("criteria.securityTypes").hasAnyOf(securityTypes)
 				)
 			);
 		}
 		return q;
 	}
 	
-	private static Query<Subscription> buildFloorTypeQuery(Query<Subscription> q, HashMap<String, Object> data) {
-		FlatFloorType floorType = data.get("floorType") != null ? FlatFloorType.valueOf((String)data.get("floorType")) : null;
+	private static Query<Subscription> buildFloorTypeQuery(Query<Subscription> q, FlatRealtyBaseDataModel model) {
+		FlatFloorType floorType = model.getFloorType();
 		logger.debug("Realty.data.floorType: {}", floorType);
 		if (floorType == null || floorType == FlatFloorType.UNDEFINED) {
 			logger.debug("Realty.data.floorType search without floorType");
 			q.and(
-				q.criteria("criteria.data.floorTypes").doesNotExist()
+				q.criteria("criteria.floorTypes").doesNotExist()
 			);
 		} else {
 			logger.debug("Realty.data.floorType search with floorType");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.floorTypes").doesNotExist(),
-					q.criteria("criteria.data.floorTypes").hasAnyOf(Arrays.asList(floorType))				
+					q.criteria("criteria.floorTypes").doesNotExist(),
+					q.criteria("criteria.floorTypes").hasAnyOf(Arrays.asList(floorType))				
 				)
 			);
 		}
 		return q;
 	}
 	
-	private static Query<Subscription> buildFurnitureTypeQuery(Query<Subscription> q, HashMap<String, Object> data) {
-		FlatFurnitureType furnitureType = data.get("furnitureType") != null ? FlatFurnitureType.valueOf((String)data.get("furnitureType")) : null;
+	private static Query<Subscription> buildFurnitureTypeQuery(Query<Subscription> q, FlatRealtyBaseDataModel model) {
+		FlatFurnitureType furnitureType = model.getFurnitureType();
 		logger.debug("Realty.data.furnitureType: {}", furnitureType);
 		if (furnitureType == null || furnitureType == FlatFurnitureType.UNDEFINED) {
 			logger.debug("Realty.data.furnitureType search without furnitureType");
 			q.and(
-				q.criteria("criteria.data.furnitureTypes").doesNotExist()
+				q.criteria("criteria.furnitureTypes").doesNotExist()
 			);
 		} else {
 			logger.debug("Realty.data.furnitureType search with furnitureType");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.furnitureTypes").doesNotExist(),
-					q.criteria("criteria.data.furnitureTypes").hasAnyOf(Arrays.asList(furnitureType))
+					q.criteria("criteria.furnitureTypes").doesNotExist(),
+					q.criteria("criteria.furnitureTypes").hasAnyOf(Arrays.asList(furnitureType))
 				)
 			);
 		}
 		return q;
 	}
 	
-	private static Query<Subscription> buildParkingTypeQuery(Query<Subscription> q, HashMap<String, Object> data){
-		FlatParkingType parkingType = data.get("parkingType") != null ? FlatParkingType.valueOf((String)data.get("parkingType")) : null;
+	private static Query<Subscription> buildParkingTypeQuery(Query<Subscription> q, FlatRealtyBaseDataModel model){
+		FlatParkingType parkingType = model.getParkingType();
 		logger.debug("Realty.data.parkingType: {}", parkingType);
 		if (parkingType == null || parkingType == FlatParkingType.UNDEFINED) {
 			logger.debug("Realty.data.parkingType search without parkingType");
 			q.and(
-				q.criteria("criteria.data.parkingTypes").doesNotExist()
+				q.criteria("criteria.parkingTypes").doesNotExist()
 			);
 		} else {
 			logger.debug("Realty.data.parkingType search with parkingType");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.parkingTypes").doesNotExist(),
-					q.criteria("criteria.data.parkingTypes").hasAnyOf(Arrays.asList(parkingType))
+					q.criteria("criteria.parkingTypes").doesNotExist(),
+					q.criteria("criteria.parkingTypes").hasAnyOf(Arrays.asList(parkingType))
 				)
 			);
 		}
 		return q;
 	}
 	
-	private static Query<Subscription> buildDoorTypeQuery(Query<Subscription> q, HashMap<String, Object> data){
-		FlatDoorType doorType = data.get("doorType") != null ? FlatDoorType.valueOf((String)data.get("doorType")) : null;
+	private static Query<Subscription> buildDoorTypeQuery(Query<Subscription> q, FlatRealtyBaseDataModel model){
+		FlatDoorType doorType = model.getDoorType();
 		logger.debug("Realty.data.doorType: {}", doorType);
 		if (doorType == null || doorType == FlatDoorType.UNDEFINED) {
-			logger.debug("Realty.data.doorType search without doorType");
+			logger.debug("Realty.doorType search without doorType");
 			q.and(
 				q.criteria("criteria.doorTypes").doesNotExist()
 			);
 		} else {
-			logger.debug("Realty.data.doorType search with doorType");
+			logger.debug("Realty.doorType search with doorType");
 			q.and(
 				q.or(
 					q.criteria("criteria.doorTypes").doesNotExist(),
@@ -364,40 +370,40 @@ public class FlatSubscriptionSearcherQueryBuilder {
 		return q;
 	}
 	
-	private static Query<Subscription> buildBalconyGlazingType(Query<Subscription> q, HashMap<String, Object> data){
-		FlatBalconyGlazingType balconyGlazingType = data.get("balconyGlazingType") != null ? FlatBalconyGlazingType.valueOf((String)data.get("balconyGlazingType")) : null;
+	private static Query<Subscription> buildBalconyGlazingType(Query<Subscription> q, FlatRealtyBaseDataModel model){
+		FlatBalconyGlazingType balconyGlazingType = model.getBalconyGlazingType();
 		logger.debug("Realty.data.balconyGlazingType: {}", balconyGlazingType);
 		if (balconyGlazingType == null || balconyGlazingType == FlatBalconyGlazingType.UNDEFINED) {
 			logger.debug("Realty.data.balconyGlazingType search without balconyGlazingType");
 			q.and(
-				q.criteria("criteria.data.balconyGlazingTypes").doesNotExist()
+				q.criteria("criteria.balconyGlazingTypes").doesNotExist()
 			);
 		} else {
 			logger.debug("Realty.data.balconyGlazingType search with balconyGlazingType");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.balconyGlazingTypes").doesNotExist(),
-					q.criteria("criteria.data.balconyGlazingTypes").hasAnyOf(Arrays.asList(balconyGlazingType))
+					q.criteria("criteria.balconyGlazingTypes").doesNotExist(),
+					q.criteria("criteria.balconyGlazingTypes").hasAnyOf(Arrays.asList(balconyGlazingType))
 				)
 			);
 		}
 		return q;
 	}
 	
-	private static Query<Subscription> buildBalconyType(Query<Subscription> q, HashMap<String, Object> data){
-		FlatBalconyType balconyType = data.get("balconyType") != null ? FlatBalconyType.valueOf((String)data.get("balconyType")) : null;
+	private static Query<Subscription> buildBalconyType(Query<Subscription> q, FlatRealtyBaseDataModel model){
+		FlatBalconyType balconyType = model.getBalconyType();
 		logger.debug("Realty.data.balconyType: {}", balconyType);
 		if (balconyType == null || balconyType == FlatBalconyType.UNDEFINED) {
 			logger.debug("Realty.data.balconyType search without balconyType");
 			q.and(
-					q.criteria("criteria.data.balconyTypes").doesNotExist()
+					q.criteria("criteria.balconyTypes").doesNotExist()
 			);
 		} else {
 			logger.debug("Realty.data.balconyType search with balconyType");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.balconyTypes").doesNotExist(),
-					q.criteria("criteria.data.balconyTypes").hasAnyOf(Arrays.asList(balconyType))
+					q.criteria("criteria.balconyTypes").doesNotExist(),
+					q.criteria("criteria.balconyTypes").hasAnyOf(Arrays.asList(balconyType))
 				)
 			);
 		}
@@ -405,140 +411,140 @@ public class FlatSubscriptionSearcherQueryBuilder {
 	}
 	
 	
-	private static Query<Subscription> buildLavatoryType(Query<Subscription> q, HashMap<String, Object> data) {
-		FlatLavatoryType lavatoryType = data.get("lavatoryType") != null ? FlatLavatoryType.valueOf((String)data.get("lavatoryType")) : null;
+	private static Query<Subscription> buildLavatoryType(Query<Subscription> q, FlatRealtyBaseDataModel model) {
+		FlatLavatoryType lavatoryType = model.getLavatoryType();
 		logger.debug("Realty.data.lavatoryType: {}", lavatoryType);
 		if (lavatoryType == null || lavatoryType == FlatLavatoryType.UNDEFINED) {
 			logger.debug("Realty.data.lavatoryType search without lavatoryType");
 			q.and(
-				q.criteria("criteria.data.lavatoryTypes").doesNotExist()
+				q.criteria("criteria.lavatoryTypes").doesNotExist()
 			);
 		} else {
 			logger.debug("Realty.data.lavatoryType search with lavatoryType");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.lavatoryTypes").doesNotExist(),
-					q.criteria("criteria.data.lavatoryTypes").hasAnyOf(Arrays.asList(lavatoryType))		
+					q.criteria("criteria.lavatoryTypes").doesNotExist(),
+					q.criteria("criteria.lavatoryTypes").hasAnyOf(Arrays.asList(lavatoryType))		
 				)
 			);
 		}
 		return q;
 	}
 	
-	private static Query<Subscription> buildInternetTypeQuery(Query<Subscription> q, HashMap<String, Object> data) {
-		FlatInternetType internetType = data.get("internetType") != null ? FlatInternetType.valueOf((String)data.get("internetType")) : null;
+	private static Query<Subscription> buildInternetTypeQuery(Query<Subscription> q, FlatRealtyBaseDataModel model) {
+		FlatInternetType internetType = model.getInternetType();
 		logger.debug("Realty.data.internetType: {}", internetType);
 		if (internetType == null || internetType == FlatInternetType.UNDEFINED) {
 			logger.debug("Realty.data.internetType search without internetType");
 			q.and(
-				q.criteria("criteria.data.internetTypes").doesNotExist()
+				q.criteria("criteria.internetTypes").doesNotExist()
 			);
 		} else {
 			logger.debug("Realty.data.internetType search with internetType");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.internetTypes").doesNotExist(),
-					q.criteria("criteria.data.internetTypes").hasAnyOf(Arrays.asList(internetType))					
+					q.criteria("criteria.internetTypes").doesNotExist(),
+					q.criteria("criteria.internetTypes").hasAnyOf(Arrays.asList(internetType))					
 				)
 			);
 		}
 		return q;
 	}
 	
-	private static Query<Subscription> buildPhoneType(Query<Subscription> q, HashMap<String, Object> data){
-		FlatPhoneType phoneType = data.get("phoneType") != null ? FlatPhoneType.valueOf((String)data.get("phoneType")) : null;
+	private static Query<Subscription> buildPhoneType(Query<Subscription> q, FlatRealtyBaseDataModel model){
+		FlatPhoneType phoneType = model.getPhoneType();
 		logger.debug("Realty.data.phoneType: {}", phoneType);
 		if (phoneType == null || phoneType == FlatPhoneType.UNDEFINED) {
 			logger.debug("Realty.data.phoneType search without phoneType");
 			q.and(
-				q.criteria("criteria.data.phoneTypes").doesNotExist()
+				q.criteria("criteria.phoneTypes").doesNotExist()
 			);
 		} else {
 			logger.debug("Realty.data.phoneType search with phoneType");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.phoneTypes").doesNotExist(),
-					q.criteria("criteria.data.phoneTypes").hasAnyOf(Arrays.asList(phoneType))
+					q.criteria("criteria.phoneTypes").doesNotExist(),
+					q.criteria("criteria.phoneTypes").hasAnyOf(Arrays.asList(phoneType))
 				)
 			);
 		}
 		return q;
 	}
 	
-	private static Query<Subscription> buildRenovationTypeQuery(Query<Subscription> q, HashMap<String, Object> data) {
-		FlatRenovationType renovationType = data.get("renovationType") != null ? FlatRenovationType.valueOf((String)data.get("renovationType")) : null;
+	private static Query<Subscription> buildRenovationTypeQuery(Query<Subscription> q, FlatRealtyBaseDataModel model) {
+		FlatRenovationType renovationType = model.getRenovationType();
 		logger.debug("Realty.data.renovationType: {}", renovationType);
 		if (renovationType == null || renovationType == FlatRenovationType.UNDEFINED) {
 			logger.debug("Realty.data.renovationType search without renovationType");
 			q.and(
-				q.criteria("criteria.data.renovationTypes").doesNotExist()
+				q.criteria("criteria.renovationTypes").doesNotExist()
 			);
 		} else {
 			logger.debug("Realty.data.renovationType search with renovationType");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.renovationTypes").doesNotExist(),
-					q.criteria("criteria.data.renovationTypes").hasAnyOf(Arrays.asList(renovationType))
+					q.criteria("criteria.renovationTypes").doesNotExist(),
+					q.criteria("criteria.renovationTypes").hasAnyOf(Arrays.asList(renovationType))
 				)
 			);
 		}
 		return q;
 	}
 	
-	private static Query<Subscription> buildPrivatizedDormTypeQuery(Query<Subscription> q, HashMap<String, Object> data){
-		FlatPrivatizedDormType privatizedDormType = data.get("privatizedDormType") != null ? FlatPrivatizedDormType.valueOf((String)data.get("privatizedDormType")) : null;
+	private static Query<Subscription> buildPrivatizedDormTypeQuery(Query<Subscription> q, FlatRealtyBaseDataModel model){
+		FlatPrivatizedDormType privatizedDormType = model.getPrivatizedDormType();
 		logger.debug("Realty.data.privatizedDormType: {}", privatizedDormType);
 		if (privatizedDormType == null || privatizedDormType == FlatPrivatizedDormType.UNDEFINED) {
 			logger.debug("Realty.data.privatizedDormType search without privatizedDormType");
 			q.and(
-				q.criteria("criteria.data.privatizedDormTypes").doesNotExist()
+				q.criteria("criteria.privatizedDormTypes").doesNotExist()
 			);
 		} else {
 			logger.debug("Realty.data.privatizedDormType search with privatizedDormType");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.privatizedDormTypes").doesNotExist(),
-					q.criteria("criteria.data.privatizedDormTypes").hasAnyOf(Arrays.asList(privatizedDormType))
+					q.criteria("criteria.privatizedDormTypes").doesNotExist(),
+					q.criteria("criteria.privatizedDormTypes").hasAnyOf(Arrays.asList(privatizedDormType))
 				)
 			);
 		}
 		return q;
 	}
 	
-	private static Query<Subscription> buildFlatBuildingTypeQuery(Query<Subscription> q, HashMap<String, Object> data){
-		FlatBuildingType flatBuildingType = data.get("flatBuildingType") != null ? FlatBuildingType.valueOf((String)data.get("flatBuildingType")) : null;
+	private static Query<Subscription> buildFlatBuildingTypeQuery(Query<Subscription> q, FlatRealtyBaseDataModel model){
+		FlatBuildingType flatBuildingType = model.getFlatBuildingType();
 		logger.debug("Realty.data.flatBuildingType: {}", flatBuildingType);
 		if (flatBuildingType != null && flatBuildingType != FlatBuildingType.UNDEFINED) {
 			logger.debug("Realty.data.flatBuildingType search without flatBuildingType");
 			q.and(
-				q.criteria("criteria.data.flatBuildingTypes").doesNotExist()
+				q.criteria("criteria.flatBuildingTypes").doesNotExist()
 			);
 			
 		} else {
 			logger.debug("Realty.data.flatBuildingType search with flatBuildingType");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.flatBuildingTypes").doesNotExist(),
-					q.criteria("criteria.data.flatBuildingTypes").hasAnyOf(Arrays.asList(flatBuildingType))
+					q.criteria("criteria.flatBuildingTypes").doesNotExist(),
+					q.criteria("criteria.flatBuildingTypes").hasAnyOf(Arrays.asList(flatBuildingType))
 				)
 			);
 		}
 		return q;
 	}
 	
-	private static Query<Subscription> buildCeilingHieght(Query<Subscription> q, HashMap<String, Object> data) {
-		Float ceilingHeight = data.get("ceilingHeight") != null ? Float.valueOf((String)data.get("ceilingHeight")) : null;
+	private static Query<Subscription> buildCeilingHieght(Query<Subscription> q, FlatRealtyBaseDataModel model) {
+		Float ceilingHeight = model.getCeilingHeight();
 		logger.debug("Realty.data.ceilingHeight: {}", ceilingHeight);
 		if (ceilingHeight != null && ceilingHeight > 0) {
 			logger.debug("Realty.data.ceilingHeight search with ceilingHeight");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.ceilingHeightFrom").doesNotExist(),
-					q.criteria("criteria.data.ceilingHeightFrom").lessThanOrEq(ceilingHeight)
+					q.criteria("criteria.ceilingHeightFrom").doesNotExist(),
+					q.criteria("criteria.ceilingHeightFrom").lessThanOrEq(ceilingHeight)
 				),
 				q.or(
-					q.criteria("criteria.data.ceilingHeightTo").doesNotExist(),
-					q.criteria("criteria.data.ceilingHeightTo").greaterThanOrEq(ceilingHeight)
+					q.criteria("criteria.ceilingHeightTo").doesNotExist(),
+					q.criteria("criteria.ceilingHeightTo").greaterThanOrEq(ceilingHeight)
 				)
 			);
 			
@@ -546,78 +552,78 @@ public class FlatSubscriptionSearcherQueryBuilder {
 			// Если нету информации о комнатах, то ищем подписки там где это никак не задавали
 			logger.debug("Realty.data.ceilingHeight search without ceilingHeight");
 			q.and(
-				q.criteria("criteria.data.ceilingHeightFrom").doesNotExist(),
-				q.criteria("criteria.data.ceilingHeightTo").doesNotExist()
+				q.criteria("criteria.ceilingHeightFrom").doesNotExist(),
+				q.criteria("criteria.ceilingHeightTo").doesNotExist()
 			);
 		}
 		return q;
 	}
 	
-	private static Query<Subscription> buildSquareKitckenQuery(Query<Subscription> q, HashMap<String, Object> data) {
-		Float squareKitchen = data.get("squareKitchen") != null ? Float.valueOf((String)data.get("squareKitchen")) : null;
+	private static Query<Subscription> buildSquareKitckenQuery(Query<Subscription> q, FlatRealtyBaseDataModel model) {
+		Float squareKitchen = model.getSquareKitchen();
 		logger.debug("Realty.data.squareKitchen: {}", squareKitchen);
 		if (squareKitchen != null && squareKitchen > 0) {
 			logger.debug("Realty.data.squareKitchen search with squareKitchen");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.squareKitchenFrom").doesNotExist(),
-					q.criteria("criteria.data.squareKitchenFrom").lessThanOrEq(squareKitchen)
+					q.criteria("criteria.squareKitchenFrom").doesNotExist(),
+					q.criteria("criteria.squareKitchenFrom").lessThanOrEq(squareKitchen)
 				),
 				q.or(
-					q.criteria("criteria.data.squareKitchenTo").doesNotExist(),
-					q.criteria("criteria.data.squareKitchenTo").greaterThanOrEq(squareKitchen)
+					q.criteria("criteria.squareKitchenTo").doesNotExist(),
+					q.criteria("criteria.squareKitchenTo").greaterThanOrEq(squareKitchen)
 				)
 			);
 		} else {
 			// Если нету информации о комнатах, то ищем подписки там где это никак не задавали
 			logger.debug("Realty.data.squareKitchen search without squareKitchen");
 			q.and(
-				q.criteria("criteria.data.squareKitchenFrom").doesNotExist(),
-				q.criteria("criteria.data.squareKitchenTo").doesNotExist()
+				q.criteria("criteria.squareKitchenFrom").doesNotExist(),
+				q.criteria("criteria.squareKitchenTo").doesNotExist()
 			);
 		}
 		return q;
 	}
 	
-	private static Query<Subscription> buildSquareLivingQuery(Query<Subscription> q, HashMap<String, Object> data) {
-		Float squareLiving = data.get("squareLiving") != null ? Float.valueOf((String)data.get("squareLiving")) : null;
+	private static Query<Subscription> buildSquareLivingQuery(Query<Subscription> q, FlatRealtyBaseDataModel model) {
+		Float squareLiving = model.getSquareLiving();
 		logger.debug("Realty.data.squareLiving: {}", squareLiving);
 		if (squareLiving != null && squareLiving > 0) {
 			logger.debug("Realty.data.squareLiving search with squareLiving");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.squareLivingFrom").doesNotExist(),
-					q.criteria("criteria.data.squareLivingFrom").lessThanOrEq(squareLiving)
+					q.criteria("criteria.squareLivingFrom").doesNotExist(),
+					q.criteria("criteria.squareLivingFrom").lessThanOrEq(squareLiving)
 				),
 				q.or(
-					q.criteria("criteria.data.squareLivingTo").doesNotExist(),
-					q.criteria("criteria.data.squareLivingTo").greaterThanOrEq(squareLiving)
+					q.criteria("criteria.squareLivingTo").doesNotExist(),
+					q.criteria("criteria.squareLivingTo").greaterThanOrEq(squareLiving)
 				)
 			);
 		} else {
 			// Если нету информации о комнатах, то ищем подписки там где это никак не задавали
 			logger.debug("Realty.data.squareLiving search without squareLiving");
 			q.and(
-				q.criteria("criteria.data.squareLivingFrom").doesNotExist(),
-				q.criteria("criteria.data.squareLivingTo").doesNotExist()
+				q.criteria("criteria.squareLivingFrom").doesNotExist(),
+				q.criteria("criteria.squareLivingTo").doesNotExist()
 			);
 		}
 		return q;
 	}
 	
-	private static Query<Subscription> buildHouseFloorCountQuery(Query<Subscription> q, HashMap<String, Object> data) {
-		Long houseFloorCount = data.get("houseFloorCount") != null ? Long.valueOf((String)data.get("houseFloorCount")) : null;
+	private static Query<Subscription> buildHouseFloorCountQuery(Query<Subscription> q, FlatRealtyBaseDataModel model) {
+		Long houseFloorCount = model.getHouseFloorCount();
 		logger.debug("Realty.data.houseFloorCount: {}", houseFloorCount);
 		if (houseFloorCount != null && houseFloorCount > 0) {
 			logger.debug("Realty.data.houseFloorCount search with houseFloorCount");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.houseFloorCountFrom").doesNotExist(),
-					q.criteria("criteria.data.houseFloorCountFrom").lessThanOrEq(houseFloorCount)
+					q.criteria("criteria.houseFloorCountFrom").doesNotExist(),
+					q.criteria("criteria.houseFloorCountFrom").lessThanOrEq(houseFloorCount)
 				),
 				q.or(
-					q.criteria("criteria.data.houseFloorCountTo").doesNotExist(),
-					q.criteria("criteria.data.houseFloorCountTo").greaterThanOrEq(houseFloorCount)
+					q.criteria("criteria.houseFloorCountTo").doesNotExist(),
+					q.criteria("criteria.houseFloorCountTo").greaterThanOrEq(houseFloorCount)
 				)
 			);
 			
@@ -625,26 +631,26 @@ public class FlatSubscriptionSearcherQueryBuilder {
 			// Если нету информации о комнатах, то ищем подписки там где это никак не задавали
 			logger.debug("Realty.data.houseFloorCount search without houseFloorCount");
 			q.and(
-				q.criteria("criteria.data.houseFloorCountFrom").doesNotExist(),
-				q.criteria("criteria.data.houseFloorCountTo").doesNotExist()
+				q.criteria("criteria.houseFloorCountFrom").doesNotExist(),
+				q.criteria("criteria.houseFloorCountTo").doesNotExist()
 			);
 		}
 		return q;
 	}
 	
-	private static Query<Subscription> buildFlatFloorQuery(Query<Subscription> q, HashMap<String, Object> data) {
-		Long flatFloor = data.get("flatFloor") != null ? Long.valueOf((String)data.get("flatFloor")) : null;
+	private static Query<Subscription> buildFlatFloorQuery(Query<Subscription> q, FlatRealtyBaseDataModel model) {
+		Long flatFloor = model.getFlatFloor();
 		logger.debug("Realty.data.flatFloor: {}", flatFloor);
 		if (flatFloor != null && flatFloor > 0) {
 			logger.debug("Realty.data.flatFloor search with flatFloor");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.flatFloorFrom").doesNotExist(),
-					q.criteria("criteria.data.flatFloorFrom").lessThanOrEq(flatFloor)
+					q.criteria("criteria.flatFloorFrom").doesNotExist(),
+					q.criteria("criteria.flatFloorFrom").lessThanOrEq(flatFloor)
 					),
 				q.or(
-					q.criteria("criteria.data.flatFloorTo").doesNotExist(),
-					q.criteria("criteria.data.flatFloorTo").greaterThanOrEq(flatFloor)
+					q.criteria("criteria.flatFloorTo").doesNotExist(),
+					q.criteria("criteria.flatFloorTo").greaterThanOrEq(flatFloor)
 				)
 			);
 			
@@ -652,84 +658,82 @@ public class FlatSubscriptionSearcherQueryBuilder {
 			// Если нету информации о комнатах, то ищем подписки там где это никак не задавали
 			logger.debug("Realty.data.flatFloor search without flatFloor");
 			q.and(
-				q.criteria("criteria.data.flatFloorFrom").doesNotExist(),
-				q.criteria("criteria.data.flatFloorTo").doesNotExist()
+				q.criteria("criteria.flatFloorFrom").doesNotExist(),
+				q.criteria("criteria.flatFloorTo").doesNotExist()
 			);
 		}
 		return q;
 	}
 	
-	private static Query<Subscription> buildBuildingYear(Query<Subscription> q, HashMap<String, Object> data) {
-		Long houseYear = data.get("houseYear") != null ? Long.valueOf((String)data.get("houseYear")) : null;
+	private static Query<Subscription> buildBuildingYear(Query<Subscription> q, FlatRealtyBaseDataModel model) {
+		Long houseYear = model.getHouseYear();
 		logger.debug("Realty.data.houseYear: {}", houseYear);
 		if (houseYear != null && houseYear > 0) {
 			logger.debug("Realty.data.houseYear search with year");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.houseYearFrom").doesNotExist(),
-					q.criteria("criteria.data.houseYearFrom").lessThanOrEq(houseYear)
+					q.criteria("criteria.houseYearFrom").doesNotExist(),
+					q.criteria("criteria.houseYearFrom").lessThanOrEq(houseYear)
 				),
 				q.or(
-					q.criteria("criteria.data.houseYearTo").doesNotExist(),
-					q.criteria("criteria.data.houseYearTo").greaterThanOrEq(houseYear)
+					q.criteria("criteria.houseYearTo").doesNotExist(),
+					q.criteria("criteria.houseYearTo").greaterThanOrEq(houseYear)
 				)
 			);
 		} else {
 			// Если нету информации о комнатах, то ищем подписки там где это никак не задавали
 			logger.debug("Realty.data.houseYear search without year");
 			q.and(
-				q.criteria("criteria.data.houseYearFrom").doesNotExist(),
-				q.criteria("criteria.data.houseYearTo").doesNotExist()
+				q.criteria("criteria.houseYearFrom").doesNotExist(),
+				q.criteria("criteria.houseYearTo").doesNotExist()
 			);
 		}
 		return q;
 	}
 	
-	private static Query<Subscription> buildRoomQuery(Query<Subscription> q, HashMap<String, Object> data) {
-		Float rooms = data.get("rooms") != null ? Float.valueOf((String)data.get("rooms")) : null;
+	private static Query<Subscription> buildRoomQuery(Query<Subscription> q, FlatRealtyBaseDataModel model) {
+		Float rooms = model.getRooms();
 		logger.debug("Realty.data.rooms: {}", rooms);
 		if (rooms != null && rooms > 0) {
 			logger.debug("Realty.data.rooms: search with rooms");
 			q.and(
 				q.or(
-					q.criteria("criteria.data.roomFrom").doesNotExist(),
-					q.criteria("criteria.data.roomFrom").lessThanOrEq(rooms)
+					q.criteria("criteria.roomFrom").doesNotExist(),
+					q.criteria("criteria.roomFrom").lessThanOrEq(rooms)
 				),
 				q.or(
-					q.criteria("criteria.data.roomTo").doesNotExist(),
-					q.criteria("criteria.data.roomTo").greaterThanOrEq(rooms)
+					q.criteria("criteria.roomTo").doesNotExist(),
+					q.criteria("criteria.roomTo").greaterThanOrEq(rooms)
 				)
 			);
 		} else {
 			// Если нету информации о комнатах, то ищем подписки там где это никак не задавали
 			logger.debug("Realty.data.rooms: search empty rooms conditions");
 			q.and(
-				q.criteria("criteria.data.roomFrom").doesNotExist(),
-				q.criteria("criteria.data.roomTo").doesNotExist()
+				q.criteria("criteria.roomFrom").doesNotExist(),
+				q.criteria("criteria.roomTo").doesNotExist()
 			);
 		}
 		return q;
 	}
 	
 	// TODO Внимание заменил externalComplexId на ObjectId так как поменяли связь в БДшке
-	private static Query<Subscription> buildResidentialComplexQuery(Query<Subscription> q, HashMap<String, Object> data) {
-		Mapper mapper = new Mapper();
-		mapper.getConverters().addConverter(CalendarConverter.class);
-		ResidentialComplex residentalComplex = (DBObject)data.get("residentalComplex") != null ? mapper.fromDBObject(DB.DS(), ResidentialComplex.class, (DBObject)data.get("residentalComplex"), mapper.createEntityCache()) : null;
+	private static Query<Subscription> buildResidentialComplexQuery(Query<Subscription> q, FlatRealtyBaseDataModel model) {
+		ResidentialComplex residentalComplex = model.getResidentialComplex(DB.DS());
 		
 		if (residentalComplex != null && residentalComplex.id != null) {
 			// Если есть ЖК то проверяем подписки где это не указано или где указан именно этот ЖК
 			logger.debug("Realty.data.residentalComplex: {}, {}", residentalComplex.externalComplexId, residentalComplex.id);
 			q.and(
 				q.or(
-					q.criteria("criteria.data.residentalComplexs").doesNotExist(),
-					q.criteria("criteria.data.residentalComplexs.id").hasAnyOf(Arrays.asList(residentalComplex.id))
+					q.criteria("criteria.residentialComplexIds").doesNotExist(),
+					q.criteria("criteria.residentialComplexIds").hasAnyOf(Arrays.asList(residentalComplex.id.toHexString()))
 				)
 			);
 		} else {
-			logger.debug("Realty.data.residentalComplex is null");
+			logger.debug("Realty.data.residentialComplex is null");
 			// Если нету ЖК или не смогли распарсить в краулере, тогда смотрим подписки где нету ЖК
-			q.and(q.criteria("criteria.data.residentalComplexs").doesNotExist());
+			q.and(q.criteria("criteria.data.residentialComplexIds").doesNotExist());
 		}
 		return q;
 	}
@@ -756,8 +760,7 @@ public class FlatSubscriptionSearcherQueryBuilder {
 				q.and(
 					q.or(
 						q.criteria("criteria.location").doesNotExist(),
-						q.criteria("criteria.location.regions").doesNotExist(),
-						q.criteria("criteria.location.regions.code").hasAnyOf(regionCodes)
+						q.criteria("criteria.location.regionIds").hasAnyOf(regionCodes)
 					)
 				);
 
@@ -796,23 +799,23 @@ public class FlatSubscriptionSearcherQueryBuilder {
 		return q;
 	}
 	
-	private static Query<Subscription> buildSquareQuery(Query<Subscription> q, HashMap<String, Object> data) {
-		Float square = data.get("square") != null ? Float.valueOf((String)data.get("square")) : null;
+	private static Query<Subscription> buildSquareQuery(Query<Subscription> q, FlatRealtyBaseDataModel model) {
+		Float square = model.getSquare();
 		logger.debug("Realty.square: " + square);
 		if (square == null) {
 			q.and(
-				q.criteria("criteria.data.squareFrom").doesNotExist(),
-				q.criteria("criteria.data.squareTo").doesNotExist()
+				q.criteria("criteria.squareFrom").doesNotExist(),
+				q.criteria("criteria.squareTo").doesNotExist()
 			);
 		} else {
 			q.and(
 				q.or(
-					q.criteria("criteria.data.squareFrom").doesNotExist(),
-					q.criteria("criteria.data.squareFrom").lessThanOrEq(square)
+					q.criteria("criteria.squareFrom").doesNotExist(),
+					q.criteria("criteria.squareFrom").lessThanOrEq(square)
 				),
 				q.or(
-					q.criteria("criteria.data.squareTo").doesNotExist(),
-					q.criteria("criteria.data.squareTo").greaterThanOrEq(square)
+					q.criteria("criteria.squareTo").doesNotExist(),
+					q.criteria("criteria.squareTo").greaterThanOrEq(square)
 				)
 			);
 		}
@@ -842,8 +845,8 @@ public class FlatSubscriptionSearcherQueryBuilder {
 	}
 	
 	
-	private static Query<Subscription> buildPriceQuery(Query<Subscription> q, Advert realty) {
-		Long price = (Long)realty.data.get("price");
+	private static Query<Subscription> buildPriceQuery(Query<Subscription> q, FlatRealtyBaseDataModel model) {
+		Long price = model.getPrice();
 		logger.debug("Realty.price: " + price);
 		if (price == null) {
 			// Если нет цены в объявлении то нам подходят подписки без указания цены

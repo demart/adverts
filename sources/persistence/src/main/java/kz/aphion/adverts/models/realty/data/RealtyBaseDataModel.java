@@ -11,12 +11,16 @@ import kz.aphion.adverts.persistence.adverts.Advert;
  * @author artem.demidovich
  *
  */
-public abstract class RealtyBaseDataModel {
+public class RealtyBaseDataModel {
 
 	protected Advert advert;
 	
 	protected HashMap<String, Object> getData() {
 		return advert.data;
+	}
+	
+	public RealtyBaseDataModel(Advert advert){
+		this.advert = advert;
 	}
 	
 	/**

@@ -71,7 +71,7 @@ public class FlatDataMapperUtils {
 				mapper.getConverters().addConverter(CalendarConverter.class);
 				DBObject complexDBO = mapper.toDBObject(complexEntity.complex);
 				//logger.info("{}", complexDBO);
-				data.put("residentalComplex", complexDBO);
+				data.put("residentialComplex", complexDBO);
 				//complex.relationId = complexEntity.id;
 				//complex.name = complexEntity.name;
 			} else {

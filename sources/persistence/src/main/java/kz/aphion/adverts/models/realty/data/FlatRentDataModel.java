@@ -26,7 +26,7 @@ public class FlatRentDataModel extends FlatRealtyBaseDataModel {
 	//protected List<FlatRentMiscellaneousType> rentMiscellaneous;
 
 	public FlatRentDataModel(Advert advert){
-		this.advert = advert;
+		super(advert);
 	}	
 	
 	public FlatRentPeriodType getRentPeriod() {

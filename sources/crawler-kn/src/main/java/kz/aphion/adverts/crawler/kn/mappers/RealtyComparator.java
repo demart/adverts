@@ -55,8 +55,8 @@ public class RealtyComparator {
 		//возможно будут исправлены ошибки. Так как изначально тяжело понять где они ошиблись
 		Mapper mapper = new Mapper();
 		mapper.getConverters().addConverter(CalendarConverter.class);
-		ResidentialComplex oldComplex = (DBObject)oldRealty.data.get("residentalComplex") != null ? mapper.fromDBObject(DB.DS(), ResidentialComplex.class, (DBObject)oldRealty.data.get("residentalComplex"), mapper.createEntityCache()) : null;
-		ResidentialComplex newComplex = (DBObject)newRealty.data.get("residentalComplex") != null ? mapper.fromDBObject(DB.DS(), ResidentialComplex.class, (DBObject)newRealty.data.get("residentalComplex"), mapper.createEntityCache()) : null;
+		ResidentialComplex oldComplex = (DBObject)oldRealty.data.get("residentialComplex") != null ? mapper.fromDBObject(DB.DS(), ResidentialComplex.class, (DBObject)oldRealty.data.get("residentialComplex"), mapper.createEntityCache()) : null;
+		ResidentialComplex newComplex = (DBObject)newRealty.data.get("residentialComplex") != null ? mapper.fromDBObject(DB.DS(), ResidentialComplex.class, (DBObject)newRealty.data.get("residentialComplex"), mapper.createEntityCache()) : null;
 		//ResidentialComplex oldComplex = (ResidentialComplex)oldRealty.data.get("residentalComplex");
 		//ResidentialComplex newComplex = (ResidentialComplex)newRealty.data.get("residentalComplex");
 		

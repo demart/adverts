@@ -18,7 +18,7 @@ public class FlatSellDataModel extends FlatRealtyBaseDataModel {
 	//public MortgageStatus mortgageStatus;
 	
 	public FlatSellDataModel(Advert advert){
-		this.advert = advert;
+		super(advert);
 	}
 
 	public MortgageStatus getMortgageStatus() {
