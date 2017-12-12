@@ -1,12 +1,12 @@
 package kz.aphion.adverts.persistence.subscription;
 
 import java.util.Calendar;
+import java.util.HashMap;
 
 import kz.aphion.adverts.persistence.BaseEntity;
 import kz.aphion.adverts.persistence.CalendarConverter;
 import kz.aphion.adverts.persistence.adverts.AdvertOperationType;
 import kz.aphion.adverts.persistence.adverts.AdvertType;
-import kz.aphion.adverts.persistence.subscription.criteria.SubscriptionCriteria;
 import kz.aphion.adverts.persistence.subscription.notification.SubscriptionNotification;
 import kz.aphion.adverts.persistence.users.User;
 
@@ -74,7 +74,7 @@ public class Subscription extends BaseEntity {
 	 * Здесь указан базовый класс, так как остальные наследники имеют разные параметры поиска
 	 */
 	@Embedded
-	public SubscriptionCriteria criteria;
+	public HashMap<String, Object> criteria;
 
 	/**
 	 * Статус подписки

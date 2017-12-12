@@ -5,7 +5,6 @@ import java.util.List;
 import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.persistence.adverts.Advert;
 import kz.aphion.adverts.persistence.subscription.Subscription;
-import kz.aphion.adverts.subscription.processors.AdvertSubscriptionProcessorImpl;
 import kz.aphion.adverts.subscription.searcher.SubscriptionSearcher;
 import kz.aphion.adverts.subscription.searcher.impl.utils.FlatSubscriptionSearcherQueryBuilder;
 
@@ -23,7 +22,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FlatSellSubscriptionSearcher implements SubscriptionSearcher {
 
-	private static Logger logger = LoggerFactory.getLogger(AdvertSubscriptionProcessorImpl.class);
+	private static Logger logger = LoggerFactory.getLogger(FlatSellSubscriptionSearcher.class);
 	
 	private Advert realty;
 	

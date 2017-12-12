@@ -1,7 +1,5 @@
 package kz.aphion.adverts.persistence.subscription.criteria;
 
-import kz.aphion.adverts.persistence.BaseEntity;
-
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Property;
 
@@ -15,7 +13,7 @@ import org.mongodb.morphia.annotations.Property;
  * Created at Aug 11, 2016
  */
 @Embedded
-public class SubscriptionCriteriaGeoLocation extends BaseEntity {
+public class SubscriptionCriteriaGeoLocation {
 
 	@Property
 	public String longitude;

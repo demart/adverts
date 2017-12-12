@@ -32,7 +32,7 @@ import com.google.gson.GsonBuilder;
 
 /**
  * 
- * Класс обработчик сообщений о недвижимости
+ * Класс обработчик сообщений
  * 
  * @author artem.demidovich
  *
@@ -155,7 +155,7 @@ public class AdvertSubscriptionProcessorImpl implements AdvertSubscriptionProces
 					}
 				}
 
-				SubscriptionAdvert subscriptionAdvert = createSubscriptionAdvertAndAddToSubscription(subscription, searcher, advertStatus);
+				SubscriptionAdvert subscriptionAdvert = createSubscriptionAdvert(subscription, searcher, advertStatus);
 
 				// Обновляем данные
 				ds.save(subscriptionAdvert);
@@ -222,7 +222,7 @@ public class AdvertSubscriptionProcessorImpl implements AdvertSubscriptionProces
 	 * @param status
 	 * @return
 	 */
-	private SubscriptionAdvert createSubscriptionAdvertAndAddToSubscription(Subscription subscription, SubscriptionSearcher searcher, SubscriptionAdvertStatus status) {
+	private SubscriptionAdvert createSubscriptionAdvert(Subscription subscription, SubscriptionSearcher searcher, SubscriptionAdvertStatus status) {
 		SubscriptionAdvert advert = new SubscriptionAdvert();
 		
 		advert.subscription = subscription;

@@ -3,7 +3,6 @@ package kz.aphion.adverts.persistence.subscription.criteria;
 import java.util.List;
 
 import kz.aphion.adverts.persistence.BaseEntity;
-import kz.aphion.adverts.persistence.Region;
 
 import org.mongodb.morphia.annotations.Embedded;
 
@@ -26,12 +25,12 @@ public class SubscriptionCriteriaLocation extends BaseEntity {
 	 * Интересующие регионы (районы или еще что-то)
 	 */
 	@Embedded
-	public List<Region> regions;
+	public List<String> regionIds;
 	
 	/**
 	 * Возможные расположение объекта на карте
 	 */
 	@Embedded
-	public List<SubscriptionCriteriaGeoLocation> geo;
+	public List<SubscriptionCriteriaGeoLocation> points;
 	
 }
