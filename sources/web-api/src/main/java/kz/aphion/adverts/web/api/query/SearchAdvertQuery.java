@@ -4,10 +4,11 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
+import kz.aphion.adverts.persistence.adverts.AdvertOperationType;
 import kz.aphion.adverts.web.api.exceptions.MissingRequiredParameterException;
 import kz.aphion.adverts.web.api.models.AdvertType;
+
+import org.apache.commons.lang.StringUtils;
 
 public class SearchAdvertQuery {
 
@@ -28,7 +29,7 @@ public class SearchAdvertQuery {
 	/**
 	 * Вид операции (Продажа, Аренда и т.д.)
 	 */
-	public String operationType;
+	public AdvertOperationType operationType;
 	
 	/**
 	 * Сколько объявлений выводить
@@ -61,7 +62,7 @@ public class SearchAdvertQuery {
 			throw new MissingRequiredParameterException("AdvertType value is missing!");
 		if (StringUtils.isBlank(subType))
 			throw new MissingRequiredParameterException("AdvertSubType value is missing!");
-		if (StringUtils.isBlank(operationType))
+		if (operationType == null || operationType == AdvertOperationType.UNDEFINED)
 			throw new MissingRequiredParameterException("AdvertOperationType value is missing!");
 	}
 	

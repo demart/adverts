@@ -3,7 +3,8 @@ package kz.aphion.adverts.web.api.models.geo;
 import java.util.ArrayList;
 import java.util.List;
 
-import kz.aphion.adverts.persistence.subscription.criteria.realty.RealtyGeoLocation;
+import kz.aphion.adverts.persistence.adverts.AdvertLocation;
+import kz.aphion.adverts.persistence.subscription.criteria.SubscriptionCriteriaLocation;
 
 
 /**
@@ -23,13 +24,13 @@ public class GeoLocationModel {
 	 */
 	public Float radus;
 
-	public static List<GeoLocationModel> convertToModel(List<RealtyGeoLocation> mapLocations) {
+	public static List<GeoLocationModel> convertToModel(List<SubscriptionCriteriaLocation> mapLocations) {
 		if (mapLocations == null || mapLocations.size() == 0)
 			return null;
 		
 		List<GeoLocationModel> models = new ArrayList<GeoLocationModel>();
 		
-		for (RealtyGeoLocation realtyGeoLocation : mapLocations) {
+		for (SubscriptionCriteriaLocation realtyGeoLocation : mapLocations) {
 			GeoLocationModel model = GeoLocationModel.covertToModel(realtyGeoLocation);
 			if (model != null)
 				models.add(model);
@@ -38,7 +39,7 @@ public class GeoLocationModel {
 		return models;
 	}
 
-	private static GeoLocationModel covertToModel(RealtyGeoLocation realtyGeoLocation) {
+	private static GeoLocationModel covertToModel(SubscriptionCriteriaLocation realtyGeoLocation) {
 		if (realtyGeoLocation == null)
 			return null;
 		

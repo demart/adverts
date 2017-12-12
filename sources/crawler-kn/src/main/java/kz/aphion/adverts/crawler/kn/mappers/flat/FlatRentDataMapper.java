@@ -11,6 +11,7 @@ import kz.aphion.adverts.crawler.kn.QueryBuilder;
 import kz.aphion.adverts.crawler.kn.mappers.AbstractAdvertMapper;
 import kz.aphion.adverts.crawler.kn.mappers.CommonMapperUtils;
 import kz.aphion.adverts.crawler.kn.persistence.KnResidentialComplex;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatRentPeriodType;
 import kz.aphion.adverts.persistence.CalendarConverter;
 import kz.aphion.adverts.persistence.adverts.Advert;
 import kz.aphion.adverts.persistence.adverts.AdvertOperationType;
@@ -18,7 +19,6 @@ import kz.aphion.adverts.persistence.adverts.AdvertPhoto;
 import kz.aphion.adverts.persistence.adverts.AdvertPublisherType;
 import kz.aphion.adverts.persistence.adverts.AdvertType;
 import kz.aphion.adverts.persistence.realty.RealtyType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatRentPeriodType;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -112,7 +112,7 @@ public class FlatRentDataMapper extends AbstractAdvertMapper<Advert> {
 		}
 		
 		//Цена
-		realty.price = FlatDataMapperUtils.convertPrice(adv.select("span.price").text());
+		realty.data.put("price", FlatDataMapperUtils.convertPrice(adv.select("span.price").text()));
 		
 		//В некоторых объявлениях отсутствует описание, поэтому необходима такая проверка
 		if (adv.select("div.description").size() > 0)

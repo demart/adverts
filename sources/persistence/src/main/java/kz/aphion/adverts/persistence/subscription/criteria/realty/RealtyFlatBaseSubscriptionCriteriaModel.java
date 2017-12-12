@@ -2,21 +2,21 @@ package kz.aphion.adverts.persistence.subscription.criteria.realty;
 
 import java.util.List;
 
+import kz.aphion.adverts.models.realty.data.flat.types.FlatBalconyGlazingType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatBalconyType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatBuildingType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatDoorType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatFloorType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatFurnitureType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatInternetType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatLavatoryType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatMiscellaneousType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatParkingType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatPhoneType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatPrivatizedDormType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatRenovationType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatSecurityType;
 import kz.aphion.adverts.persistence.realty.ResidentialComplex;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBalconyGlazingType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBalconyType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBuildingType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatDoorType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatFloorType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatFurnitureType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatInternetType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatLavatoryType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatMiscellaneousType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatParkingType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatPhoneType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatPrivatizedDormType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatRenovationType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatSecurityType;
 
 /**
  * Базовые критерии для квартир, не зависимо от продажи или аренды

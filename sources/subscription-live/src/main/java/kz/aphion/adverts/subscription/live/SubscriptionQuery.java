@@ -1,6 +1,6 @@
 package kz.aphion.adverts.subscription.live;
 
-import kz.aphion.adverts.persistence.BaseEntity;
+import kz.aphion.adverts.persistence.adverts.Advert;
 
 /**
  * Базовый класс для критериев поиска в подписках
@@ -31,6 +31,6 @@ public interface SubscriptionQuery {
 	 * @param advert
 	 * @return
 	 */
-	public boolean isAdvertBelongToQuery(BaseEntity advert) throws Exception;
+	public boolean isAdvertBelongToQuery(Advert advert) throws Exception;
 	
 }

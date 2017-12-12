@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import kz.aphion.adverts.common.DB;
-import kz.aphion.adverts.persistence.realty.RealtyPublisherType;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatRentRealty;
+import kz.aphion.adverts.persistence.adverts.Advert;
+import kz.aphion.adverts.persistence.adverts.AdvertPublisherType;
 import kz.aphion.adverts.web.api.exceptions.IncorrectParameterValueException;
 import kz.aphion.adverts.web.api.query.SearchAdvertQuery;
 import kz.aphion.adverts.web.api.search.AdvertSearch;
@@ -19,9 +19,9 @@ import org.mongodb.morphia.query.Query;
 public class FlatRentRealtySearcher implements AdvertSearch {
 
 	@Override
-	public List<Object> search(SearchAdvertQuery query) throws Exception {
+	public List<Advert> search(SearchAdvertQuery query) throws Exception {
 		// Построить запрос
-		Query<FlatRentRealty> q = builQuery(query.parameters);
+		Query<Advert> q = builQuery(query.parameters);
 		
 		// Выполнить
 		if (query.limit > 0 && query.limit < 1001) {
@@ -34,7 +34,7 @@ public class FlatRentRealtySearcher implements AdvertSearch {
 			q.offset(query.offset);
 		}
 		
-		List result = q.asList();
+		List<Advert> result = q.asList();
 		// Посмотреть как отдавать результат
 		// Вернуть
 		
@@ -45,7 +45,7 @@ public class FlatRentRealtySearcher implements AdvertSearch {
 	@Override
 	public Long count(SearchAdvertQuery query) throws Exception {
 		// Построить запрос
-		Query<FlatRentRealty> q = builQuery(query.parameters);
+		Query<Advert> q = builQuery(query.parameters);
 		// Выполнить
 		Long result = q.countAll();
 		
@@ -53,10 +53,10 @@ public class FlatRentRealtySearcher implements AdvertSearch {
 	}
 
 	
-	private Query<FlatRentRealty> builQuery(HashMap<String, List<String>> parameters) throws Exception {
+	private Query<Advert> builQuery(HashMap<String, List<String>> parameters) throws Exception {
 		Datastore ds = DB.DS();
 		
-		Query<FlatRentRealty> q = ds.createQuery(FlatRentRealty.class);
+		Query<Advert> q = ds.createQuery(Advert.class);
 		
 		for (String key : parameters.keySet()) {
 			switch (key) {
@@ -106,12 +106,12 @@ public class FlatRentRealtySearcher implements AdvertSearch {
 		return q;
 	}
 	
-	private void addPublusherType(Query<FlatRentRealty> q, String pathName, List<String> range) {
+	private void addPublusherType(Query<Advert> q, String pathName, List<String> range) {
 		if (range == null || range.size() < 1)
 			return;
 		
-		List<RealtyPublisherType> types = new ArrayList<RealtyPublisherType>();
-		for (RealtyPublisherType type : RealtyPublisherType.values()) {
+		List<AdvertPublisherType> types = new ArrayList<AdvertPublisherType>();
+		for (AdvertPublisherType type : AdvertPublisherType.values()) {
 			for (String typeStr : range) {
 				if (typeStr.equalsIgnoreCase(String.valueOf(type.getValue())))
 					types.add(type);
@@ -122,7 +122,7 @@ public class FlatRentRealtySearcher implements AdvertSearch {
 	}
 	
 	
-	private void addRegions(Query<FlatRentRealty> q, String pathName, List<String> range) {
+	private void addRegions(Query<Advert> q, String pathName, List<String> range) {
 		if (range == null || range.size() < 1)
 			return;
 		
@@ -130,7 +130,7 @@ public class FlatRentRealtySearcher implements AdvertSearch {
 		
 	}
 	
-	private void addHasPhoto(Query<FlatRentRealty> q, String pathName, List<String> range) throws IncorrectParameterValueException {
+	private void addHasPhoto(Query<Advert> q, String pathName, List<String> range) throws IncorrectParameterValueException {
 		if (range != null && range.size() > 0) {
 			Boolean hasPhoto = Boolean.parseBoolean(range.get(0));
 			if (hasPhoto != null) {
@@ -140,7 +140,7 @@ public class FlatRentRealtySearcher implements AdvertSearch {
 		
 	}
 	
-	private void addRangeValue(Query<FlatRentRealty> q, String pathName, List<String> range) throws IncorrectParameterValueException {
+	private void addRangeValue(Query<Advert> q, String pathName, List<String> range) throws IncorrectParameterValueException {
 		if (range == null)
 			throw new IncorrectParameterValueException(pathName +" rage is incorrect!");
 		

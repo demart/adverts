@@ -2,8 +2,8 @@ package kz.aphion.adverts.persistence.subscription.criteria.realty;
 
 import java.util.List;
 
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatRentMiscellaneousType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatRentPeriodType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatRentMiscellaneousType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatRentPeriodType;
 
 /**
  * Критерии поиска для аренды квартиры

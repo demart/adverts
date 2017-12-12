@@ -2,6 +2,7 @@ package kz.aphion.adverts.crawler.kn.mappers;
 
 
 import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.common.utils.ValuesUtils;
 import kz.aphion.adverts.persistence.CalendarConverter;
 import kz.aphion.adverts.persistence.adverts.Advert;
 import kz.aphion.adverts.persistence.adverts.AdvertPhoto;
@@ -44,7 +45,7 @@ public class RealtyComparator {
 	public static boolean isFlatCommonFieldsUpdated(Advert oldRealty, Advert newRealty) {
 		String oldText = String.valueOf(oldRealty.data.get("text"));
 		String newText = String.valueOf(newRealty.data.get("text"));
-		if (!isEqualsTexts(oldText, newText)) {
+		if (!ValuesUtils.isStringsEqual(oldText, newText)) {
 			logger.info("Advert [{}] text changed from [{}] to [{}]", oldRealty.source.externalId, oldText, newText);
 			return true;
 		}
@@ -79,7 +80,7 @@ public class RealtyComparator {
 		//Проверяем этаж
 		Long oldFlatFloor = convertObjectoToLong(oldRealty.data.get("flatFloor"));
 		Long newFlatFloor = convertObjectoToLong(newRealty.data.get("flatFloor"));
-		if (!isEqualsLongs(oldFlatFloor, newFlatFloor)) {
+		if (!ValuesUtils.isLongsEqual(oldFlatFloor, newFlatFloor)) {
 			logger.info("Advert [{}] flat floor changed from [{}] to [{}]", oldRealty.source.externalId, oldFlatFloor, newFlatFloor);
 			return true;
 		}
@@ -87,7 +88,7 @@ public class RealtyComparator {
 		//Проверяем площадь
 		Float oldSquare = convertObjectoToFloat(oldRealty.data.get("square"));
 		Float newSquare = convertObjectoToFloat(newRealty.data.get("square"));
-		if (!isEqualsFloats(oldSquare, newSquare)) {
+		if (!ValuesUtils.isFloatsEqual(oldSquare, newSquare)) {
 			logger.info("Advert [{}] square changed from [{}] to [{}]", oldRealty.source.externalId, oldSquare, newSquare);
 			return true;
 		}
@@ -95,7 +96,7 @@ public class RealtyComparator {
 		//Проверяем год постройки
 		Long oldHourseYear = convertObjectoToLong(oldRealty.data.get("houseYear"));
 		Long newHourseYear = convertObjectoToLong(newRealty.data.get("houseYear"));
-		if (!isEqualsLongs(oldHourseYear, newHourseYear)) {
+		if (!ValuesUtils.isLongsEqual(oldHourseYear, newHourseYear)) {
 			logger.info("Advert [{}] house year changed from [{}] to [{}]", oldRealty.source.externalId, oldHourseYear, newHourseYear);
 			return true;
 		}
@@ -103,7 +104,7 @@ public class RealtyComparator {
 		//Проверяем всего этажей
 		Long oldHourseFloorCount = convertObjectoToLong(oldRealty.data.get("houseFloorCount"));
 		Long newHourseFloorCount = convertObjectoToLong(newRealty.data.get("houseFloorCount"));
-		if (!isEqualsLongs(oldHourseFloorCount, newHourseFloorCount)) {
+		if (!ValuesUtils.isLongsEqual(oldHourseFloorCount, newHourseFloorCount)) {
 			logger.info("Advert [{}] house floor count changed from [{}] to [{}]", oldRealty.source.externalId, oldHourseFloorCount, newHourseFloorCount);
 			return true;
 		}
@@ -111,14 +112,17 @@ public class RealtyComparator {
 		//Проверяем количество комнат
 		Float oldRooms = convertObjectoToFloat(oldRealty.data.get("rooms"));
 		Float newRooms = convertObjectoToFloat(newRealty.data.get("rooms"));
-		if (!isEqualsFloats(oldRooms, newRooms)) {
+		if (!ValuesUtils.isFloatsEqual(oldRooms, newRooms)) {
 			logger.info("Advert [{}] rooms changed from [{}] to [{}]", oldRealty.source.externalId, oldRealty, newRooms);
 			return true;
 		}
 		
 		//Проверяем осталась ли прежняя цена
-		if (!isEqualsLongs(oldRealty.price, newRealty.price)) {
-			logger.info("Advert [{}] price changed from [{}] to [{}]", oldRealty.source.externalId, oldRealty.price, newRealty.price);
+		Long oldPrice = convertObjectoToLong(oldRealty.data.get("price"));
+		Long newPrice = convertObjectoToLong(newRealty.data.get("price"));
+		
+		if (!ValuesUtils.isLongsEqual(oldPrice, newPrice)) {
+			logger.info("Advert [{}] price changed from [{}] to [{}]", oldRealty.source.externalId, oldPrice, newPrice);
 			return true;
 		}
 		
@@ -176,69 +180,5 @@ public class RealtyComparator {
 			return null;
 		return Long.valueOf(strVal);
 	}
-	
-	
-	/**
-	 * Метод корректно сравнивает значения Float учитывая null и другие варианты
-	 * @param oldValue
-	 * @param newValue
-	 * @return
-	 */
-	private static Boolean isEqualsFloats(Float oldValue, Float newValue) {
-		if (oldValue == null && newValue == null)
-			return true;
-		if ((oldValue == null && newValue != null) || (oldValue != null && newValue == null))
-			return false;
-		
-		if (Math.abs(oldValue - newValue) < 0.0001)
-			return true;
-		
-		return false;
-	}
-	
-	/**
-	 * Сравнивает два текстовых поля, при этом учитывая null и выполняя для каждого текста trim
-	 * @param oldValue
-	 * @param newValue
-	 * @return
-	 */
-	private static Boolean isEqualsTexts(String oldValue, String newValue) {
-		if (oldValue == null && newValue == null)
-			return true;
-		if ((oldValue == null && newValue != null) || (oldValue != null && newValue == null))
-			return false;
-		
-		return oldValue.trim().equals(newValue.trim());
-	}
-	
-	/**
-	 * Сравнивает два Boolean при этом учитывает NULL значения
-	 * @param oldValue
-	 * @param newValue
-	 * @return
-	 */
-	private static Boolean isEqualsBoolean(Boolean oldValue, Boolean newValue) {
-		if (oldValue == null && newValue == null)
-			return true;
-		if ((oldValue == null && newValue != null) || (oldValue != null && newValue == null))
-			return false;
-		return oldValue == newValue;
-	}
-	
-	/**
-	 * Сравнивает два Long значение при этом учитывает NULL значения
-	 * @param oldValue
-	 * @param newValue
-	 * @return
-	 */
-	private static Boolean isEqualsLongs(Long oldValue, Long newValue) {
-		if (oldValue == null && newValue == null)
-			return true;
-		if ((oldValue == null && newValue != null) || (oldValue != null && newValue == null))
-			return false;
-		return oldValue.equals(newValue);
-	}
-	
-	
 	
 }

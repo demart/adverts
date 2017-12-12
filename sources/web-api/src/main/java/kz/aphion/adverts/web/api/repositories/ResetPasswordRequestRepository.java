@@ -1,6 +1,5 @@
 package kz.aphion.adverts.web.api.repositories;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -41,10 +40,6 @@ public class ResetPasswordRequestRepository {
 		// Set expirationTime in 2 hours
 		rpr.expiresAt = Calendar.getInstance();
 		rpr.expiresAt.add(Calendar.HOUR, RESET_PASSWORD_REQUEST_EXPIRATION_TIME_IN_HOURS); // TODO Move to configuration
-		
-		if (user.resetPasswordRequests == null)
-			user.resetPasswordRequests = new ArrayList<ResetPasswordRequest>();
-		user.resetPasswordRequests.add(rpr);
 		
 		DB.DS().save(rpr);
 		DB.DS().merge(user);

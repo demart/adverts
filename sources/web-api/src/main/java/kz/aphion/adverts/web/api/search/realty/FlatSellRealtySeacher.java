@@ -6,8 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import kz.aphion.adverts.common.DB;
-import kz.aphion.adverts.persistence.realty.RealtyPublisherType;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatSellRealty;
+import kz.aphion.adverts.persistence.adverts.Advert;
+import kz.aphion.adverts.persistence.adverts.AdvertPublisherType;
+import kz.aphion.adverts.persistence.realty.MortgageStatus;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBalconyGlazingType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBalconyType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBuildingType;
@@ -24,7 +25,6 @@ import kz.aphion.adverts.persistence.realty.data.flat.types.FlatRenovationType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatRentMiscellaneousType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatRentPeriodType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatSecurityType;
-import kz.aphion.adverts.persistence.realty.types.MortgageStatus;
 import kz.aphion.adverts.web.api.exceptions.IncorrectParameterValueException;
 import kz.aphion.adverts.web.api.query.SearchAdvertQuery;
 import kz.aphion.adverts.web.api.search.AdvertSearch;
@@ -40,9 +40,9 @@ public class FlatSellRealtySeacher implements AdvertSearch {
 	private static Logger logger = LoggerFactory.getLogger(FlatSellRealtySeacher.class);
 	
 	@Override
-	public List<Object> search(SearchAdvertQuery query) throws Exception {
+	public List<Advert> search(SearchAdvertQuery query) throws Exception {
 		// Построить запрос
-		Query<FlatSellRealty> q = builQuery(query.parameters);
+		Query<Advert> q = builQuery(query.parameters);
 		
 		// Выполнить
 		if (query.limit > 0 && query.limit < 1001) {
@@ -55,7 +55,7 @@ public class FlatSellRealtySeacher implements AdvertSearch {
 			q.offset(query.offset);
 		}
 		
-		List result = q.asList();
+		List<Advert> result = q.asList();
 		// Посмотреть как отдавать результат
 		// Вернуть
 		
@@ -66,7 +66,7 @@ public class FlatSellRealtySeacher implements AdvertSearch {
 	@Override
 	public Long count(SearchAdvertQuery query) throws Exception {
 		// Построить запрос
-		Query<FlatSellRealty> q = builQuery(query.parameters);
+		Query<Advert> q = builQuery(query.parameters);
 		// Выполнить
 		Long result = q.countAll();
 		
@@ -74,10 +74,10 @@ public class FlatSellRealtySeacher implements AdvertSearch {
 	}
 
 	
-	private Query<FlatSellRealty> builQuery(HashMap<String, List<String>> parameters) throws Exception {
+	private Query<Advert> builQuery(HashMap<String, List<String>> parameters) throws Exception {
 		Datastore ds = DB.DS();
 		
-		Query<FlatSellRealty> q = ds.createQuery(FlatSellRealty.class);
+		Query<Advert> q = ds.createQuery(Advert.class);
 		
 		for (String key : parameters.keySet()) {
 			switch (key) {
@@ -184,7 +184,7 @@ public class FlatSellRealtySeacher implements AdvertSearch {
 	}
 	
 	
-	private void addEnumType(Query<FlatSellRealty> q, String pathName, List<String> range, Class<?> enumClass) {
+	private void addEnumType(Query<Advert> q, String pathName, List<String> range, Class<?> enumClass) {
 		if (range == null || range.size() < 1)
 			return;
 		try {
@@ -208,12 +208,12 @@ public class FlatSellRealtySeacher implements AdvertSearch {
 	}
 	
 	
-	private void addPublusherType(Query<FlatSellRealty> q, String pathName, List<String> range) {
+	private void addPublusherType(Query<Advert> q, String pathName, List<String> range) {
 		if (range == null || range.size() < 1)
 			return;
 		
-		List<RealtyPublisherType> types = new ArrayList<RealtyPublisherType>();
-		for (RealtyPublisherType type : RealtyPublisherType.values()) {
+		List<AdvertPublisherType> types = new ArrayList<AdvertPublisherType>();
+		for (AdvertPublisherType type : AdvertPublisherType.values()) {
 			for (String typeStr : range) {
 				if (typeStr.equalsIgnoreCase(String.valueOf(type.getValue())))
 					types.add(type);
@@ -224,7 +224,7 @@ public class FlatSellRealtySeacher implements AdvertSearch {
 	}
 	
 	
-	private void addRegions(Query<FlatSellRealty> q, String pathName, List<String> range) {
+	private void addRegions(Query<Advert> q, String pathName, List<String> range) {
 		if (range == null || range.size() < 1)
 			return;
 		
@@ -232,7 +232,7 @@ public class FlatSellRealtySeacher implements AdvertSearch {
 		
 	}
 	
-	private void addHasPhoto(Query<FlatSellRealty> q, String pathName, List<String> range) throws IncorrectParameterValueException {
+	private void addHasPhoto(Query<Advert> q, String pathName, List<String> range) throws IncorrectParameterValueException {
 		if (range != null && range.size() > 0) {
 			Boolean hasPhoto = Boolean.parseBoolean(range.get(0));
 			if (hasPhoto != null) {
@@ -242,7 +242,7 @@ public class FlatSellRealtySeacher implements AdvertSearch {
 		
 	}
 	
-	private void addRangeValue(Query<FlatSellRealty> q, String pathName, List<String> range) throws IncorrectParameterValueException {
+	private void addRangeValue(Query<Advert> q, String pathName, List<String> range) throws IncorrectParameterValueException {
 		if (range == null)
 			throw new IncorrectParameterValueException(pathName +" rage is incorrect!");
 		

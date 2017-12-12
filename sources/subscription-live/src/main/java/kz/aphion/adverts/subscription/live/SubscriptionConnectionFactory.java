@@ -1,8 +1,8 @@
 package kz.aphion.adverts.subscription.live;
 
-import kz.aphion.adverts.persistence.realty.types.RealtyOperationType;
-import kz.aphion.adverts.persistence.realty.types.RealtyType;
-import kz.aphion.adverts.persistence.subscription.SubscriptionAdvertType;
+import kz.aphion.adverts.persistence.adverts.AdvertOperationType;
+import kz.aphion.adverts.persistence.adverts.AdvertType;
+import kz.aphion.adverts.persistence.realty.RealtyType;
 import kz.aphion.adverts.subscription.live.query.realty.FlatRentSubscriptionQuery;
 import kz.aphion.adverts.subscription.live.query.realty.FlatSellSubscriptionQuery;
 
@@ -11,7 +11,7 @@ import org.apache.commons.lang.NotImplementedException;
 public class SubscriptionConnectionFactory {
 
 	public static SubscriptionConnection createConnection(String type, String subType, String operationType) throws Exception {
-		SubscriptionAdvertType advertType = getSubscriptionAdvertType(type);
+		AdvertType advertType = getSubscriptionAdvertType(type);
 		
 		switch (advertType) {
 		
@@ -26,22 +26,21 @@ public class SubscriptionConnectionFactory {
 
 	private static SubscriptionConnection createRealtySubscriptionConnection(String subType, String operationType) throws Exception {
 		RealtyType realtyType = getRealtyType(subType);
-		RealtyOperationType realtyOperationType = getRealtyOperationType(operationType);
+		AdvertOperationType realtyOperationType = getAdvertOperationType(operationType);
 		
 		switch (realtyType) {
 			case FLAT:
 				switch (realtyOperationType) {
 				
-				case SELL:
-					return new SubscriptionConnection(new FlatSellSubscriptionQuery());
-					
-				case RENT:
-					return new SubscriptionConnection(new FlatRentSubscriptionQuery());
-					
-				default:
-					throw new NotImplementedException("Unsupported selected realty and operation types");
+					case SELL:
+						return new SubscriptionConnection(new FlatSellSubscriptionQuery());
+						
+					case RENT:
+						return new SubscriptionConnection(new FlatRentSubscriptionQuery());
+						
+					default:
+						throw new NotImplementedException("Unsupported selected realty and operation types");
 				}
-			
 	
 			default:
 				throw new NotImplementedException("Unsupported realty type");
@@ -49,21 +48,21 @@ public class SubscriptionConnectionFactory {
 		
 	}
 	
-	public static SubscriptionAdvertType getSubscriptionAdvertType(String advertType) throws Exception {
+	public static AdvertType getSubscriptionAdvertType(String advertType) throws Exception {
 		if (advertType == null)
 			throw new NullPointerException("Advert Type is null");
 		advertType = advertType.toUpperCase();
-		for (SubscriptionAdvertType subscriptionAdvertType : SubscriptionAdvertType.values()) {
-			if (subscriptionAdvertType.equals(SubscriptionAdvertType.valueOf(advertType)))
+		for (AdvertType subscriptionAdvertType : AdvertType.values()) {
+			if (subscriptionAdvertType.equals(AdvertType.valueOf(advertType)))
 					return subscriptionAdvertType;
 		}
-		throw new Exception("Incorrect SubscriptionAdvertType parameter");
+		throw new Exception("Incorrect AdvertType parameter");
 	}
 	
-	public static RealtyOperationType getRealtyOperationType(String operationType) throws Exception {
+	public static AdvertOperationType getAdvertOperationType(String operationType) throws Exception {
 		operationType = operationType.toUpperCase();
-		for (RealtyOperationType realtyOperationType : RealtyOperationType.values()) {
-			if (realtyOperationType.equals(RealtyOperationType.valueOf(operationType)))
+		for (AdvertOperationType realtyOperationType : AdvertOperationType.values()) {
+			if (realtyOperationType.equals(AdvertOperationType.valueOf(operationType)))
 					return realtyOperationType;
 		}
 		throw new Exception("Incorrect RealtyType parameter");

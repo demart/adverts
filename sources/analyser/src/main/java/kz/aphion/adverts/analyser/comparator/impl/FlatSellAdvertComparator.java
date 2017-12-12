@@ -3,6 +3,7 @@ package kz.aphion.adverts.analyser.comparator.impl;
 import kz.aphion.adverts.analyser.comparator.AdvertComparator;
 import kz.aphion.adverts.analyser.mq.AnalyserProcessStatus;
 import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.models.realty.FlatSellAdvertModel;
 import kz.aphion.adverts.persistence.CalendarConverter;
 import kz.aphion.adverts.persistence.adverts.Advert;
 import kz.aphion.adverts.persistence.adverts.AdvertStatus;
@@ -202,32 +203,35 @@ public class FlatSellAdvertComparator implements AdvertComparator {
 	 * @return
 	 */
 	private AnalyserProcessStatus comparePrices(Advert newAdvert, Advert oldAdvert) {
+		Long newPrice = new FlatSellAdvertModel(newAdvert).getDataModel().getPrice();
+		Long oldPrice = new FlatSellAdvertModel(oldAdvert).getDataModel().getPrice();
+		
 		/// Проверка цены
-		if (newAdvert.price == null && oldAdvert.price == null) {
+		if (newPrice == null && oldPrice == null) {
 			// Аномально, но ничего не поменялось
 			// 
 		} else {
-			if (newAdvert.price == null && oldAdvert.price != null) {
+			if (newPrice == null && oldPrice != null) {
 				return AnalyserProcessStatus.WORSTE;
 			}
 			
-			if (newAdvert.price != null && oldAdvert.price == null) {
+			if (newPrice != null && oldPrice == null) {
 				return AnalyserProcessStatus.BETTER;
 			}
 			
-			if (newAdvert.price != null && oldAdvert.price != null) {
-				if (newAdvert.price > oldAdvert.price) {
-					logger.debug("New advert with id {} has higher price {} than old advert id {} with price {} ", newAdvert.id, newAdvert.price, oldAdvert.id, oldAdvert.price);
+			if (newPrice != null && oldPrice != null) {
+				if (newPrice > oldPrice) {
+					logger.debug("New advert with id {} has higher price {} than old advert id {} with price {} ", newAdvert.id, newPrice, oldAdvert.id, oldPrice);
 					return AnalyserProcessStatus.WORSTE;
 				}
 				
-				if (newAdvert.price < oldAdvert.price) {
-					logger.debug("New advert with id {} has lower price {} than old advert id {} with price {} ", newAdvert.id, newAdvert.price, oldAdvert.id, oldAdvert.price);					
+				if (newPrice < oldPrice) {
+					logger.debug("New advert with id {} has lower price {} than old advert id {} with price {} ", newAdvert.id, newPrice, oldAdvert.id, oldPrice);					
 					return AnalyserProcessStatus.BETTER;
 				}
 				
-				if (newAdvert.price == oldAdvert.price) {
-					logger.debug("New advert with id {} and old advert id {} have the same price {} ", newAdvert.id, oldAdvert.id, newAdvert.price);
+				if (newPrice == oldPrice) {
+					logger.debug("New advert with id {} and old advert id {} have the same price {} ", newAdvert.id, oldAdvert.id, newPrice);
 					return AnalyserProcessStatus.SAME;
 				}
 			}

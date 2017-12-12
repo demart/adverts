@@ -1,6 +1,5 @@
 package kz.aphion.adverts.web.api.repositories;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -43,10 +42,6 @@ public class EmailVerificationRequestRepository {
 		// Set expirationTime in 2 hours
 		evr.expiresAt = Calendar.getInstance();
 		evr.expiresAt.add(Calendar.HOUR, EMAIL_VERIFICATION_REQUEST_EXPIRATION_TIME_IN_HOURS); // TODO Move to configuration
-		
-		if (user.emailVerificationRequests == null)
-			user.emailVerificationRequests = new ArrayList<EmailVerificationRequest>();
-		user.emailVerificationRequests.add(evr);
 		
 		DB.DS().save(evr);
 		DB.DS().merge(user); 

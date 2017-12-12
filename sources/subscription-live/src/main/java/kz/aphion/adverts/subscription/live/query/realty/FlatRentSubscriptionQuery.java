@@ -1,7 +1,9 @@
 package kz.aphion.adverts.subscription.live.query.realty;
 
-import kz.aphion.adverts.persistence.BaseEntity;
-import kz.aphion.adverts.persistence.realty.data.flat.FlatRentRealty;
+import kz.aphion.adverts.persistence.adverts.Advert;
+import kz.aphion.adverts.persistence.adverts.AdvertOperationType;
+import kz.aphion.adverts.persistence.adverts.AdvertType;
+import kz.aphion.adverts.persistence.realty.RealtyType;
 import kz.aphion.adverts.subscription.live.SubscriptionQuery;
 import kz.aphion.adverts.subscription.live.models.realty.flat.RealtyRentFlatSubscriptionCriteria;
 
@@ -42,9 +44,9 @@ public class FlatRentSubscriptionQuery  implements SubscriptionQuery {
 	}
 
 	@Override
-	public boolean isAdvertBelongToQuery(BaseEntity advert) throws Exception {
+	public boolean isAdvertBelongToQuery(Advert advert) throws Exception {
 		logger.debug("Check advert with Id {}", advert.id);
-		if (!(advert instanceof FlatRentRealty)) {
+		if ((advert.type != AdvertType.REALTY) || (advert.operation != AdvertOperationType.RENT) || (RealtyType.FLAT != RealtyType.valueOf(advert.subType) ) ) {
 			logger.debug("Skip this advert, it's belongs to another advert type");
 			return false;
 		}
@@ -53,7 +55,7 @@ public class FlatRentSubscriptionQuery  implements SubscriptionQuery {
 		if (!isQueryReady)
 			return false;
 		
-		return query.isBelongs((FlatRentRealty)advert);
+		return query.isBelongs(advert);
 	}
 	
 }

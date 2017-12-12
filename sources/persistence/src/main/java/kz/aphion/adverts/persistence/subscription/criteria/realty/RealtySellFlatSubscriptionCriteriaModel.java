@@ -2,7 +2,7 @@ package kz.aphion.adverts.persistence.subscription.criteria.realty;
 
 import java.util.List;
 
-import kz.aphion.adverts.persistence.realty.MortgageStatus;
+import kz.aphion.adverts.models.realty.data.MortgageStatus;
 
 /**
  * Критерии для продажи квартир

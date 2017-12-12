@@ -7,13 +7,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import kz.aphion.adverts.crawler.irr.mappers.AbstractAdvertMapper;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatBuildingType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatLavatoryType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatPhoneType;
 import kz.aphion.adverts.persistence.adverts.Advert;
 import kz.aphion.adverts.persistence.adverts.AdvertOperationType;
 import kz.aphion.adverts.persistence.adverts.AdvertType;
 import kz.aphion.adverts.persistence.realty.RealtyType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBuildingType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatLavatoryType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatPhoneType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,8 +35,6 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<Advert> {
 	
 	@Override
 	public void mapAdvertData(List<Map<String, Object>> customFields, String description) {
-		
-		realty.data = new HashMap<String, Object>();
 		
 		realty.type = AdvertType.REALTY;
 		realty.subType = RealtyType.FLAT.toString();

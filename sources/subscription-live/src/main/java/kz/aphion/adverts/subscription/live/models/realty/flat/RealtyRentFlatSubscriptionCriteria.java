@@ -2,7 +2,7 @@ package kz.aphion.adverts.subscription.live.models.realty.flat;
 
 import java.util.List;
 
-import kz.aphion.adverts.persistence.realty.data.flat.FlatRentRealty;
+import kz.aphion.adverts.persistence.adverts.Advert;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatRentMiscellaneousType;
 import kz.aphion.adverts.persistence.realty.data.flat.types.FlatRentPeriodType;
 
@@ -19,7 +19,7 @@ public class RealtyRentFlatSubscriptionCriteria extends RealtyFlatBaseSubscripti
 	public List<FlatRentMiscellaneousType> rentMiscellaneous;
 	
 	
-	public boolean isBelongs(FlatRentRealty realty) {
+	public boolean isBelongs(Advert realty) {
 		if (isAdvertBelongsToQuery(realty) == false)
 			return false;
 		

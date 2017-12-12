@@ -3,10 +3,10 @@ package kz.aphion.adverts.subscription.live.models.realty;
 import java.util.List;
 
 import kz.aphion.adverts.persistence.Region;
-import kz.aphion.adverts.persistence.realty.Realty;
-import kz.aphion.adverts.persistence.realty.RealtyPublisherType;
-import kz.aphion.adverts.persistence.realty.types.RealtyOperationType;
-import kz.aphion.adverts.persistence.realty.types.RealtyType;
+import kz.aphion.adverts.persistence.adverts.Advert;
+import kz.aphion.adverts.persistence.adverts.AdvertOperationType;
+import kz.aphion.adverts.persistence.adverts.AdvertPublisherType;
+import kz.aphion.adverts.persistence.realty.RealtyType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +18,12 @@ public class RealtyBaseSubscriptionCriteria {
 	/**
 	 * Вид недвижимости
 	 */
-	public RealtyType type;
+	public RealtyType subType;
 	
 	/**
 	 * Тип операции
 	 */
-	public RealtyOperationType operation;
+	public AdvertOperationType operation;
 	
 	/**
 	 * Цена от
@@ -43,7 +43,7 @@ public class RealtyBaseSubscriptionCriteria {
 	/**
 	 * Кто опубликовал объявление (различные виды)
 	 */
-	public List<RealtyPublisherType> publisherTypes;
+	public List<AdvertPublisherType> publisherTypes;
 	
 	/**
 	 * Где ищем объявление
@@ -51,7 +51,7 @@ public class RealtyBaseSubscriptionCriteria {
 	public List<String> regions;
 	
 	
-	public boolean isAdvertBelongsToQuery(Realty advert) {
+	public boolean isAdvertBelongsToQuery(Advert advert) {
 		if (checkType(advert) == false)
 			return false;
 		if (checkOperationType(advert) == false)
@@ -73,7 +73,7 @@ public class RealtyBaseSubscriptionCriteria {
 	// Превращать в критерии
 	// Каждое объявление проверять по критериям
 	
-	public boolean checkRegions(Realty advert) {
+	public boolean checkRegions(Advert advert) {
 		if (regions != null) {
 			if (advert.location.regions == null) {
 				logger.warn("Found realty advert [{}] without regions informaiton! Fix issue!", advert.id);
@@ -94,15 +94,15 @@ public class RealtyBaseSubscriptionCriteria {
 		return true;
 	}
 	
-	public boolean checkPublisherTypes(Realty advert) {
+	public boolean checkPublisherTypes(Advert advert) {
 		if (publisherTypes != null) {
-			if (advert.publisher == null || advert.publisher.publisherType == null) {
+			if (advert.publisher == null || advert.publisher.type == null) {
 				logger.warn("Found realty advert [{}] without publisher informaiton! Fix issue!", advert.id);
 				return false;
 			}
 			
-			for (RealtyPublisherType realtyPublisherType : publisherTypes) {
-				if (realtyPublisherType.equals(advert.publisher.publisherType))
+			for (AdvertPublisherType realtyPublisherType : publisherTypes) {
+				if (realtyPublisherType.equals(advert.publisher.type))
 					return true;
 			}
 			
@@ -112,7 +112,7 @@ public class RealtyBaseSubscriptionCriteria {
 		return true;
 	}
 	
-	public boolean checkPrice(Realty advert) {
+	public boolean checkPrice(Advert advert) {
 		if (priceFrom != null && priceFrom > advert.price) {
 			return false;
 		}
@@ -124,7 +124,7 @@ public class RealtyBaseSubscriptionCriteria {
 		return true;
 	}
 	
-	public boolean checkPhoto(Realty advert) {
+	public boolean checkPhoto(Advert advert) {
 		if (hasPhoto != null) {
 			if (advert.hasPhoto == hasPhoto) {
 				return true;
@@ -135,15 +135,15 @@ public class RealtyBaseSubscriptionCriteria {
 		return true;
 	}
 	
-	public boolean checkOperationType(Realty advert) {
+	public boolean checkOperationType(Advert advert) {
 		if (operation != null && operation != advert.operation)
 			return false;
 		return true;
 	}
 	
 	
-	public boolean checkType(Realty advert) {
-		if (type != null && type != advert.type)
+	public boolean checkType(Advert advert) {
+		if (subType != null && subType != RealtyType.valueOf(advert.subType))
 			return false;
 		return true;
 	}

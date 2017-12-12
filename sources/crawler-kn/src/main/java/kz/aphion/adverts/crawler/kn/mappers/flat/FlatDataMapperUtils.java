@@ -1,8 +1,8 @@
 package kz.aphion.adverts.crawler.kn.mappers.flat;
 
-import kz.aphion.adverts.persistence.realty.MortgageStatus;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBuildingType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatFurnitureType;
+import kz.aphion.adverts.models.realty.data.MortgageStatus;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatBuildingType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatFurnitureType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

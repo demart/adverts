@@ -12,6 +12,8 @@ import kz.aphion.adverts.crawler.olx.OlxAdvertCategoryType;
 import kz.aphion.adverts.crawler.olx.mappers.CommonMapperUtils;
 import kz.aphion.adverts.crawler.olx.mappers.OlxPhoneMapper;
 import kz.aphion.adverts.crawler.olx.mappers.OlxPhotoMapper;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatBuildingType;
+import kz.aphion.adverts.models.realty.data.flat.types.FlatRentPeriodType;
 import kz.aphion.adverts.persistence.SourceSystemType;
 import kz.aphion.adverts.persistence.adverts.Advert;
 import kz.aphion.adverts.persistence.adverts.AdvertLocation;
@@ -22,8 +24,6 @@ import kz.aphion.adverts.persistence.adverts.AdvertSource;
 import kz.aphion.adverts.persistence.adverts.AdvertStatus;
 import kz.aphion.adverts.persistence.adverts.AdvertType;
 import kz.aphion.adverts.persistence.realty.RealtyType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatBuildingType;
-import kz.aphion.adverts.persistence.realty.data.flat.types.FlatRentPeriodType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -319,7 +319,7 @@ public class FlatRentDataMapper {
 					// value: 8472500
 					// Moved transforming price here
 					String priceLabel = (String)entry.getValue();
-					realty.price = Long.valueOf(priceLabel);
+					realty.data.put("price", Long.valueOf(priceLabel));
 					break;
 				
 				case "region_id":

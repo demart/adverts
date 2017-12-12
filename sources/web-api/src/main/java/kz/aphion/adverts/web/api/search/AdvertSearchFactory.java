@@ -1,7 +1,6 @@
 package kz.aphion.adverts.web.api.search;
 
-import kz.aphion.adverts.persistence.realty.types.RealtyOperationType;
-import kz.aphion.adverts.persistence.realty.types.RealtyType;
+import kz.aphion.adverts.persistence.realty.RealtyType;
 import kz.aphion.adverts.web.api.exceptions.IncorrectParameterValueException;
 import kz.aphion.adverts.web.api.query.SearchAdvertQuery;
 import kz.aphion.adverts.web.api.search.realty.FlatRentRealtySearcher;
@@ -18,8 +17,7 @@ public class AdvertSearchFactory {
 				RealtyType realtyType = getRealtyType(query.subType);
 				switch (realtyType) {
 					case FLAT:
-						RealtyOperationType realtyOperationType = getRealtyOperationType(query.operationType);
-						switch (realtyOperationType) {
+						switch (query.operationType) {
 						case SELL:
 							return new FlatSellRealtySeacher();
 						case RENT:
@@ -31,20 +29,11 @@ public class AdvertSearchFactory {
 					default:
 						throw new NotImplementedException("Selected AdvertType not implemented");
 				}
-	
+			
 			default:
 				throw new NotImplementedException("Selected AdvertType not implemented");
 		}
-	}
-	
-	
-	private static RealtyOperationType getRealtyOperationType(String operationType) throws IncorrectParameterValueException {
-		for (RealtyOperationType rt : RealtyOperationType.values()) {
-			if (operationType.toUpperCase().equals(rt.toString()))
-				return rt;
-		}
 		
-		throw new IncorrectParameterValueException("Incorrect realty operation type!");
 	}
 
 

@@ -2,7 +2,7 @@ package kz.aphion.adverts.web.api.models.subscriptions.requests;
 
 import java.util.Map;
 
-import kz.aphion.adverts.persistence.subscription.SubscriptionAdvertType;
+import kz.aphion.adverts.persistence.adverts.AdvertType;
 import kz.aphion.adverts.web.api.exceptions.ModelValidationException;
 
 /**
@@ -22,7 +22,7 @@ public class CreateOrUpdateSubscriptionRequestModel {
 	/**
 	 * Тип подписки
 	 */
-	public SubscriptionAdvertType advertType;
+	public AdvertType advertType;
 	
 	/**
 	 * Параметры уведомлений подписки

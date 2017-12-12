@@ -9,6 +9,7 @@ import javax.inject.Named;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 
+import kz.aphion.adverts.persistence.adverts.AdvertOperationType;
 import kz.aphion.adverts.web.api.exceptions.IncorrectParameterValueException;
 import kz.aphion.adverts.web.api.models.AdvertType;
 
@@ -48,7 +49,7 @@ public class SearchAdvertsQueryParser {
 					break;
 	
 				case SupportedQueryParams.ADVERT_OPERATION_TYPE:
-					query.operationType = parameters.getFirst(SupportedQueryParams.ADVERT_OPERATION_TYPE);
+					query.operationType = AdvertOperationType.valueOf(parameters.getFirst(SupportedQueryParams.ADVERT_OPERATION_TYPE));
 					break;
 	
 				case SupportedQueryParams.RECORD_DETALISATION:

@@ -18,13 +18,7 @@ public class ApplicationStartupListener implements ServletContextListener  {
 	public void contextInitialized(ServletContextEvent arg0) {
 		logger.info("Starting analyser processor application...");
 		
-		try {
-//			
-//			// assume SLF4J is bound to logback in the current environment
-//			LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-//			// 	print logback's internal status
-//			StatusPrinter.print(lc);
-			
+		try {			
 			// Инициализируем подключение к Mongo
 			logger.info("Initializing connection to MongoDB...");
 			DB.INSTANCE.init();

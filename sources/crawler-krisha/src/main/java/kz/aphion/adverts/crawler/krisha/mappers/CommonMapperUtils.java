@@ -154,7 +154,7 @@ public class CommonMapperUtils {
 			case "price-2":
 				// Пока ничего не делаем
 				//realty.price = (Long)systemDataItem.getValue();
-				realty.price = Long.parseLong((String)systemDataItem.getValue());
+				realty.data.put("price", Long.parseLong((String)systemDataItem.getValue()));
 				break;
 			case "price-3":
 				// Пока ничего не делаем						

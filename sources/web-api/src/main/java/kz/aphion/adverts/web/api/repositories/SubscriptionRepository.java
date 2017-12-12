@@ -1,6 +1,5 @@
 package kz.aphion.adverts.web.api.repositories;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -8,12 +7,7 @@ import kz.aphion.adverts.common.DB;
 import kz.aphion.adverts.persistence.subscription.Subscription;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvert;
 import kz.aphion.adverts.persistence.subscription.SubscriptionAdvertStatus;
-import kz.aphion.adverts.persistence.subscription.SubscriptionAdvertType;
 import kz.aphion.adverts.persistence.subscription.SubscriptionStatus;
-import kz.aphion.adverts.persistence.subscription.notification.SubscriptionNotification;
-import kz.aphion.adverts.persistence.subscription.notification.SubscriptionNotificationChannelType;
-import kz.aphion.adverts.persistence.subscription.notification.SubscriptionNotificationScheduledType;
-import kz.aphion.adverts.persistence.subscription.notification.SubscriptionNotificationType;
 import kz.aphion.adverts.persistence.users.User;
 import kz.aphion.adverts.web.api.exceptions.DataValidationException;
 import kz.aphion.adverts.web.api.exceptions.RecordNotFoundException;

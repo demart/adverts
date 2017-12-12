@@ -53,12 +53,6 @@ public class Advert extends BaseEntity {
 	public AdvertLocation location;
 	
 	/**
-	 * Цена (ВОЗМОЖНО ПЕРЕНЕСТИ В DATA)
-	 */
-	@Property
-	public Long price;
-	
-	/**
 	 * Кастомные данные объявления 
 	 */
 	@Embedded

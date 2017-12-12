@@ -5,6 +5,7 @@ import java.util.List;
 import kz.aphion.adverts.analyser.processors.AdvertAnalyserProcessorImpl;
 import kz.aphion.adverts.analyser.searcher.DuplicateSearcher;
 import kz.aphion.adverts.common.DB;
+import kz.aphion.adverts.models.realty.FlatSellAdvertModel;
 import kz.aphion.adverts.persistence.adverts.Advert;
 import kz.aphion.adverts.persistence.adverts.AdvertStatus;
 
@@ -41,8 +42,9 @@ public class FlatSellAdvertDuplicateSearcher implements DuplicateSearcher {
 		
 		q.field("data.rooms").equal(realty.data.get("rooms"));
 		
-		q.field("price").greaterThan(realty.price - Math.round(realty.price * 0.10));
-		q.field("price").lessThan(realty.price + Math.round(realty.price * 0.10));
+		Long price = new FlatSellAdvertModel(realty).getDataModel().getPrice();
+		q.field("price").greaterThan(price - Math.round(price * 0.10));
+		q.field("price").lessThan(price + Math.round(price * 0.10));
 		
 		q.field("data.square").greaterThanOrEq(Float.valueOf((String)realty.data.get("square")) - 1);
 		q.field("data.square").lessThanOrEq(Float.valueOf((String)realty.data.get("square")) + 1);

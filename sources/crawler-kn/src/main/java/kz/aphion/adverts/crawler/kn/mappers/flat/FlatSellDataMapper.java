@@ -126,7 +126,7 @@ public class FlatSellDataMapper extends AbstractAdvertMapper<Advert> {
 		}
 		
 		//Цена
-		realty.price = FlatDataMapperUtils.convertPrice(adv.select("span.price").text());
+		realty.data.put("price", FlatDataMapperUtils.convertPrice(adv.select("span.price").text()));
 		
 		//В некоторых объявлениях отсутствует описание, поэтому необходима такая проверка
 		if (adv.select("div.description").size() > 0)

@@ -1,6 +1,6 @@
 package kz.aphion.adverts.persistence.subscription.criteria.realty;
 
-import kz.aphion.adverts.persistence.realty.SquareType;
+import kz.aphion.adverts.models.realty.data.SquareType;
 
 /**
  * Базовые критерии поиска для всех объектов недвижимости

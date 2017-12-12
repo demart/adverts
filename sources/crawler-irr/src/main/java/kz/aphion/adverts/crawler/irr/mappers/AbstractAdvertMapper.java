@@ -2,6 +2,7 @@ package kz.aphion.adverts.crawler.irr.mappers;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -39,6 +40,8 @@ public abstract class AbstractAdvertMapper<T extends Advert> {
 	public T mapAdvertObject(Map<String,Object> advert) throws CrawlerException, ParseException {
 		
 		realty.status = AdvertStatus.ACTIVE;
+		
+		realty.data = new HashMap<String, Object>();
 		
 		realty.source = new AdvertSource();
 		realty.source.type = SourceSystemType.IRR;
@@ -89,7 +92,7 @@ public abstract class AbstractAdvertMapper<T extends Advert> {
 				//Цена
 				case "price":
 					String price = (String)entry.getValue();
-					realty.price =  Long.parseLong(price);
+					realty.data.put("price", Long.parseLong(price));
 					break;
 					
 				//Продавец

@@ -3,7 +3,7 @@ package kz.aphion.adverts.web.api.models.geo;
 import java.util.ArrayList;
 import java.util.List;
 
-import kz.aphion.adverts.persistence.realty.building.ResidentialComplex;
+import kz.aphion.adverts.persistence.realty.ResidentialComplex;
 
 /**
  * Жилые комплексы
