@@ -47,7 +47,7 @@ public class EmailNotificationChannelBuilder {
 				logger.warn("AdvertType: AUTO doesn't supported. Please check why it may happened");
 				break;
 			case PRODUCT:
-				logger.warn("AdvertType: PRODUCTS doesn't supported. Please check why it may happened");
+				logger.warn("AdvertType: PRODUCT doesn't supported. Please check why it may happened");
 				break;
 			case SERVICE:
 				logger.warn("AdvertType: SERVICE doesn't supported. Please check why it may happened");

@@ -291,6 +291,11 @@ public class SubscriptionAdvertNotificationBuilderProcessor implements AdvertSub
 	private Subscription getActiveSubscription(Datastore ds, SubscriptionNotificationBuilderModel model) {
 		Subscription subscription = ds.get(Subscription.class, new ObjectId(model.subscriptionId));
 
+		if (subscription == null) {
+			logger.warn("Subscription with Id {} not found...", model.subscriptionId);
+			return null;
+		}
+		
 		if (subscription.status != SubscriptionStatus.ACTIVE) {
 			logger.debug("Subscription with Id {} is inactive status: {}", subscription.id, subscription.status);
 			return null;
@@ -325,7 +330,7 @@ public class SubscriptionAdvertNotificationBuilderProcessor implements AdvertSub
 		// TODO Change for more optimal
 		List<SubscriptionAdvert> loadedAdverts = DB.DS().createQuery(SubscriptionAdvert.class)
 														.field("subscription.id").equal(subscription.id)
-														.field("status").notIn(Arrays.asList(SubscriptionAdvertStatus.DELETED,SubscriptionAdvertStatus.REPLACED))
+														.field("status").notIn(Arrays.asList(SubscriptionAdvertStatus.DELETED, SubscriptionAdvertStatus.REPLACED))
 														.asList();
 		
 		for (SubscriptionAdvert subscriptionAdvertObject : loadedAdverts) {

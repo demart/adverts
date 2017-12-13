@@ -81,7 +81,7 @@ public class SubscriptionAdvertsSearcher {
 		// Выполняем запрос в бд 
 		List<SubscriptionAdvert> adverts = getNeededAdverts(ds, subscription);
 		if (adverts == null || adverts.size() < 1) {
-			logger.debug("Subscription {} doesn't contains any adverts to notify", subscription.id);
+			logger.debug("Subscription {} doesn't contain any adverts to notify", subscription.id);
 		}
 		
 		// Сбрасываем счетчики подписки и продолжаем обрабтку
@@ -91,7 +91,7 @@ public class SubscriptionAdvertsSearcher {
 		
 		// Проверяем если нету никаких объявлений, то завершаем процесс обработки данной подписки
 		if (adverts == null || adverts.size() < 1) {
-			logger.debug("Subscription {} doesn't contains any adverts to notify, subscriptin will be skipped.", subscription.id);
+			logger.debug("Subscription {} doesn't contain any adverts to notify, subscriptin will be skipped.", subscription.id);
 			return;
 		}
 		

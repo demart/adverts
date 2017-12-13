@@ -160,6 +160,10 @@ public class SubscriptionAdvertsQueryBuilder {
 				q.criteria("wasNotificationSent").equal(false),
 				q.criteria("wasNotificationSent").equal(null)
 			),
+			q.or(
+				q.criteria("hasBeenViewed").equal(false),
+				q.criteria("hasBeenViewed").equal(null)
+			),
 			q.criteria("status").hasNoneOf(
 				Arrays.asList(
 					SubscriptionAdvertStatus.REPLACED,
